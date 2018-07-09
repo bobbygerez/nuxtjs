@@ -1,4 +1,4 @@
-# bobtest
+# mandauestore
 
 > Nuxt.js project
 
