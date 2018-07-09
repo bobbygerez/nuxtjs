@@ -13,18 +13,10 @@
           sample: 'asdf',
         }
     },
-    created(){
-      
-    },
     computed: {
       post(){
         return this.$store.getters.post
       }
-    },
-    async fetch ({ store, params }) {
-      console.log(store)
-      let { data } = await axios.get("http://juanmerkado.it.nf/public/api/categories")
-      store.commit('post', data)
     }
 }
 </script>

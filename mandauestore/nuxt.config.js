@@ -18,6 +18,9 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
+  router: {
+    middleware: 'sidebar-menu'
+  },
   loading: { color: '#3B8070' },
   plugins:['~plugins/vuetify.js', '~plugins/globals.js'],
   /*
