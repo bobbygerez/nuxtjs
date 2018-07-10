@@ -2,233 +2,215 @@
   <v-app id="inspire">
     <v-navigation-drawer
     :clipped="$vuetify.breakpoint.lgAndUp"
-      v-model="drawer"
+    v-model="drawer"
     fixed
     app
-  >
+    >
     <v-list>
       <v-list-tile>
-        <v-list-tile-action>
-          <v-icon>home</v-icon>
-        </v-list-tile-action>
         <v-list-tile-title>Home</v-list-tile-title>
       </v-list-tile>
 
-      <v-list-group
-        prepend-icon="account_circle"
-        value="true"
+<v-list-group
+      v-for="(category, x) in categories"
+      :key="x"
       >
-        <v-list-tile slot="activator">
-          <v-list-tile-title>Users</v-list-tile-title>
-        </v-list-tile>
+      <v-list-tile slot="activator">
+        <v-list-tile-title>{{ category.name }}</v-list-tile-title>
+      </v-list-tile>
 
-        <v-list-group
-          no-action
-          sub-group
-          value="true"
-        >
-          <v-list-tile slot="activator">
-            <v-list-tile-title>Admin</v-list-tile-title>
-          </v-list-tile>
+      <v-list-group
+      no-action
+      sub-group
+      v-for="(subcategory, i) in category.subcategories"
+      :key="i"
+      >
+      <v-list-tile slot="activator">
+        <v-list-tile-title>{{ subcategory.name }}</v-list-tile-title>
+      </v-list-tile>
 
-          <v-list-tile
-            v-for="(admin, i) in admins"
-            :key="i"
-            @click=""
-          >
-            <v-list-tile-title v-text="admin[0]"></v-list-tile-title>
-            <v-list-tile-action>
-              <v-icon v-text="admin[1]"></v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list-group>
+      <v-list-tile
+      v-for="(furtherCat, i) in subcategory.further_categories"
+      :key="i"
+      @click=""
+      >
+      <v-list-tile-title>{{ furtherCat.name }}</v-list-tile-title>
+    </v-list-tile>
+    </v-list-group>
 
-        <v-list-group
-          sub-group
-          no-action
-        >
-          <v-list-tile slot="activator">
-            <v-list-tile-title>Actions</v-list-tile-title>
-          </v-list-tile>
-
-          <v-list-tile
-            v-for="(crud, i) in cruds"
-            :key="i"
-            @click=""
-          >
-            <v-list-tile-title v-text="crud[0]"></v-list-tile-title>
-            <v-list-tile-action>
-              <v-icon v-text="crud[1]"></v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list-group>
-      </v-list-group>
-    </v-list>
-  </v-navigation-drawer>
-    <v-toolbar
-      :clipped-left="$vuetify.breakpoint.lgAndUp"
-      color="blue darken-3"
-      dark
-      app
-      fixed
+</v-list-group>
+</v-list>
+</v-navigation-drawer>
+<v-toolbar
+:clipped-left="$vuetify.breakpoint.lgAndUp"
+color="blue darken-3"
+dark
+app
+fixed
+>
+<v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+  <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+  <span class="hidden-sm-and-down">Juan Merkado</span>
+</v-toolbar-title>
+<v-text-field
+flat
+solo-inverted
+prepend-icon="search"
+label="Search"
+class="hidden-sm-and-down"
+></v-text-field>
+<v-spacer></v-spacer>
+<v-btn icon>
+  <v-icon>apps</v-icon>
+</v-btn>
+<v-btn icon>
+  <v-icon>notifications</v-icon>
+</v-btn>
+<v-btn icon large>
+  <v-avatar size="32px" tile>
+    <img
+    src="https://vuetifyjs.comhttps://cdn.vuetifyjs.com/images/logos/logo.svg"
+    alt="Vuetify"
     >
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
-        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <span class="hidden-sm-and-down">Juan Merkado</span>
-      </v-toolbar-title>
-      <v-text-field
-        flat
-        solo-inverted
-        prepend-icon="search"
-        label="Search"
-        class="hidden-sm-and-down"
-      ></v-text-field>
-      <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>apps</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>notifications</v-icon>
-      </v-btn>
-      <v-btn icon large>
-        <v-avatar size="32px" tile>
-          <img
-            src="https://vuetifyjs.comhttps://cdn.vuetifyjs.com/images/logos/logo.svg"
-            alt="Vuetify"
-          >
-        </v-avatar>
-      </v-btn>
-    </v-toolbar>
-    <v-content>
-      <nuxt/>
-    </v-content>
-    <v-btn
-      fab
-      bottom
-      right
-      color="pink"
-      dark
-      fixed
-      @click.stop="dialog = !dialog"
+  </v-avatar>
+</v-btn>
+</v-toolbar>
+<v-content>
+  <nuxt/>
+</v-content>
+<v-btn
+fab
+bottom
+right
+color="pink"
+dark
+fixed
+@click.stop="dialog = !dialog"
+>
+<v-icon>add</v-icon>
+</v-btn>
+<v-dialog v-model="dialog" width="800px">
+  <v-card>
+    <v-card-title
+    class="grey lighten-4 py-4 title"
     >
-      <v-icon>add</v-icon>
-    </v-btn>
-    <v-dialog v-model="dialog" width="800px">
-      <v-card>
-        <v-card-title
-          class="grey lighten-4 py-4 title"
-        >
-          Create contact
-        </v-card-title>
-        <v-container grid-list-sm class="pa-4">
-          <v-layout row wrap>
-            <v-flex xs12 align-center justify-space-between>
-              <v-layout align-center>
-                <v-avatar size="40px" class="mr-3">
-                  <img
-                    src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"
-                    alt=""
-                  >
-                </v-avatar>
-                <v-text-field
-                  placeholder="Name"
-                ></v-text-field>
-              </v-layout>
-            </v-flex>
-            <v-flex xs6>
-              <v-text-field
-                prepend-icon="business"
-                placeholder="Company"
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs6>
-              <v-text-field
-                placeholder="Job title"
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field
-                prepend-icon="mail"
-                placeholder="Email"
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field
-                type="tel"
-                prepend-icon="phone"
-                placeholder="(000) 000 - 0000"
-                mask="phone"
-              ></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field
-                prepend-icon="notes"
-                placeholder="Notes"
-              ></v-text-field>
-            </v-flex>
-          </v-layout>
-        </v-container>
-        <v-card-actions>
-          <v-btn flat color="primary">More</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
-          <v-btn flat @click="dialog = false">Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-app>
+    Create contact
+  </v-card-title>
+  <v-container grid-list-sm class="pa-4">
+    <v-layout row wrap>
+      <v-flex xs12 align-center justify-space-between>
+        <v-layout align-center>
+          <v-avatar size="40px" class="mr-3">
+            <img
+            src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"
+            alt=""
+            >
+          </v-avatar>
+          <v-text-field
+          placeholder="Name"
+          ></v-text-field>
+        </v-layout>
+      </v-flex>
+      <v-flex xs6>
+        <v-text-field
+        prepend-icon="business"
+        placeholder="Company"
+        ></v-text-field>
+      </v-flex>
+      <v-flex xs6>
+        <v-text-field
+        placeholder="Job title"
+        ></v-text-field>
+      </v-flex>
+      <v-flex xs12>
+        <v-text-field
+        prepend-icon="mail"
+        placeholder="Email"
+        ></v-text-field>
+      </v-flex>
+      <v-flex xs12>
+        <v-text-field
+        type="tel"
+        prepend-icon="phone"
+        placeholder="(000) 000 - 0000"
+        mask="phone"
+        ></v-text-field>
+      </v-flex>
+      <v-flex xs12>
+        <v-text-field
+        prepend-icon="notes"
+        placeholder="Notes"
+        ></v-text-field>
+      </v-flex>
+    </v-layout>
+  </v-container>
+  <v-card-actions>
+    <v-btn flat color="primary">More</v-btn>
+    <v-spacer></v-spacer>
+    <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
+    <v-btn flat @click="dialog = false">Save</v-btn>
+  </v-card-actions>
+</v-card>
+</v-dialog>
+</v-app>
 </template>
 
 <script>
   export default {
     data: () => ({
+      numbers: [ 1, 2, 3, 4, 5 ],
       admins: [
-        ['Management', 'people_outline'],
-        ['Settings', 'settings']
+      ['Management', 'people_outline'],
+      ['Settings', 'settings']
       ],
       cruds: [
-        ['Create', 'add'],
-        ['Read', 'insert_drive_file'],
-        ['Update', 'update'],
-        ['Delete', 'delete']
+      ['Create', 'add'],
+      ['Read', 'insert_drive_file'],
+      ['Update', 'update'],
+      ['Delete', 'delete']
       ],
       dialog: false,
       drawer: null,
       items: [
-        { icon: 'contacts', text: 'Contacts' },
-        { icon: 'history', text: 'Frequently contacted' },
-        { icon: 'content_copy', text: 'Duplicates' },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'Labels',
-          model: true,
-          children: [
-            { icon: 'add', text: 'Create label' }
-          ]
-        },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'More',
-          model: false,
-          children: [
-            { text: 'Import' },
-            { text: 'Export' },
-            { text: 'Print' },
-            { text: 'Undo changes' },
-            { text: 'Other contacts' }
-          ]
-        },
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'chat_bubble', text: 'Send feedback' },
-        { icon: 'help', text: 'Help' },
-        { icon: 'phonelink', text: 'App downloads' },
-        { icon: 'keyboard', text: 'Go to the old version' }
+      { icon: 'contacts', text: 'Contacts' },
+      { icon: 'history', text: 'Frequently contacted' },
+      { icon: 'content_copy', text: 'Duplicates' },
+      {
+        icon: 'keyboard_arrow_up',
+        'icon-alt': 'keyboard_arrow_down',
+        text: 'Labels',
+        model: true,
+        children: [
+        { icon: 'add', text: 'Create label' }
+        ]
+      },
+      {
+        icon: 'keyboard_arrow_up',
+        'icon-alt': 'keyboard_arrow_down',
+        text: 'More',
+        model: false,
+        children: [
+        { text: 'Import' },
+        { text: 'Export' },
+        { text: 'Print' },
+        { text: 'Undo changes' },
+        { text: 'Other contacts' }
+        ]
+      },
+      { icon: 'settings', text: 'Settings' },
+      { icon: 'chat_bubble', text: 'Send feedback' },
+      { icon: 'help', text: 'Help' },
+      { icon: 'phonelink', text: 'App downloads' },
+      { icon: 'keyboard', text: 'Go to the old version' }
       ]
     }),
     props: {
       source: String
+    },
+    computed: {
+      categories(){
+        return this.$store.getters.categories
+      }
     }
   }
 </script>

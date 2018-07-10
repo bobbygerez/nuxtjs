@@ -1,7 +1,7 @@
 <template>
   <v-container>
       <h1>{{ sample }}</h1>
-       <p>{{ post }}</p>
+       <p>{{ categories }}</p>
   </v-container>
 </template>
 
@@ -14,8 +14,8 @@
         }
     },
     computed: {
-      post(){
-        return this.$store.getters.post
+      categories(){
+        return this.$store.getters.categories
       }
     }
 }

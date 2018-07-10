@@ -4,21 +4,21 @@ const createStore = () => {
   return new Vuex.Store({
     state: {
       base_api: "http://juanmerkado.it.nf/public/api/",
-      post: []
+      categories: []
     },
     mutations: {
-      post(state, payload){
-        state.post = payload
+      categories(state, payload){
+        state.categories = payload
       }
     },
     actions: {
-      post(store, payload){
-        store.commit('post', payload)
+      categories(store, payload){
+        store.commit('categories', payload)
       }
     },
     getters: {
-      post(state){
-        return state.post
+      categories(state){
+        return state.categories
       },
       base_api(state){
         return state.base_api
