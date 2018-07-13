@@ -18,11 +18,18 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
+  env: {
+    baseApi: 'http://localhost/estoreapi/public/api'
+  },
   router: {
     middleware: 'sidebar-menu'
   },
   loading: { color: '#3B8070' },
-  plugins:['~plugins/vuetify.js', '~plugins/globals.js'],
+  plugins:[
+  '~plugins/vuetify.js', 
+  '~plugins/globals.js',
+  '~plugins/vue2-filters'
+  ],
   /*
   ** Build configuration
   */

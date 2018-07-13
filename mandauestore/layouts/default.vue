@@ -7,32 +7,32 @@
     app
     >
     <v-list>
-      <v-list-tile>
+      <v-list-tile :to="'/'">
         <v-list-tile-title>Home</v-list-tile-title>
       </v-list-tile>
-
+<v-divider></v-divider>
 <v-list-group
       v-for="(category, x) in categories"
       :key="x"
       >
-      <v-list-tile slot="activator">
+      <v-list-tile slot="activator" :to="'/' + slug(category.name) +`/${category.id}`">
         <v-list-tile-title>{{ category.name }}</v-list-tile-title>
       </v-list-tile>
-
+      
       <v-list-group
       no-action
       sub-group
       v-for="(subcategory, i) in category.subcategories"
       :key="i"
       >
-      <v-list-tile slot="activator">
+      <v-list-tile slot="activator" :to="'/' + slug(category.name) + '/'+ slug(subcategory.name) + `/${subcategory.id}/`">
         <v-list-tile-title>{{ subcategory.name }}</v-list-tile-title>
       </v-list-tile>
 
       <v-list-tile
       v-for="(furtherCat, i) in subcategory.further_categories"
       :key="i"
-      @click=""
+      :to="'/' + slug(category.name) + '/'+ slug(subcategory.name) + '/' + slug(furtherCat.name) +`/${furtherCat.id}`"
       >
       <v-list-tile-title>{{ furtherCat.name }}</v-list-tile-title>
     </v-list-tile>
@@ -157,59 +157,24 @@ fixed
 
 <script>
   export default {
-    data: () => ({
-      numbers: [ 1, 2, 3, 4, 5 ],
-      admins: [
-      ['Management', 'people_outline'],
-      ['Settings', 'settings']
-      ],
-      cruds: [
-      ['Create', 'add'],
-      ['Read', 'insert_drive_file'],
-      ['Update', 'update'],
-      ['Delete', 'delete']
-      ],
-      dialog: false,
-      drawer: null,
-      items: [
-      { icon: 'contacts', text: 'Contacts' },
-      { icon: 'history', text: 'Frequently contacted' },
-      { icon: 'content_copy', text: 'Duplicates' },
-      {
-        icon: 'keyboard_arrow_up',
-        'icon-alt': 'keyboard_arrow_down',
-        text: 'Labels',
-        model: true,
-        children: [
-        { icon: 'add', text: 'Create label' }
-        ]
-      },
-      {
-        icon: 'keyboard_arrow_up',
-        'icon-alt': 'keyboard_arrow_down',
-        text: 'More',
-        model: false,
-        children: [
-        { text: 'Import' },
-        { text: 'Export' },
-        { text: 'Print' },
-        { text: 'Undo changes' },
-        { text: 'Other contacts' }
-        ]
-      },
-      { icon: 'settings', text: 'Settings' },
-      { icon: 'chat_bubble', text: 'Send feedback' },
-      { icon: 'help', text: 'Help' },
-      { icon: 'phonelink', text: 'App downloads' },
-      { icon: 'keyboard', text: 'Go to the old version' }
-      ]
-    }),
+     data(){
+        return {
+          dialog: false,
+          drawer: true
+        }
+    }, 
     props: {
       source: String
     },
     computed: {
       categories(){
         return this.$store.getters.categories
+      },
+      
+    },
+    methods: {
+      slug(text){
+        return this.$slug(text)
       }
     }
   }
