@@ -16,7 +16,7 @@
     "axios": "^0.18.0",
     "nuxt": "^1.0.0",
     "vue2-filters": "^0.3.0",
-    "vuetify": "^1.1.1"
+    "vuetify": "^1.1.4"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

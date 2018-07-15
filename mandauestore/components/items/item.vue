@@ -4,17 +4,19 @@
       <v-card 
         hover
         class="ma-1"
-        :height="300"
+        :height="500"
       >
         <v-card-title primary-title>
           <div>
             <div class="title">{{ item.name }}</div>
-             
           </div>
         </v-card-title>
         <v-card-text wrap style='text-align: left;  word-wrap: break-word;'>
-          <p>asfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfasdfasfa</p>
-          <p color="purple" class="text-lg-center">{{ item.amount|currency('₱ ') }}</p>
+          <span v-for="img in item.images">
+            <img :src="img.path" class='responsive'/>
+          </span>
+          <p>{{ item.short_desc| truncate(100) }}</p>
+          <h3 class="text-lg-center red--text">{{ item.amount|currency('₱ ') }}</h3>
         </v-card-text>
       </v-card>
     </v-flex>
@@ -28,17 +30,15 @@
     data: () => ({
       show: false,
       cardME: "elevation-1"
-    }),
-    methods: {
-
-      productHover(){
-        this.cardME = "elevation-6"
-      },
-      productLeave(){
-        this.cardME = "elevation-1"
-      }
-    }
+    })
 
     
   }
 </script>
+
+<style type="text/css">
+  .responsive {
+    width: 100%;
+    height: auto;
+}
+</style>

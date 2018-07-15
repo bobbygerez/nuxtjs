@@ -1,7 +1,7 @@
 {
   "sample": "https://jsonplaceholder.typicode.com/posts/1",
-  "base_url": "http://localhost:3000/",
-  "base_api": "http://localhost/rbestore/public/api/",
+  "base_public": "http://localhost:3000/public",
+  "base_api": "http://localhost/rbestore/public/api",
   "website_url": "https://www.company.com",
   "social": {
     "facebook": {
