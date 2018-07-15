@@ -87,6 +87,7 @@ fixed
 </v-toolbar>
 <v-content>
   <nuxt/>
+
 </v-content>
 <v-btn
 fab
@@ -205,14 +206,14 @@ fixed
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <login-loader></login-loader>
+    <vuetify-loader></vuetify-loader>
     <main-snackbar></main-snackbar>
 </v-app>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
-  import loginLoader from '~/components/loader/login-loader.vue'
+  import vuetifyLoader from '~/components/loader/vuetify-loader.vue'
   import mainSnackbar from '~/components/snackbar/main-snackbar.vue'
   import axios from 'axios'
   export default {
@@ -307,7 +308,7 @@ fixed
     source: String
   },
   components: {
-    loginLoader, mainSnackbar
+    vuetifyLoader, mainSnackbar
   },
   computed: {
      ...mapGetters([
@@ -334,28 +335,22 @@ fixed
     signin(){
        var data = this
           if(this.$refs.login.validate()){
-              this.$store.dispatch('loaderMessage', 'Logging in...')
+              this.$store.dispatch('loginLoader', 'Logging in...')
               this.$store.dispatch('loader', true) 
-              axios.post(process.env.baseApi + 'login',{
+              axios.post(process.env.baseApi + '/login',{
                 email: this.email,
                 password: this.password
               }).then((res)=>{
-
+                  data.loginDialog = false
                   localStorage.setItem('tokenKey', res.data.token)
-                  data.$store.dispatch('authUser', res.data.user)
-                  data.$store.dispatch('userLogin', true)
-                  window.localStorage.setItem('userLogin', true)
-                  window.localStorage.setItem('roles', res.data.roles)
-                  data.dialog = false
-
-                  data.$store.dispatch('snackbarText', 'You have successfully sign-in!')
+                  data.$store.dispatch('snackbarText', 'You have successfully sign-in')
                   data.$store.dispatch('snackbarColor', 'success')
                   data.$store.dispatch('snackbar', true)
                   data.$store.dispatch('loader', false) 
 
               })
               .catch(function(error){
-                data.alertText = error.response.data
+                data.alertText = error.response.data.msg
                 data.alertLogin = true
                 data.$store.dispatch('loader', false) 
               })

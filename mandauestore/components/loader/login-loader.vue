@@ -4,7 +4,7 @@
       <v-container fill-height>
         <v-layout column justify-center align-center>
           <v-progress-circular indeterminate :size="70" :width="7" :color="progressColor"></v-progress-circular>
-          <h1 v-if="loaderMessage != null">{{loaderMessage}}</h1>
+          <h1 v-if="loginLoader != null">{{loginLoader}}</h1>
         </v-layout>
       </v-container>
     </v-dialog>
@@ -21,23 +21,18 @@
             progressColor: {type: String, default: 'purple'},
         },
         computed: {
-          loader: {
-            get(){
-              return this.$store.getters.loader
-            },
-            set(){
-              
-            }
+          loader() {
+             return this.$store.getters.loader
             
           },
-          loaderMessage(){
-            return this.$store.getters.loaderMessage
+          loginLoader(){
+            return this.$store.getters.loginLoader
           }
         }
     }
 </script>
 
-<style>
+<style scoped>
   .dialog.centered-dialog {
     background: #282c2dad;
     box-shadow: none;

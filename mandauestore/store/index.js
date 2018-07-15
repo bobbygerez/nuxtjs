@@ -80,7 +80,7 @@ const createStore = () => {
     },
     getters: {
       snackbarColor(state){
-        return state.snackbarText
+        return state.snackbarColor
       },
       snackbarText(state){
         return state.snackbarText
