@@ -1,11 +1,16 @@
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate';
+import * as Cookie from 'js-cookie';
 
 const createStore = () => {
   return new Vuex.Store({
     state: {
+      user: null,
+      userReg: false,
+      loginDialog: false,
       snackbarColor: 'success',
       snackbarText: '',
-      snackbar: true,
+      snackbar: false,
       loginLoader: '',
       loader: false,
       perPage: [12, 16, 20, 24, 28],
@@ -15,6 +20,12 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      userReg(state, payload){
+        state.userReg = payload
+      },
+      loginDialog(state, payload){
+        state.loginDialog = payload
+      },
       snackbarColor(state, payload){
         state.snackbarColor = payload
       },
@@ -47,6 +58,12 @@ const createStore = () => {
       }
     },
     actions: {
+      userReg(store, payload){
+        store.commit('userReg', payload)
+      },
+      loginDialog(store, payload){
+        store.commit('loginDialog', payload)
+      },
       snackbarColor(store, payload){
         store.commit('snackbarColor', payload)
       },
@@ -79,6 +96,12 @@ const createStore = () => {
       }
     },
     getters: {
+      userReg(state){
+        return state.userReg
+      },
+      loginDialog(state){
+        return state.loginDialog
+      },
       snackbarColor(state){
         return state.snackbarColor
       },

@@ -23,13 +23,14 @@ module.exports = {
     basePublic: 'http://localhost/estoreapi/public'
   },
   router: {
-    middleware: 'sidebar-menu'
+    middleware: ['sidebar-menu', 'auth']
   },
   loading: { color: '#3B8070' },
   plugins:[
   '~plugins/vuetify.js', 
   '~plugins/globals.js',
-  '~plugins/vue2-filters'
+  '~plugins/vue2-filters',
+  { src: '~/plugins/localStorage.js', ssr: false }
   ],
   /*
   ** Build configuration

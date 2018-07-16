@@ -51,23 +51,9 @@ fixed
 <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
   <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
   <span class="hidden-sm-and-down">Juan Merkado</span>
-  <span class="hidden-md-and-up">
-  <v-btn icon>
-  <v-icon>place</v-icon>
-  </v-btn>
-  <v-btn icon>
-    <v-icon>lock_outline</v-icon>
-  </v-btn>
-  </span>
+  <login-dialog v-bind:visibility="'hidden-md-and-up'"></login-dialog>
 </v-toolbar-title>
-<span class="hidden-sm-and-down">
-  <v-btn icon>
-  <v-icon>place</v-icon>
-  </v-btn>
-  <v-btn icon @click="loginDialog=true">
-    <v-icon>lock_outline</v-icon>
-  </v-btn>
-  </span>
+<login-dialog v-bind:visibility="'hidden-sm-and-down'"></login-dialog>
 
 <v-spacer></v-spacer>
 <v-autocomplete
@@ -77,7 +63,7 @@ fixed
       :search-input.sync="search"
       v-model="select"
       cache-items
-      class="mx-3"
+      class="mx-3 hidden-xs-only"
       flat
       hide-no-data
       hide-details
@@ -96,11 +82,11 @@ right
 color="pink"
 dark
 fixed
-@click.stop="dialog = !dialog"
+
 >
-<v-icon>account_circle</v-icon>
+<v-icon>chat</v-icon>
 </v-btn>
-<v-dialog v-model="dialog" width="800px">
+<v-dialog v-model="userReg" width="800px">
   <v-card>
     <v-card-title
     class="grey lighten-4 py-4 title"
@@ -158,7 +144,7 @@ fixed
   <v-card-actions>
     <v-btn flat color="primary">More</v-btn>
     <v-spacer></v-spacer>
-    <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
+    <v-btn flat color="primary" @click="hideUserReg">Cancel</v-btn>
     <v-btn flat @click="dialog = false">Save</v-btn>
   </v-card-actions>
 </v-card>
@@ -201,7 +187,7 @@ fixed
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="loginDialog = false">Cancel</v-btn>
+          <v-btn flat color="primary" @click="hideLoginDialog">Cancel</v-btn>
           <v-btn flat @click="signin">Sign-in</v-btn>
         </v-card-actions>
       </v-card>
@@ -216,6 +202,7 @@ fixed
   import vuetifyLoader from '~/components/loader/vuetify-loader.vue'
   import mainSnackbar from '~/components/snackbar/main-snackbar.vue'
   import axios from 'axios'
+  import loginDialog from '~/components/buttons/login.vue'
   export default {
    data(){
     return {
@@ -234,8 +221,6 @@ fixed
       (v) => !!v || 'E-mail is required',
       (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
       ],
-      loginDialog: false,
-      dialog: false,
       drawer: true,
       loading: false,
         items: [],
@@ -308,17 +293,25 @@ fixed
     source: String
   },
   components: {
-    vuetifyLoader, mainSnackbar
+    vuetifyLoader, mainSnackbar, loginDialog
   },
   computed: {
      ...mapGetters([
       'categories',
       'loader',
       'loginLoader',
-      'snackbar'
+      'snackbar',
+      'loginDialog',
+      'userReg'
     ]),
   },
   methods: {
+    hideUserReg(){
+      this.$store.dispatch('userReg', false);
+    },
+    hideLoginDialog(){
+      this.$store.dispatch('loginDialog', false)
+    },
     slug(text){
       return this.$slug(text)
     },
