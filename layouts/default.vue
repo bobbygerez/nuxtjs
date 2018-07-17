@@ -356,6 +356,7 @@ fixed
                   data.$store.dispatch('snackbarColor', 'success')
                   data.$store.dispatch('snackbar', true)
                   data.$store.dispatch('loader', false) 
+                  data.hideLoginDialog()
 
               })
               .catch(function(error){
