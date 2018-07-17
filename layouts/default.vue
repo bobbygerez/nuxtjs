@@ -301,9 +301,23 @@ fixed
       'loader',
       'loginLoader',
       'snackbar',
-      'loginDialog',
-      'userReg'
     ]),
+     userReg: {
+      get(){
+        return this.$store.getters.userReg
+      },
+      set(){
+
+      }
+     },
+     loginDialog: {
+      get(){
+        return this.$store.getters.loginDialog
+      },
+      set(val){
+
+      }
+     }
   },
   methods: {
     hideUserReg(){
@@ -326,16 +340,18 @@ fixed
         }, 500)
       },
     signin(){
-       var data = this
+       
           if(this.$refs.login.validate()){
+            
               this.$store.dispatch('loginLoader', 'Logging in...')
               this.$store.dispatch('loader', true) 
+              var data = this
               axios.post(process.env.baseApi + '/login',{
                 email: this.email,
                 password: this.password
-              }).then((res)=>{
+              }).then(function (res){
                   data.loginDialog = false
-                  localStorage.setItem('tokenKey', res.data.token)
+                  data.$store.dispatch('token', res.data.token)
                   data.$store.dispatch('snackbarText', 'You have successfully sign-in')
                   data.$store.dispatch('snackbarColor', 'success')
                   data.$store.dispatch('snackbar', true)
@@ -343,7 +359,7 @@ fixed
 
               })
               .catch(function(error){
-                data.alertText = error.response.data.msg
+                data.alertText = error.response.data
                 data.alertLogin = true
                 data.$store.dispatch('loader', false) 
               })

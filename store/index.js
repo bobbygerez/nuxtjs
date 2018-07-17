@@ -4,7 +4,10 @@ import * as Cookie from 'js-cookie';
 
 const createStore = () => {
   return new Vuex.Store({
+    
     state: {
+      token: null,
+      userLogin:{},
       user: null,
       userReg: false,
       loginDialog: false,
@@ -20,6 +23,9 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      token(state, payload){
+        state.token = payload
+      },
       userReg(state, payload){
         state.userReg = payload
       },
@@ -58,6 +64,9 @@ const createStore = () => {
       }
     },
     actions: {
+      token(store, payload){
+        store.commit('token', payload)
+      },
       userReg(store, payload){
         store.commit('userReg', payload)
       },
@@ -96,6 +105,9 @@ const createStore = () => {
       }
     },
     getters: {
+      token(state){
+        return state.token
+      },
       userReg(state){
         return state.userReg
       },
