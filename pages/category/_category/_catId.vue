@@ -16,7 +16,8 @@
 </template>
 
 <script type="text/javascript">
-	 import items from '~/components/items/item'
+	import axios from 'axios'
+	import items from '~/components/items/item'
   	import itemHeaders from '~/components/items/item-headers'
 	export default {
 
@@ -42,6 +43,16 @@
 				return this.$store.getters.categoryName
 			}
 
+		},
+		watch: {
+
+			page(val){
+				axios.get( process.env.baseApi + '/get-items/' + this.$route.params.catId + '?catId=' + this.$route.params.catId + '&page=' + val + '&perPage=' + this.$store.getters.selectedPage)
+		        .then(res => {
+		             this.$store.commit('items', res.data.items)
+		             this.$store.commit('categoryName', res.data.categoryName)
+		          })
+			}
 		}
 	}
 </script>

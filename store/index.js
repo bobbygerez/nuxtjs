@@ -4,6 +4,8 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      furtherCategoryName: '',
+      subcategoryName: '',
       categoryName: '',
       token: null,
       user: {},
@@ -22,6 +24,12 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      furtherCategoryName(state, payload){
+        state.furtherCategoryName = payload
+      },
+      subcategoryName(state, payload){
+        state.subcategoryName = payload
+      },
       categoryName(state, payload){
         state.categoryName = payload
       },
@@ -72,6 +80,12 @@ const createStore = () => {
       }
     },
     actions: {
+      furtherCategoryName(store, payload){
+        store.commit('furtherCategoryName', payload)
+      },
+      subcategoryName(store, payload){
+        store.commit('subcategoryName', payload)
+      },
       categoryName(store, payload){
         store.commit('categoryName', payload)
       },
@@ -127,6 +141,12 @@ const createStore = () => {
       }
     },
     getters: {
+      furtherCategoryName(state){
+        return state.furtherCategoryName
+      },
+      subcategoryName(state){
+        return state.subcategoryName
+      },
       categoryName(state){
         return state.categoryName
       },
