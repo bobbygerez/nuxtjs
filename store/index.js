@@ -5,8 +5,8 @@ const createStore = () => {
     
     state: {
       token: null,
-      userLogin:{},
-      user: null,
+      user: {},
+      userLogin: false,
       userReg: false,
       loginDialog: false,
       snackbarColor: 'success',
@@ -21,6 +21,12 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      user(state, payload){
+        state.user = payload
+      },
+      userLogin(state, payload){
+        state.userLogin = payload
+      },
       token(state, payload){
         state.token = payload
       },
@@ -62,6 +68,12 @@ const createStore = () => {
       }
     },
     actions: {
+      user(store, payload){
+        store.commit('user', payload)
+      },
+      userLogin(store, payload){
+        store.commit('userLogin', payload)
+      },
       token(store, payload){
         store.commit('token', payload)
       },
@@ -103,6 +115,12 @@ const createStore = () => {
       }
     },
     getters: {
+       user(state){
+        return state.user
+      },
+      userLogin(state){
+        return state.userLogin
+      },
       token(state){
         return state.token
       },

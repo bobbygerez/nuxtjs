@@ -1,5 +1,5 @@
 {
-  "name": "mandauestore",
+  "name": "JuanMerkado",
   "version": "1.0.0",
   "description": "Nuxt.js project",
   "author": "Bobby Gerez",
@@ -17,7 +17,7 @@
     "js-cookie": "^2.2.0",
     "nuxt": "^1.0.0",
     "vue2-filters": "^0.3.0",
-    "vuetify": "^1.1.4",
+    "vuetify": "^1.1.6",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {

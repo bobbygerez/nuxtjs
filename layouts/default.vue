@@ -58,10 +58,7 @@ fixed
 <v-spacer></v-spacer>
 <v-autocomplete
       prepend-icon="search"
-      :loading="loading"
-      :items="items"
-      :search-input.sync="search"
-      v-model="select"
+      
       cache-items
       class="mx-3 hidden-xs-only"
       flat
@@ -315,7 +312,7 @@ fixed
         return this.$store.getters.loginDialog
       },
       set(val){
-
+        this.$store.dispatch('loginDialog', false)
       }
      }
   },
@@ -331,7 +328,6 @@ fixed
     },
     querySelections (v) {
         this.loading = true
-        // Simulated ajax query
         setTimeout(() => {
           this.items = this.states.filter(e => {
             return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
@@ -352,6 +348,8 @@ fixed
               }).then(function (res){
                   data.loginDialog = false
                   data.$store.dispatch('token', res.data.token)
+                  data.$store.dispatch('user', res.data.user)
+                  data.$store.dispatch('userLogin', res.data.userLogin)
                   data.$store.dispatch('snackbarText', 'You have successfully sign-in')
                   data.$store.dispatch('snackbarColor', 'success')
                   data.$store.dispatch('snackbar', true)

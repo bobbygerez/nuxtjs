@@ -2,14 +2,18 @@ import axios from 'axios'
 
 export default async function ({context, store, route, redirect, req}) {
 
- 	if (store.getters.token === null) {
- 		// return axios.post( process.env.baseApi + '/login',{
- 		// 	email: 'superAdmin@juanmerkado.com',
- 		// 	password: '12345678'
- 		// })
-		 //  .then(response => {
-		 //      store.dispatch('token', response.data.token)
-		 //    })
+	var token = store.getters.token;
+ 	if (token != null) {
+ 		return axios.get( process.env.baseApi + '/auth/user?token=' + token)
+		  .then(response => {
+		      store.dispatch('userLogin', response.data.user)
+		    })
+		  .catch(function(error){
+
+		  	  store.dispatch('snackbarText', 'Login expired...')
+              store.dispatch('snackbarColor', 'error')
+              store.dispatch('snackbar', true)
+		  })
  	}
 
 }
