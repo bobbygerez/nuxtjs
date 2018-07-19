@@ -15,7 +15,7 @@
       v-for="(category, x) in categories"
       :key="x"
       >
-      <v-list-tile slot="activator" :to="'/' + slug(category.name) +`/${category.id}`">
+      <v-list-tile slot="activator" :to="'/Category/' + slug(category.name) +`/${category.id}`">
         <v-list-tile-title>{{ category.name }}</v-list-tile-title>
       </v-list-tile>
       
@@ -25,14 +25,14 @@
       v-for="(subcategory, i) in category.subcategories"
       :key="i"
       >
-      <v-list-tile slot="activator" :to="'/' + slug(category.name) + '/'+ slug(subcategory.name) + `/${subcategory.id}`">
+      <v-list-tile slot="activator" :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + `/${subcategory.id}`">
         <v-list-tile-title>{{ subcategory.name }}</v-list-tile-title>
       </v-list-tile>
 
       <v-list-tile
       v-for="(furtherCat, i) in subcategory.further_categories"
       :key="i"
-      :to="'/' + slug(category.name) + '/'+ slug(subcategory.name) + '/' + slug(furtherCat.name) +`/${furtherCat.id}`"
+      :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + '/' + slug(furtherCat.name) +`/${furtherCat.id}`"
       >
       <v-list-tile-title>{{ furtherCat.name }}</v-list-tile-title>
     </v-list-tile>

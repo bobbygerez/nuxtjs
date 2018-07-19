@@ -4,6 +4,7 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      categoryName: '',
       token: null,
       user: {},
       userLogin: false,
@@ -21,6 +22,9 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      categoryName(state, payload){
+        state.categoryName = payload
+      },
       user(state, payload){
         state.user = payload
       },
@@ -68,6 +72,9 @@ const createStore = () => {
       }
     },
     actions: {
+      categoryName(store, payload){
+        store.commit('categoryName', payload)
+      },
       user(store, payload){
         store.commit('user', payload)
       },
@@ -92,6 +99,11 @@ const createStore = () => {
       snackbar(store, payload){
         store.commit('snackbar', payload)
       },
+      snackbarOptions(store, payload){
+        store.commit('snackbarColor', payload['snackbarColor'])
+        store.commit('snackbarText', payload['snackbarText'])
+        store.commit('snackbar', payload['snackbar'])
+      },
       loginLoader(store, payload){
         store.commit('loginLoader', payload)
       },
@@ -115,6 +127,9 @@ const createStore = () => {
       }
     },
     getters: {
+      categoryName(state){
+        return state.categoryName
+      },
        user(state){
         return state.user
       },

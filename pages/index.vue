@@ -1,23 +1,6 @@
 <template>
   <v-container class="ma-1 pa-1">
-      <v-layout class="ma-0 pa-0">
-        <v-flex xs12 sm12 md9 lg9 xl9>
-          <div class="subheading pl-2 pt-3 text-xs-center">
-            <p>Displaying <span class="gray--text">{{ items.from }}</span > out of <span class="gray--text">{{ items.total }}</span> items </p>
-          </div>
-        </v-flex>
-        <v-flex xs12 sm12 md3 lg3 xl3>
-          <v-select
-                max-height="100"
-                label="Items per page"
-                persistent-hint
-                :items="perPage"
-                v-model="selectedPage"
-              ></v-select>
-          
-        </v-flex>
-      </v-layout>
-      
+      <item-headers v-bind:suffix="'Items'"/>
       <v-divider></v-divider>
       <v-layout wrap class="ma-0 pa-0" justify-center align-center>
            <items v-bind:item="item" v-bind:index="i" v-for="(item, i) in items.data" :key="i"></items>
@@ -35,6 +18,7 @@
 <script type="text/javascript">
   import axios from 'axios'
   import items from '~/components/items/item'
+  import itemHeaders from '~/components/items/item-headers'
   function myFetchMethod(store, params){
     return axios.get( process.env.baseApi + '/get-items?page=' + store.getters.page + '&perPage=' + store.getters.selectedPage)
         .then(res => {
@@ -50,7 +34,7 @@
       return myFetchMethod(store, params)
     },
     components: {
-      items
+      items, itemHeaders
     },
     computed: {
       categories(){

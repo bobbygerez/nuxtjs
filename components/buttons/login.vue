@@ -38,7 +38,19 @@
 				this.$store.dispatch('userReg', true);
 			},
 			logoff(){
+				let data = this
+				axios.post( process.env.baseApi + '/auth/logout?token=' + this.$store.getters.token)
+		        .then(function(res){
+		        	data.$store.dispatch('snackbarOptions', {
+		        			snackbarColor : 'success',
+		        			snackbarText : res.data.msg,
+		        			snackbar: true
+		        		})
+		        	data.$store.dispatch('userLogin', res.data.userLogin)
+		        	data.$store.dispatch('user',{})
+		        	data.$store.dispatch('token', null)
 
+		        })
 			}
 		}
 	}
