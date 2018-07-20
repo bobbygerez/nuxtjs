@@ -4,6 +4,14 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      item: {},
+      firstname: '',
+      middlename: '',
+      lastname: '',
+      email: '',
+      company: '',
+      jobTitle: '',
+      phone: '',
       furtherCategoryName: '',
       subcategoryName: '',
       categoryName: '',
@@ -24,6 +32,30 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      item(state, payload){
+        state.item = payload
+      },
+      email(state, payload){
+        state.email = payload
+      },
+      phone(state, payload){
+        state.phone = payload
+      },
+      jobTitle(state, payload){
+        state.jobTitle = payload
+      },
+      company(state, payload){
+        state.company = payload
+      },
+      lastname(state, payload){
+        state.lastname = payload
+      },
+      middlename(state, payload){
+        state.middlename = payload
+      },
+      firstname(state, payload){
+        state.firstname = payload
+      },
       furtherCategoryName(state, payload){
         state.furtherCategoryName = payload
       },
@@ -80,6 +112,30 @@ const createStore = () => {
       }
     },
     actions: {
+      item(store, payload){
+        store.commit('item', payload)
+      },
+      email(store, payload){
+        store.commit('email', payload)
+      },
+      phone(store, payload){
+        store.commit('phone', payload)
+      },
+      jobTitle(store, payload){
+        store.commit('jobTitle', payload)
+      },
+      company(store, payload){
+        store.commit('company', payload)
+      },
+      lastname(store, payload){
+        store.commit('lastname', payload)
+      },
+      middlename(store, payload){
+        store.commit('middlename', payload)
+      },
+      firstname(store, payload){
+        store.commit('firstname', payload)
+      },
       furtherCategoryName(store, payload){
         store.commit('furtherCategoryName', payload)
       },
@@ -141,6 +197,30 @@ const createStore = () => {
       }
     },
     getters: {
+      item(state){
+        return state.item
+      },
+      email(state){
+        return state.email
+      },
+      firstname(state){
+        return state.firstname
+      },
+      middlename(state){
+        return state.middlename
+      },
+      lastname(state){
+        return state.lastname
+      },
+      company(state){
+        return state.company
+      },
+      jobTitle(state){
+        return state.jobTitle
+      },
+      phone(state){
+        return state.phone
+      },
       furtherCategoryName(state){
         return state.furtherCategoryName
       },

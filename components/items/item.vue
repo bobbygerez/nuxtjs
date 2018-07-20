@@ -5,6 +5,7 @@
         hover
         class="ma-1"
         :height="500"
+        :to="'/Category/' + slug(item.category.name) + '/'+ slug(item.sub_category.name) + '/' + slug(item.further_category.name) + '/' + slug(item.name) +`/${item.id}`" 
       >
         <v-card-title primary-title>
           <div>
@@ -30,7 +31,12 @@
     data: () => ({
       show: false,
       cardME: "elevation-1"
-    })
+    }),
+    methods: {
+      slug(text){
+        return this.$slug(text)
+      }
+    }
 
     
   }
