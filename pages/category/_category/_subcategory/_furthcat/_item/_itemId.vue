@@ -4,16 +4,21 @@
       	<v-flex xs12 sm12 md5 lg5 xl5 justify-center align-center>
       		<v-card>
 		        <v-card-title>
-		        <article class="demo-area">
-				  <img class="demo-trigger" src="http://localhost/estoreapi/public/images/uploads/67.jpg?w=200&ch=DPR&dpr=2&border=1,ddd" data-zoom="http://localhost/estoreapi/public/images/uploads/67.jpg?w=1000&ch=DPR&dpr=2" width="400">
-				  
-				</article>
 				<p>This is a simple description of the dog picture.</p>
 		        </v-card-title>
 		        <v-card-title>
 		          <div>
 		            <span>{{ item.short_desc }}</span><br>
-		            <span>Whitsunday Island, Whitsunday Islands</span>
+		            
+					<article class="demo-area">
+					  <img class="demo-trigger" src="http://localhost/estoreapi/public/images/uploads/67.jpg?w=200&ch=DPR&dpr=2&border=1,ddd" data-zoom="http://localhost/estoreapi/public/images/uploads/67.jpg?w=1000&ch=DPR&dpr=2" width="400">
+					  
+					</article>
+
+					<article class="demo-area">
+					  <img class="demo-trigger" src="http://localhost/estoreapi/public/images/uploads/5.jpg?w=200&ch=DPR&dpr=2&border=1,ddd" data-zoom="http://localhost/estoreapi/public/images/uploads/5.jpg?w=1000&ch=DPR&dpr=2" width="400">
+					  
+					</article>
 		          </div>
 		        </v-card-title>
 		        <v-card-actions>
@@ -51,13 +56,17 @@ import Drift from 'drift-zoom';
   },
     middleware: 'item',
     mounted(){
-    	var demoTrigger = document.querySelector('.demo-trigger');
+    	var demoTrigger = document.querySelectorAll('.demo-trigger');
 		var paneContainer = document.querySelector('.detail');
 
-		new Drift(demoTrigger, {
-		  paneContainer: paneContainer,
-		  inlinePane: false
-		});
+    	for (var i = 0, len = demoTrigger.length; i < len; i++) {
+
+		      	new Drift(demoTrigger[i], {
+				  paneContainer: paneContainer,
+				  inlinePane: false
+				});
+			}
+		
     },
     computed: {
     	item(){

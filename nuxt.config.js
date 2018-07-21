@@ -15,6 +15,9 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css'}
     ]
   },
+  css: [
+    '~assets/css/luminous-basic.css'
+  ],
   /*
   ** Customize the progress bar color
   */
