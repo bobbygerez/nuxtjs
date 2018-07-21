@@ -33,6 +33,7 @@ module.exports = {
   '~plugins/vuetify.js', 
   '~plugins/globals.js',
   '~plugins/vue2-filters',
+  '~plugins/carousel',
    { src: '~/plugins/localStorage.js', ssr: false },
   ],
   /*
