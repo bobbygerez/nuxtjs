@@ -30,14 +30,13 @@ module.exports = {
   '~plugins/vuetify.js', 
   '~plugins/globals.js',
   '~plugins/vue2-filters',
-  { src: '~/plugins/localStorage.js', ssr: false },
-  {src: '~plugins/zoom', ssr: false}
+   { src: '~/plugins/localStorage.js', ssr: false },
   ],
   /*
   ** Build configuration
   */
   build: {
-    vendor: ['axios', 'vuetify', 'vue-product-zoomer'],
+    vendor: ['axios', 'vuetify', 'drift-zoom'],
     /*
     ** Run ESLint on save
     */
