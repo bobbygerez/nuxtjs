@@ -28,21 +28,44 @@
 				       <h2 class=" title pa-3">
 				       <span class="red--text">{{ item.amount|currency('₱ ') }}</span> <br /><span class="grey--text body-2" style="text-decoration: line-through">{{ item.amount|currency('₱ ') }} </span> <span class="black--text body-2 ml-1"> -44% </span></h2>
 				       <v-divider></v-divider>
-				       <p>Color</p>
-				       <p>Quantity</p>
+               <br />
+               <p>Quantity <cart-quantity></cart-quantity></p>
+               <p>Select Color <br />
+               <span v-for="color in item.colors" :key="color.id">
+                 <span v-for="img in color.images" :key="img.id">
+                    <img :src="img.path" class="ma-1" 
+                    @click="selectedImage($event,img.id)">
+                 </span>
+               </span></p>
+               
+				       
 				    </section>
 			</div>
       	</v-flex>
+
+
+      </v-layout>
+      <v-divider></v-divider>
+      <v-layout wrap class="ma-2">
+        <v-flex xs12 sm12 md12 lg12 xl12 justify-center align-center>
+          Specifically designed to protect your phone from drops, shocks,scrapes, scratches, dust and debris without adding bulk
+Made with dual-materials (durable 1.5mm hard plastic back-plateand flexible TPU edges and corners) that protect the back and allsides of your device from everyday use
+        </v-flex>
       </v-layout>
   </v-container>
 </template>
 
 <script type="text/javascript">
+import Vue from 'vue'
 import Drift from 'drift-zoom';
+import cartQuantity from '~/components/cart/qty'
+import _ from 'lodash'
   export default{
   	data () {
     return {
-     	rating: 4
+     	rating: 4,
+      isActive: true,
+      colorIds: [],
     }
   },
     middleware: 'item',
@@ -59,15 +82,39 @@ import Drift from 'drift-zoom';
 			}
 		
     },
+    components:{cartQuantity},
     computed: {
     	item(){
     		return this.$store.getters.item
     	}
+    },
+    methods: {
+      selectedImage(e, id){
+        var classExist = e.srcElement.classList.contains('selectedImg');
+        if (classExist  === true) {
+          e.srcElement.classList.remove("selectedImg");
+        }
+        else {
+          e.srcElement.classList.add("selectedImg");
+        }
+        var colorExist = _.includes(this.colorIds, id);
+        if (colorExist) {
+          this.colorIds.splice(this.colorIds.indexOf(id),1)
+          var arr = this.colorIds.filter(e => e !== id)
+          this.colorIds = arr
+        }
+        else {
+          this.colorIds.push(id);
+        }
+      }
     }
   }
 </script>
 
 <style type="text/css">
+.selectedImg{
+  border: 2px solid gray;
+}
 	.demo-area{
   background:$color_invert_fg;
   border-radius:8px;

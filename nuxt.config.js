@@ -41,7 +41,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    vendor: ['axios', 'vuetify', 'drift-zoom'],
+    vendor: ['axios', 'vuetify', 'drift-zoom', 'lodash'],
     /*
     ** Run ESLint on save
     */

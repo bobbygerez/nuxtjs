@@ -1,5 +1,8 @@
 <template>
 	<span :class="visibility">
+		  <v-btn icon>
+		    <v-icon>shopping_cart</v-icon>
+		  </v-btn>
 		  <v-btn icon @click="showUserReg">
 		    <v-icon>account_circle</v-icon>
 		  </v-btn>
