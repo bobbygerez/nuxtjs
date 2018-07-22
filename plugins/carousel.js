@@ -18,7 +18,7 @@ Vue.component('carousel-component', {
       createElement('button', {
         'class': 'carousel-nav-next',
         on: { click: () => { this.increaseCurrent(); } }
-      }, 'Next')
+      }, "Next")
     ])
                         );
   },

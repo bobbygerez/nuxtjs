@@ -34,6 +34,7 @@ module.exports = {
   '~plugins/globals.js',
   '~plugins/vue2-filters',
   '~plugins/carousel',
+  '~plugins/start-rating',
    { src: '~/plugins/localStorage.js', ssr: false },
   ],
   /*

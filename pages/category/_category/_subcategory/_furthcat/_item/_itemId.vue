@@ -4,49 +4,32 @@
       	<v-flex xs12 sm12 md4 lg4 xl4 justify-center align-center>
       		<v-card flat>
 		        <v-card-title>
-		             <carousel-component>
+		             <carousel-component v-for="img in item.images" :key="item.id">
 					    <carousel-item>
 					      <article class="demo-area ">
-							  <img class="demo-trigger" src="http://localhost/estoreapi/public/images/uploads/67.jpg?w=200&ch=DPR&dpr=2&border=1,ddd" data-zoom="http://localhost/estoreapi/public/images/uploads/67.jpg?w=1000&ch=DPR&dpr=2" >
-							  
+							  <img class="demo-trigger" :src="img.path + '?w=200&ch=DPR&dpr=2&border=1,ddd'" :data-zoom="img.path + '?w=1000&ch=DPR&dpr=2'" >
 							</article>
-					    </carousel-item>
-					    <carousel-item>
-					      <article class="demo-area">
-							  <img class="demo-trigger " src="http://localhost/estoreapi/public/images/uploads/13.jpg?w=200&ch=DPR&dpr=2&border=1,ddd" data-zoom="http://localhost/estoreapi/public/images/uploads/13.jpg?w=1000&ch=DPR&dpr=2" >
-							</article>
-					    </carousel-item>
-					    <carousel-item>
-					      <h2>#3</h2>
-					      <img src="https://octodex.github.com/images/daftpunktocat-thomas.gif" alt="">
-					    </carousel-item>
-					    <carousel-item>
-					      <h2>#4</h2>
-					      <img src="https://octodex.github.com/images/adventure-cat.png" alt="">
 					    </carousel-item>
 					  </carousel-component>
-					
-
-					
 		        </v-card-title>
 		        <v-card-actions>
-		          <v-btn flat color="orange">Share</v-btn>
-		          <v-btn flat color="orange">Explore</v-btn>
+		          <v-btn color="orange darken-3 white--text">Share</v-btn>
+		          <v-btn color="orange darken-3 white--text">Add to Cart</v-btn>
 		        </v-card-actions>
 		      </v-card>
       	</v-flex>
       	<v-flex xs12 sm12 md8 lg8 xl8>
       		<div class="detail">
 				   <section>
-				      <h3> <span>{{ item.short_desc }}</span><br></h3>
-				      <p>Specifications:</p>
-				      <ul>
-				        <li>Hover over image</li>
-				        <li>35 mm stainless steel case</li>
-				        <li>Stainless link bracelet with buckle closure</li>
-				        <li>Water resistant to 100m</li>
-				      </ul>
-				      <h4>$XX.XX <button>Add to Cart</button></h4>
+				      <h1 class="display-1"> {{ item.name }}</h1>
+				      <span><star-rating v-model="rating" read-only :star-size="30" :show-rating="false"></star-rating> </span> 
+				      <p>{{ item.short_desc }}</p>
+				      <v-divider></v-divider>
+				       <h2 class=" title pa-3">
+				       <span class="red--text">{{ item.amount|currency('₱ ') }}</span> <br /><span class="grey--text body-2" style="text-decoration: line-through">{{ item.amount|currency('₱ ') }} </span> <span class="black--text body-2 ml-1"> -44% </span></h2>
+				       <v-divider></v-divider>
+				       <p>Color</p>
+				       <p>Quantity</p>
 				    </section>
 			</div>
       	</v-flex>
@@ -59,7 +42,7 @@ import Drift from 'drift-zoom';
   export default{
   	data () {
     return {
-     
+     	rating: 4
     }
   },
     middleware: 'item',
