@@ -98,6 +98,9 @@ import _ from 'lodash'
             quantity: this.cartQuantity,
             item: this.item
           })
+      this.$store.dispatch('snackbarColor', 'success')
+      this.$store.dispatch('snackbarText', 'Item successfully added!')
+      this.$store.dispatch('snackbar', true)
       },
       selectedImage(e, id){
         var classExist = e.srcElement.classList.contains('selectedImg');

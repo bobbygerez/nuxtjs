@@ -1,10 +1,10 @@
 import Vuex from 'vuex'
-
+import _ from 'lodash'
 const createStore = () => {
   return new Vuex.Store({
     
     state: {
-      cart: {},
+      cart: [],
       cartQuantity: 0,
       item: {},
       firstname: '',
@@ -120,8 +120,29 @@ const createStore = () => {
       }
     },
     actions: {
-      cart(store, payload){
-        store.commit('cart', payload)
+      cart(store, value){
+      var cart = store.state.cart;
+
+        if(_.isEmpty(cart)){
+          store.commit('cart', [value]);
+        }
+        else {
+          cart.push(value);
+          var newCart = store.state.cart;
+          store.commit('cart', newCart);
+        }
+              
+      },
+      removeCart(store, delKey){
+        var cart = store.state.cart;
+        delete cart[delKey]
+        var cleanArray = [];
+        for(var key in cart){
+          if(cart[key] !== null || cart[key] !== undefined){
+            cleanArray.push(cart[key])
+          }
+        }
+        store.commit('cart', cleanArray)
       },
       cartQuantity(store, payload){
         store.commit('cartQuantity', payload)
