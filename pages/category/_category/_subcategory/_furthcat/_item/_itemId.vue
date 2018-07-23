@@ -33,7 +33,7 @@
                <p>Select Color <br />
                <span v-for="color in item.colors" :key="color.id">
                  <span v-for="img in color.images" :key="img.id">
-                    <img :src="img.path" class="ma-1" 
+                    <img :src="img.path" class="ma-1 hoverCursor" 
                     @click="selectedImage($event,img.id)">
                  </span>
                </span></p>
@@ -86,7 +86,10 @@ import _ from 'lodash'
     computed: {
     	item(){
     		return this.$store.getters.item
-    	}
+    	},
+      cartQuantity(){
+        return this.$store.getters.cartQuantity
+      }
     },
     methods: {
       selectedImage(e, id){
@@ -95,7 +98,12 @@ import _ from 'lodash'
           e.srcElement.classList.remove("selectedImg");
         }
         else {
-          e.srcElement.classList.add("selectedImg");
+           let length = document.getElementsByClassName('selectedImg').length ;
+           if ( this.cartQuantity > length) {
+            e.srcElement.classList.add("selectedImg");
+           }
+            
+          
         }
         var colorExist = _.includes(this.colorIds, id);
         if (colorExist) {
@@ -112,6 +120,9 @@ import _ from 'lodash'
 </script>
 
 <style type="text/css">
+.hoverCursor{
+  cursor: pointer;
+}
 .selectedImg{
   border: 2px solid gray;
 }
