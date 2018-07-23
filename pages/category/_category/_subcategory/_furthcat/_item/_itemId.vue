@@ -5,12 +5,12 @@
       		<v-card flat>
 		        <v-card-title>
 		             <carousel-component v-for="img in item.images" :key="item.id">
-					    <carousel-item>
-					      <article class="demo-area ">
-							  <img class="demo-trigger" :src="img.path + '?w=200&ch=DPR&dpr=2&border=1,ddd'" :data-zoom="img.path + '?w=1000&ch=DPR&dpr=2'" >
-							</article>
-					    </carousel-item>
-					  </carousel-component>
+    					    <carousel-item>
+    					      <article class="demo-area ">
+    							  <img class="demo-trigger" :src="img.path + '?w=200&ch=DPR&dpr=2&border=1,ddd'" :data-zoom="img.path + '?w=1000&ch=DPR&dpr=2'" >
+    							</article>
+    					    </carousel-item>
+    					  </carousel-component>
 		        </v-card-title>
 		        <v-card-actions>
 		          <v-btn color="orange darken-3 white--text">Share</v-btn>
@@ -60,6 +60,7 @@ import Vue from 'vue'
 import Drift from 'drift-zoom';
 import cartQuantity from '~/components/cart/qty'
 import _ from 'lodash'
+
   export default{
   	data () {
     return {
@@ -71,15 +72,15 @@ import _ from 'lodash'
     middleware: 'item',
     mounted(){
     	var demoTrigger = document.querySelectorAll('.demo-trigger');
-		var paneContainer = document.querySelector('.detail');
+  		var paneContainer = document.querySelector('.detail');
 
-    	for (var i = 0, len = demoTrigger.length; i < len; i++) {
+      	for (var i = 0, len = demoTrigger.length; i < len; i++) {
 
-		      	new Drift(demoTrigger[i], {
-				  paneContainer: paneContainer,
-				  inlinePane: false
-				});
-			}
+  		      	new Drift(demoTrigger[i], {
+      				  paneContainer: paneContainer,
+      				  inlinePane: false
+      				});
+  			}
 		
     },
     components:{cartQuantity},
@@ -89,7 +90,7 @@ import _ from 'lodash'
     	},
       cartQuantity(){
         return this.$store.getters.cartQuantity
-      }
+      },
     },
     methods: {
       addCart(){
@@ -103,27 +104,26 @@ import _ from 'lodash'
       this.$store.dispatch('snackbar', true)
       },
       selectedImage(e, id){
-        var classExist = e.srcElement.classList.contains('selectedImg');
-        if (classExist  === true) {
-          e.srcElement.classList.remove("selectedImg");
-        }
-        else {
-           let length = document.getElementsByClassName('selectedImg').length ;
-           if ( this.cartQuantity > length) {
+        
+        let length = document.getElementsByClassName('selectedImg').length ;
+        if ( this.cartQuantity >= length) {
+          var colorExist = _.includes(this.colorIds, id);
+          var classExist = e.srcElement.classList.contains('selectedImg');
+          console.log('exist', colorExist)
+          if (colorExist) {
+            this.colorIds.splice(this.colorIds.indexOf(id),1)
+            var arr = this.colorIds.filter(e => e !== id)
+            e.srcElement.classList.remove("selectedImg");
+            this.colorIds = arr
+            console.log(this.colorIds)
+          }
+          else {
+            console.log(this.colorIds)
             e.srcElement.classList.add("selectedImg");
-           }
-            
-          
+            this.colorIds.push(id);
+          }
         }
-        var colorExist = _.includes(this.colorIds, id);
-        if (colorExist) {
-          this.colorIds.splice(this.colorIds.indexOf(id),1)
-          var arr = this.colorIds.filter(e => e !== id)
-          this.colorIds = arr
-        }
-        else {
-          this.colorIds.push(id);
-        }
+
       }
     }
   }
