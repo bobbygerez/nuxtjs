@@ -14,7 +14,7 @@
 		        </v-card-title>
 		        <v-card-actions>
 		          <v-btn color="orange darken-3 white--text">Share</v-btn>
-		          <v-btn color="orange darken-3 white--text">Add to Cart</v-btn>
+		          <v-btn color="orange darken-3 white--text" @click="addCart">Add to Cart</v-btn>
 		        </v-card-actions>
 		      </v-card>
       	</v-flex>
@@ -31,8 +31,8 @@
                <br />
                <p>Quantity <cart-quantity></cart-quantity></p>
                <p>Select Color <br />
-               <span v-for="color in item.colors" :key="color.id">
-                 <span v-for="img in color.images" :key="img.id">
+               <span v-for="(color, x) in item.colors" :key="x">
+                 <span v-for="(img,i) in color.images" :key="i">
                     <img :src="img.path" class="ma-1 hoverCursor" 
                     @click="selectedImage($event,img.id)">
                  </span>
@@ -92,6 +92,13 @@ import _ from 'lodash'
       }
     },
     methods: {
+      addCart(){
+          this.$store.dispatch('cart', {
+            color: this.colorIds,
+            quantity: this.cartQuantity,
+            item: this.item
+          })
+      },
       selectedImage(e, id){
         var classExist = e.srcElement.classList.contains('selectedImg');
         if (classExist  === true) {

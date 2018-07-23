@@ -4,6 +4,7 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      cart: {},
       cartQuantity: 0,
       item: {},
       firstname: '',
@@ -33,6 +34,9 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      cart(state, payload){
+        state.cart = payload
+      },
       cartQuantity(state, payload){
         state.cartQuantity = payload
       },
@@ -116,6 +120,9 @@ const createStore = () => {
       }
     },
     actions: {
+      cart(store, payload){
+        store.commit('cart', payload)
+      },
       cartQuantity(store, payload){
         store.commit('cartQuantity', payload)
       },
@@ -204,6 +211,9 @@ const createStore = () => {
       }
     },
     getters: {
+      cart(state){
+        return state.cart
+      },
       cartQuantity(state){
         return state.cartQuantity
       },

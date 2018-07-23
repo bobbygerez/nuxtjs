@@ -300,6 +300,7 @@ fixed
   },
   components: {
     vuetifyLoader, mainSnackbar, loginDialog
+    
   },
   computed: {
    ...mapGetters([

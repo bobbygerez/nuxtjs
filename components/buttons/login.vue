@@ -1,8 +1,6 @@
 <template>
 	<span :class="visibility">
-		  <v-btn icon>
-		    <v-icon>shopping_cart</v-icon>
-		  </v-btn>
+		  <cart-items></cart-items>
 		  <v-btn icon @click="showUserReg">
 		    <v-icon>account_circle</v-icon>
 		  </v-btn>
@@ -22,9 +20,12 @@
 </template>
 <script type="text/javascript">
 	import axios from 'axios'
+  	import cartItems from '~/components/cart/items'
+
 	export default {
 
 		props: ['visibility'],
+		components: { cartItems },
 		computed: {
 			loginDialog(){
 				return this.$store.getters.loginDialog
