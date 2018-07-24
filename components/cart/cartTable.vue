@@ -57,7 +57,7 @@
 </v-container>
 </v-card-text>
 
-<v-card-actions>
+<v-card-actions class="mt-0 pt-0">
 <v-spacer></v-spacer>
           <v-btn flat color="orange" @click="$emit('closeCartMenu')">Cancel</v-btn>
           <v-btn flat color="success">Check out</v-btn>
