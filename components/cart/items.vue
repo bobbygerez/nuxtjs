@@ -13,7 +13,7 @@
         dark
       >
       <v-badge :color="'success'" left>
-        <span slot="badge">{{ cart.length }}</span>
+        <span slot="badge">{{ totalQuantity }}</span>
       </v-badge>
 
         <v-icon>shopping_cart</v-icon>
@@ -21,7 +21,7 @@
 
       <v-card>
         <v-list >
-            <cart-table></cart-table>
+            <cart-table @closeCartMenu="closeCartMenu"></cart-table>
         </v-list>
 
       </v-card>
@@ -39,9 +39,23 @@
       hints: true
     }),
     components: { cartTable },
+    
     computed: {
       cart(){
         return this.$store.getters.cart
+      },
+      totalQuantity(){
+        var x = this.cart.map(function(item){
+          return item.quantity
+        })
+        if(x.length > 0){
+          return x.reduce((a, b)=> a + b)
+        }
+      }
+    },
+    methods: {
+      closeCartMenu(){
+        this.menu = false
       }
     }
   }

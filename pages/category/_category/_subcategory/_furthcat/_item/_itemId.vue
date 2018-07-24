@@ -106,7 +106,10 @@ import _ from 'lodash'
       selectedImage(e, id){
         
         let length = document.getElementsByClassName('selectedImg').length ;
-        if ( this.cartQuantity >= length) {
+        console.log(this.colorIds)
+        console.log(this.cartQuantity)
+        console.log(length)
+        if ( this.cartQuantity > length) {
           var colorExist = _.includes(this.colorIds, id);
           var classExist = e.srcElement.classList.contains('selectedImg');
           console.log('exist', colorExist)
@@ -115,13 +118,20 @@ import _ from 'lodash'
             var arr = this.colorIds.filter(e => e !== id)
             e.srcElement.classList.remove("selectedImg");
             this.colorIds = arr
-            console.log(this.colorIds)
+
+            console.log('color exist' + this.colorIds)
           }
           else {
-            console.log(this.colorIds)
+            console.log('color doesnt exist' + this.colorIds)
             e.srcElement.classList.add("selectedImg");
             this.colorIds.push(id);
           }
+        }else{
+           this.colorIds.splice(this.colorIds.indexOf(id),1)
+            var arr = this.colorIds.filter(e => e !== id)
+            e.srcElement.classList.remove("selectedImg");
+            this.colorIds = arr
+           
         }
 
       }

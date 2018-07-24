@@ -1,4 +1,5 @@
 <template>
+<v-card flat>
  <v-card-text class="hidden-xs-only ma-0 pa-0">
       <v-container class="ma-0 pa-0">
        <v-layout class="text-xs-left ">
@@ -55,6 +56,14 @@
 </v-layout>
 </v-container>
 </v-card-text>
+
+<v-card-actions>
+<v-spacer></v-spacer>
+          <v-btn flat color="orange" @click="$emit('closeCartMenu')">Cancel</v-btn>
+          <v-btn flat color="success">Check out</v-btn>
+        </v-card-actions>
+</v-card>
+</v-card>
 </template>
 
 <script type="text/javascript">
