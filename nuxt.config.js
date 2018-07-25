@@ -16,7 +16,7 @@ module.exports = {
     ],
      script: [
       {
-        src: "lib/Drift.min.js"
+        src: "http://yourjavascript.com/24511711480/drift-min.js"
       },
     ]
   },

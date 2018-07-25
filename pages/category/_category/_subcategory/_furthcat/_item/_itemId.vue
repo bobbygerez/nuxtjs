@@ -60,13 +60,6 @@ import Vue from 'vue'
 import cartQuantity from '~/components/cart/qty'
 import _ from 'lodash'
   export default{
-  	head () {
-	   return {
-	     script: [
-	       { src: 'http://yourjavascript.com/24511711480/drift-min.js' }
-	     ],
-	   } 
-	 },
   	data () {
     return {
      	rating: 4,

@@ -32,7 +32,7 @@
         <td>{{ props.item.quantity }}</td>
         <td>{{ props.item.item.amount|currency('₱ ') }}</td>
         <td>
-          <v-btn icon small class="red--text mt-3" @click.native="remove(props.index)">
+          <v-btn icon small class="orange--text mt-3" @click.native="remove(props.index)">
             <v-icon dark>remove_circle</v-icon>
           </v-btn>
         </td>
@@ -59,8 +59,8 @@
 
 <v-card-actions class="mt-0 pt-0">
 <v-spacer></v-spacer>
-          <v-btn flat color="orange" @click="$emit('closeCartMenu')">Cancel</v-btn>
-          <v-btn flat color="success">Check out</v-btn>
+          <v-btn flat color="error" @click="$emit('closeCartMenu')">Cancel</v-btn>
+          <v-btn flat color="success" :to="'/checkout'" @click="$emit('closeCartMenu')">Check out</v-btn>
         </v-card-actions>
 </v-card>
 </v-card>

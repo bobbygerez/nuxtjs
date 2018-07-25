@@ -6,13 +6,16 @@ export default async function ({context, store, route, redirect, req}) {
  	if (token != null) {
  		return axios.get( process.env.baseApi + '/auth/user?token=' + token)
 		  .then(response => {
-		      store.dispatch('userLogin', response.data.user)
+		      store.dispatch('user', response.data.user)
+		      store.dispatch('userLogin', true)
 		    })
 		  .catch(function(error){
 
 		  	  store.dispatch('snackbarText', 'Login expired...')
               store.dispatch('snackbarColor', 'error')
               store.dispatch('snackbar', true)
+              store.dispatch('userLogin', false)
+              store.dispatch('userLogin', [])
 		  })
  	}
 

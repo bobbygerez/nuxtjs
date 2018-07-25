@@ -4,6 +4,12 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      brgys: [],
+      cities: [],
+      provinces: [],
+      cities: [],
+      brgys: [],
+      stepper: 0,
       colorIds:[],
       cart: [],
       cartQuantity: 0,
@@ -35,6 +41,18 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      brgys(state, payload){
+        state.brgys = payload
+      },
+      cities(state, payload){
+        state.cities = payload
+      },
+      provinces(state, payload){
+        state.provinces = payload
+      },
+      stepper(state, payload){
+        state.stepper = payload
+      },
       colorIds(state, payload){
         state.colorIds = payload
       },
@@ -148,6 +166,18 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      brgys(store, payload){
+        store.commit('brgys', payload)
+      },
+       cities(store, payload){
+        store.commit('cities', payload)
+      },
+      provinces(store, payload){
+        store.commit('provinces', payload)
+      },
+      stepper(store, payload){
+        store.commit('stepper', payload)
+      },
       colorIds(store, payload){
         store.commit('colorIds', payload)
       },
@@ -239,6 +269,18 @@ const createStore = () => {
       }
     },
     getters: {
+      brgys(state){
+        return state.brgys
+      },
+      cities(state){
+        return state.cities
+      },
+      provinces(state){
+        return state.provinces
+      },
+      stepper(state){
+        return state.stepper
+      },
       colorIds(state){
         return state.colorIds
       },

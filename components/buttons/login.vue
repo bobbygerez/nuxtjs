@@ -50,9 +50,10 @@
 		        			snackbarText : res.data.msg,
 		        			snackbar: true
 		        		})
-		        	data.$store.dispatch('userLogin', res.data.userLogin)
+		        	data.$store.dispatch('userLogin', false)
 		        	data.$store.dispatch('user',{})
 		        	data.$store.dispatch('token', null)
+		        	data.$store.dispatch('stepper', 1)
 
 		        })
 			}

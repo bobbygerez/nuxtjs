@@ -416,7 +416,8 @@ methods: {
         data.loginDialog = false
         data.$store.dispatch('token', res.data.token)
         data.$store.dispatch('user', res.data.user)
-        data.$store.dispatch('userLogin', res.data.userLogin)
+        data.$store.dispatch('userLogin', true)
+        data.$store.dispatch('stepper', 2)
         data.$store.dispatch('snackbarText', 'You have successfully sign-in')
         data.$store.dispatch('snackbarColor', 'success')
         data.$store.dispatch('snackbar', true)
