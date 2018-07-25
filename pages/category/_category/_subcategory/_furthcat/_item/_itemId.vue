@@ -57,11 +57,16 @@ Made with dual-materials (durable 1.5mm hard plastic back-plateand flexible TPU 
 
 <script type="text/javascript">
 import Vue from 'vue'
-import Drift from 'drift-zoom';
 import cartQuantity from '~/components/cart/qty'
 import _ from 'lodash'
-
   export default{
+  	head () {
+	   return {
+	     script: [
+	       { src: 'http://yourjavascript.com/24511711480/drift-min.js' }
+	     ],
+	   } 
+	 },
   	data () {
     return {
      	rating: 4,
