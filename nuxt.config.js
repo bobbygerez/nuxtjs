@@ -40,13 +40,14 @@ module.exports = {
   '~plugins/vue2-filters',
   '~plugins/carousel',
   '~plugins/start-rating',
+  '~plugins/vue-google-maps',
    { src: '~/plugins/localStorage.js', ssr: false },
   ],
   /*
   ** Build configuration
   */
   build: {
-    vendor: ['axios', 'vuetify', 'drift-zoom', 'lodash'],
+    vendor: ['axios', 'vuetify', 'drift-zoom', 'lodash', 'babel-polyfill'],
     /*
     ** Run ESLint on save
     */
@@ -59,6 +60,17 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }*/
+      if (!isClient) {
+        // This instructs Webpack to include `vue2-google-maps`'s Vue files
+        // for server-side rendering
+        config.externals.splice(0, 0, function (context, request, callback) {
+          if (/^vue2-google-maps($|\/)/.test(request)) {
+            callback(null, false)
+          } else {
+            callback()
+          }
+        })
+      }
     }
   }
 }

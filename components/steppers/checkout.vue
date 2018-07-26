@@ -86,9 +86,32 @@
       <v-stepper-content step="3">
         <v-card
           class="mb-5"
-          color="grey lighten-1"
-          height="200px"
-        ></v-card>
+          flat
+          height="500px"
+        >
+
+        <GmapMap
+        :center="{lat:12.879721, lng:121.774017}"
+        :zoom="7"
+        map-type-id="terrain"
+        style="width: 100%; height: 500px"
+      >
+        <GmapMarker
+          :position="markersPosition"
+          :clickable="true"
+          :draggable="true"
+          @dragend="dragend($event.latLng)"
+          @click="infoWindow.open=true"
+        />
+        <gmap-info-window
+          :position="markersPosition"
+          :opened="infoWindow.open"
+          @closeclick="infoWindow.open=false">
+          <div>Receivers Info</div>
+      </gmap-info-window>
+      </GmapMap>
+
+        </v-card>
 
         <v-btn
           color="primary"
@@ -120,10 +143,18 @@
 </template>
 <script>
   import axios from 'axios'
+  import vue2GoogleMaps from '~/components/google-maps/vue2-google-maps'
   export default {
     middleware: ['auth'],
     data () {
       return {
+        infoWindow: {
+          open: false,
+        },
+        markers: [{
+            position: {lat: 12.879721, lng: 121.774017}
+          }],
+        markersPosition: {lat: 12.879721, lng: 121.774017},
         selecteBrgy: '',
         selectedCity: '',
         selectedProvince: '',
@@ -149,7 +180,15 @@
       this.getProvince()
        this.$store.dispatch('stepper', 2);
     },
+    components: {
+      vue2GoogleMaps
+    },
     computed: {
+      merhcantInfo(){
+
+            return "<div>Delivery Information</div>"
+
+      },
       userLogin(){
         return this.$store.getters.userLogin
       },
@@ -173,6 +212,12 @@
       }
     },
     methods: {
+      gmapMakerClick(){
+        this.infoWinOpen = true
+      },
+      dragend(latLng){
+        this.markersPosition = { lat: latLng.lat(), lng: latLng.lng() };
+      },
       changeStepper(val){
         this.$store.dispatch('stepper', val);
       },
