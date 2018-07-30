@@ -29,21 +29,22 @@
       </v-stepper-content>
 
       <v-stepper-content step="2">
+       <v-form v-model="validStep" ref="stepper" lazy-validation>
         <v-card
           class="mb-5"
           flat
-          height="300px"
+          height="430px"
         >
           <v-text-field
             v-model="receiver"
-            :rules="[() => !!receiver || 'This field is required']"
+            :rules="[() => !!receiver || 'Receiver is required']"
             label="Full Name"
             placeholder="Receiver's Full Name"
             required
           ></v-text-field>
           <v-text-field
             v-model="contactNumber"
-            :rules="[() => !!contactNumber || 'This field is required']"
+            :rules="[() => !!contactNumber || 'Contact Number is required']"
             :mask="'(###) ### - #####'"
             label="Contact Number"
             placeholder="Receiver's Phone number"
@@ -52,6 +53,7 @@
           <v-combobox
           v-model="selectedProvince"
           :items="provinces"
+          :rules="[() => !!selectedProvince || 'Province is required']"
           item-text="provDesc"
           item-value="provCode"
           label="Province"
@@ -59,27 +61,35 @@
         <v-combobox
           v-model="selectedCity"
           :items="cities"
+          :rules="[() => !!selectedCity || 'City is required']"
           item-text="citymunDesc"
           item-value="citymunCode"
           label="City"
         ></v-combobox>
-                <v-combobox
+          <v-combobox
           v-model="selecteBrgy"
           :items="brgys"
+          :rules="[() => !!selecteBrgy || 'Barangay is required']"
           item-text="brgyDesc"
           item-value="brgyCode"
           label="Barangay"
         ></v-combobox>
+        <v-textarea
+          box
+          v-model="streetNo"
+          label="Lot No., Street"
+          :rules="[() => !!streetNo || 'Street is required']"
+        ></v-textarea>
         </v-card>
 
         <v-btn
           color="primary"
-          @click="changeStepper(3)"
+          @click="checkRequired(3)"
         >
           Continue
         </v-btn>
 
-
+       </v-form>
        
       </v-stepper-content>
 
@@ -107,7 +117,12 @@
           :position="markersPosition"
           :opened="infoWindow.open"
           @closeclick="infoWindow.open=false">
-          <div>Receivers Info</div>
+          <div><strong>{{receiver}}</strong> <br />
+          <span>{{contactNumber}}</span><br />
+          <span>{{ textBrgy }}</span><br />
+          <span>{{ textCity }}, {{ textProvince}} </span>
+
+          </div>
       </gmap-info-window>
       </GmapMap>
 
@@ -124,19 +139,67 @@
       </v-stepper-content>
       <v-stepper-content step="4">
         <v-card
-          class="mb-5"
-          color="grey lighten-1"
-          height="200px"
-        ></v-card>
-
-        <v-btn
-          color="primary"
-          @click="changeStepper(2)"
+          class="mb-1"
+          flat
         >
-          Continue
-        </v-btn>
+          
+           <v-data-table
+              v-bind:headers="checkOutHeaders"
+              :items="cart"
+              hide-actions
+              flat
+              >
+              <template slot="items" slot-scope="props">
+                <td class="text-lg-center text-md-center text-sm-center text-xs-center">
+                  <v-avatar
+                  class="grey lighten-4 ma-1"
+                  :size="'70px'"
+                  :tile="true"
+                  >
 
-        <v-btn flat @click="changeStepper(3)">Back</v-btn>
+                  <img :src="props.item.item.images[0].path" alt="avatar">
+                </v-avatar>
+                <div >
+                  <span  v-for="(color, key) in props.item.item.colors" v-if="color.id === props.item.colorId">
+                    {{ color.name}} 
+                  </span>
+                  <!-- <span v-for="(size, key) in props.item.item.sizes" v-if="size.id === props.item.sizeId">
+                    {{ ' - ' + size.name}} 
+                  </span> -->
+                </div>
+              </td>
+
+              <td>{{ props.item.quantity }}</td>
+              <td>{{ props.item.item.amount|currency('₱ ') }}</td>
+              <td>
+                <v-btn icon small class="orange--text mt-3" @click.native="remove(props.index)">
+                  <v-icon dark>remove_circle</v-icon>
+                </v-btn>
+              </td>
+            </template>
+           <template slot="footer">
+            <td>
+              &nbsp;
+            </td>
+            <td class="subheading">
+              TOTAL: 
+            </td>
+            <td class="py-3 subheading">
+              {{ cartTotal|currency('₱ ') }}
+            </td>
+            <td>
+              &nbsp;
+            </td>
+          </template>
+          </v-data-table>
+
+        </v-card>
+
+        <v-btn color="primary" @click="changeStepper(3)" >Back</v-btn>
+        <span class="pa-3">
+            <img :src="paypalImg" width="150" @click="payNow()" >
+        </span>
+        
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -148,6 +211,8 @@
     middleware: ['auth'],
     data () {
       return {
+        paypalImg: '',
+        validStep: false,
         infoWindow: {
           open: false,
         },
@@ -155,9 +220,13 @@
             position: {lat: 12.879721, lng: 121.774017}
           }],
         markersPosition: {lat: 12.879721, lng: 121.774017},
+        streetNo: '',
         selecteBrgy: '',
         selectedCity: '',
         selectedProvince: '',
+        textProvince: '',
+        textCity: '',
+        textBrgy: '',
         receiver: '',
         contactNumber: '',
         emailLogin: '',
@@ -178,12 +247,28 @@
     },
     created(){
       this.getProvince()
-       this.$store.dispatch('stepper', 2);
+       this.$store.dispatch('stepper', 4);
+       this.paypalImg = process.env.basePublic + '/images/PayPal.jpg'
     },
     components: {
       vue2GoogleMaps
     },
     computed: {
+
+      cartTotal(){
+        var x = this.cart.map(function(item){
+          return item.quantity * parseFloat(item.item.amount)
+        })
+        if(x.length > 0){
+          return x.reduce((a, b)=> a + b)
+        }
+      },
+      cart(){
+        return this.$store.getters.cart
+      },
+      checkOutHeaders(){
+        return this.$store.getters.checkOutHeaders
+      },
       merhcantInfo(){
 
             return "<div>Delivery Information</div>"
@@ -212,6 +297,15 @@
       }
     },
     methods: {
+      remove(key){
+        this.$store.dispatch('removeCart', key);
+      },
+      checkRequired(stepper){
+        if(this.$refs.stepper.validate()){
+          this.changeStepper(stepper)
+        }
+
+      },
       gmapMakerClick(){
         this.infoWinOpen = true
       },
@@ -227,22 +321,46 @@
             .then(res => {
                 data.$store.dispatch('provinces', res.data.provinces);
               })
+      },
+      payNow(){
+         let data = this
+        axios.post( process.env.baseApi + '/pay-with-credit-card')
+            .then(res => {
+               
+              })
       }
     },
     watch: {
       selectedProvince(val){
         let data = this
-        axios.get( process.env.baseApi + '/get-cities/' + val.provCode)
+        if (val != null) {
+          axios.get( process.env.baseApi + '/get-cities/' + val.provCode)
             .then(res => {
                 data.$store.dispatch('cities', res.data.cities);
+                data.textProvince = res.data.province;
               })
+        }
+        
       },
       selectedCity(val){
          let data = this
-        axios.get( process.env.baseApi + '/get-brgys/' + val.citymunCode)
+         if (val != null) {
+          axios.get( process.env.baseApi + '/get-brgys/' + val.citymunCode)
             .then(res => {
                 data.$store.dispatch('brgys', res.data.brgys);
+                data.textCity = res.data.city;
               })
+        }
+        
+      },
+      selecteBrgy(val){
+        let data = this
+        if (val != null) {
+          axios.get( process.env.baseApi + '/get-selected-brgy/' + val.brgyCode)
+            .then(res => {
+               data.textBrgy = res.data.brgy;
+              })
+        }
       }
     }
   }
