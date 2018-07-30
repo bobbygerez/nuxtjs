@@ -12,7 +12,9 @@
 
       <v-divider></v-divider>
 
-      <v-stepper-step step="4">Payments</v-stepper-step>
+      <v-stepper-step :complete="stepper > 4" step="4">Item's Review</v-stepper-step>
+       <v-divider></v-divider>
+       <v-stepper-step step="5">Payments</v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>
@@ -31,15 +33,20 @@
       <v-stepper-content step="2">
        <v-form v-model="validStep" ref="stepper" lazy-validation>
         <v-card
-          class="mb-5"
           flat
-          height="430px"
         >
           <v-text-field
-            v-model="receiver"
-            :rules="[() => !!receiver || 'Receiver is required']"
-            label="Full Name"
-            placeholder="Receiver's Full Name"
+            v-model="receiverFirstname"
+            :rules="[() => !!receiverFirstname || 'Firstname is required']"
+            label="First Name"
+            placeholder="Receiver's First Name"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="receiverLastname"
+            :rules="[() => !!receiverLastname || 'lastname is required']"
+            label="Last Name"
+            placeholder="Receiver's Last Name"
             required
           ></v-text-field>
           <v-text-field
@@ -117,7 +124,7 @@
           :position="markersPosition"
           :opened="infoWindow.open"
           @closeclick="infoWindow.open=false">
-          <div><strong>{{receiver}}</strong> <br />
+          <div><strong>{{receiverFirstname}} {{ receiverLastname}}</strong> <br />
           <span>{{contactNumber}}</span><br />
           <span>{{ textBrgy }}</span><br />
           <span>{{ textCity }}, {{ textProvince}} </span>
@@ -195,11 +202,91 @@
 
         </v-card>
 
-        <v-btn color="primary" @click="changeStepper(3)" >Back</v-btn>
-        <span class="pa-3">
-            <img :src="paypalImg" width="150" @click="payNow()" >
-        </span>
+        <v-btn color="primary" @click="changeStepper(5)" >Continue</v-btn>
+        <v-btn flat @click="changeStepper(3)">Back</v-btn>
         
+      </v-stepper-content>
+      <v-stepper-content step="5">
+       <v-form v-model="validPayModel" ref="validPay" lazy-validation>
+        <v-card
+          class="mb-1"
+          flat
+        >
+
+        <v-text-field
+            v-model="payerFirstname"
+            :rules="[() => !!payerFirstname || 'Firstname is required']"
+            label="Firstname"
+            placeholder="Enter Firstname"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="payerLastname"
+            :rules="[() => !!payerLastname || 'Lastname is required']"
+            label="Lastname"
+            placeholder="Enter Lastname"
+            required
+          ></v-text-field>
+        
+        <v-combobox
+          v-model="selectedCreditCard"
+          :items="creditCardType"
+          label="Credit Card type"
+          chips
+          deletable-chips
+        ></v-combobox>  
+          <v-text-field 
+          :mask="'credit-card'" 
+          v-model="creditCardNumber"  
+          label="Card Number" 
+          :rules="[() => !!creditCardNumber || 'Card Number is required']"></v-text-field>
+        
+          <v-layout row wrap>
+            <v-flex xs12 sm6 md3 class="ml-1">
+              <v-combobox
+                v-model="selectedExpirationMonth"
+                :items="expiryMonth"
+                label="Select Expiration Month"
+                chips
+                deletable-chips
+              ></v-combobox> 
+            </v-flex>
+
+            <v-flex xs12 sm6 md3 class="ml-1">
+              <v-combobox
+                v-model="selectedExpirationYear"
+                :items="expiryYear"
+                label="Select Expiration Year"
+                chips
+                deletable-chips
+              ></v-combobox> 
+            </v-flex>
+          </v-layout>
+          <v-layout row wrap>
+            <v-flex xs12 sm6 md3 class="ml-1">
+              <v-text-field
+                v-model="cvv"
+                :mask="'####'" 
+                :rules="[() => !!cvv || 'Card Verification Value is required']"
+                label="CVV"
+                required
+              ></v-text-field>
+            </v-flex>
+
+            <v-flex xs12 sm6 md3 class="ml-1">
+              <img :src="cvvImg" width="150" >
+            </v-flex>
+          </v-layout>
+        </v-card>
+        
+        <a href="#">
+          <img :src="paypalImg" width="150" @click="payNow()" >
+        </a>
+        <div style="float: left">
+        <v-btn color="primary" @click="changeStepper(4)" >Back</v-btn>
+        </div>
+        
+        </v-form>
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -211,7 +298,19 @@
     middleware: ['auth'],
     data () {
       return {
+        validPayModel: false,
+        cvv: '',
+        payerLastname: '',
+        payerFirstname: '',
+        selectedExpirationMonth:'',
+        selectedExpirationYear: '',
+        expiryYear: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+        expiryMonth: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+        creditCardNumber: '',
+        selectedCreditCard: '',
+        creditCardType: ['Visa', 'Mastercard', 'American Express', 'Discover'],
         paypalImg: '',
+        cvvImg: '',
         validStep: false,
         infoWindow: {
           open: false,
@@ -227,7 +326,8 @@
         textProvince: '',
         textCity: '',
         textBrgy: '',
-        receiver: '',
+        receiverFirstname: '',
+        receiverLastname: '',
         contactNumber: '',
         emailLogin: '',
         passwordLogin: '',
@@ -247,14 +347,14 @@
     },
     created(){
       this.getProvince()
-       this.$store.dispatch('stepper', 4);
-       this.paypalImg = process.env.basePublic + '/images/PayPal.jpg'
+       this.$store.dispatch('stepper', 5);
+       this.paypalImg = process.env.basePublic + '/images/paypal.png'
+       this.cvvImg = process.env.basePublic + '/images/cvv.jpg'
     },
     components: {
       vue2GoogleMaps
     },
     computed: {
-
       cartTotal(){
         var x = this.cart.map(function(item){
           return item.quantity * parseFloat(item.item.amount)
@@ -324,14 +424,24 @@
       },
       payNow(){
          let data = this
-        axios.post( process.env.baseApi + '/pay-with-credit-card')
+
+         if(this.$refs.validPay.validate()){
+           data.$store.dispatch('loader', true);
+           data.$store.dispatch('loginLoader', 'Processing Payment...');
+           axios.post( process.env.baseApi + '/pay-with-credit-card')
             .then(res => {
-               
+                data.$store.dispatch('loader', false);
+                data.$store.dispatch('snackbar', true);
+                data.$store.dispatch('snackbarText', 'Payment Successful. Please check your email.');
+                data.$store.dispatch('snackbarColor', 'success');
               })
+        }
+       
       }
     },
     watch: {
       selectedProvince(val){
+        console.log(this.selectedProvince)
         let data = this
         if (val != null) {
           axios.get( process.env.baseApi + '/get-cities/' + val.provCode)
