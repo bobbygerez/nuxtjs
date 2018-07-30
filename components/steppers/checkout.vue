@@ -428,7 +428,20 @@
          if(this.$refs.validPay.validate()){
            data.$store.dispatch('loader', true);
            data.$store.dispatch('loginLoader', 'Processing Payment...');
-           axios.post( process.env.baseApi + '/pay-with-credit-card')
+           axios.post( process.env.baseApi + '/pay-with-credit-card', {
+              firstname: this.payerFirstname,
+              lastname: this.payerLastname,
+              creditCard: this.creditCardNumber,
+              cardType: this.selectedCreditCard,
+              expiryMonth: this.selectedExpirationMonth,
+              expiryYear: this.selectedExpirationYear,
+              cvv: this.cvv,
+              deliver: {
+
+                  firstname: this.receiverFirstname,
+                  lastname: this.receiverLastname 
+              }
+           })
             .then(res => {
                 data.$store.dispatch('loader', false);
                 data.$store.dispatch('snackbar', true);
