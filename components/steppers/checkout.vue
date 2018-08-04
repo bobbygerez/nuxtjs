@@ -107,7 +107,15 @@
           :position="markersPosition"
           :opened="infoWindow.open"
           @closeclick="infoWindow.open=false">
-          <div>Receivers Info</div>
+          <div>
+              <p>
+                <strong>{{ receiver }} </strong>
+                <br />
+                <span>{{ contactNumber }} </span>
+
+              </p>
+
+          </div>
       </gmap-info-window>
       </GmapMap>
 
@@ -178,7 +186,7 @@
     },
     created(){
       this.getProvince()
-       this.$store.dispatch('stepper', 2);
+       this.$store.dispatch('stepper', 5);
     },
     components: {
       vue2GoogleMaps
