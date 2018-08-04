@@ -4,7 +4,7 @@
       <v-container class="ma-0 pa-0">
        <v-layout class="text-xs-left ">
         <v-data-table
-        v-bind:headers="headers"
+        v-bind:headers="checkOutHeaders"
         :items="cart"
         hide-actions
         flat
@@ -63,41 +63,18 @@
           <v-btn flat color="success" :to="'/checkout'" @click="$emit('closeCartMenu')">Check out</v-btn>
         </v-card-actions>
 </v-card>
-</v-card>
 </template>
 
 <script type="text/javascript">
   export default{
     props: ['item'],
     data: () => ({
-      headers: [
-      {
-        text: 'Image',
-        align: 'left',
-        sortable: false,
-        value: 'img'
-      },
-      { 
-        text: 'Qty', 
-        value: 'qty',
-        align: 'left',
-        sortable: false,
-      },
-      { 
-        text: 'Price', 
-        value: 'price',
-        align: 'left',
-        sortable: false, 
-      },
-      { 
-        text: 'Remove', 
-        value: 'remove',
-        align: 'left',
-        sortable: false, 
-      }
-      ],
+     
     }),
     computed: {
+      checkOutHeaders(){
+        return this.$store.getters.checkOutHeaders
+      },
       cart(){
         return this.$store.getters.cart
       },

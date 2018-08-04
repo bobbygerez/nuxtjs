@@ -26,7 +26,9 @@
 			items, itemHeaders
 		},
 		computed: {
-
+			selectedProvince(){
+				return this.$store.getters.selectedProvince
+			},
 			items(){
 				return this.$store.getters.items
 			},
@@ -47,7 +49,7 @@
 		watch: {
 
 			page(val){
-				axios.get( process.env.baseApi + '/get-items/' + this.$route.params.catId + '?catId=' + this.$route.params.catId + '&page=' + val + '&perPage=' + this.$store.getters.selectedPage)
+				axios.get( process.env.baseApi + '/get-items/' + this.$route.params.catId + '?catId=' + this.$route.params.catId + '&page=' + val + '&perPage=' + this.$store.getters.selectedPage + '&provCode=' + this.selectedProvince.provCode)
 		        .then(res => {
 		             this.$store.commit('items', res.data.items)
 		             this.$store.commit('categoryName', res.data.categoryName)

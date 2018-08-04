@@ -393,15 +393,15 @@ methods: {
   slug(text){
     return this.$slug(text)
   },
-  querySelections (v) {
-    this.loading = true
-    setTimeout(() => {
-      this.items = this.states.filter(e => {
-        return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
-      })
-      this.loading = false
-    }, 500)
-  },
+  // querySelections (v) {
+  //   this.loading = true
+  //   setTimeout(() => {
+  //     this.items = this.states.filter(e => {
+  //       return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+  //     })
+  //     this.loading = false
+  //   }, 500)
+  // },
   signin(){
 
     if(this.$refs.login.validate()){
@@ -456,9 +456,9 @@ methods: {
 
 },
 watch: {
-  search (val) {
-    val && val !== this.select && this.querySelections(val)
-  }
+  // search (val) {
+  //   val && val !== this.select && this.querySelections(val)
+  // }
 }
 }
 </script>
