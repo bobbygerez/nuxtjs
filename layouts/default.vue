@@ -196,6 +196,43 @@ fixed
 </v-card-actions>
 </v-card>
 </v-dialog>
+<v-dialog v-model="storeLocation" width="800px">
+  <v-card>
+    <v-card-title
+    class="grey lighten-4 py-4 title"
+    >
+    Filter Store Location
+  </v-card-title>
+  <v-container grid-list-sm class="pa-4">
+    <v-form v-model="valid" ref="login" lazy-validation>
+    <v-layout row wrap>
+      <v-flex xs12 lg12 sm12 md 12 lx12>
+         <v-combobox
+          v-model="selectedProvince"
+          :items="provinces"
+          item-text="provDesc"
+          item-value="id"
+          label="Province"
+        ></v-combobox>
+      </v-flex>
+      <v-flex xs12 lg12 sm12 md 12 lx12>
+            <v-combobox
+          v-model="selectedCity"
+          :items="cities"
+          item-text="citymunDesc"
+          item-value="id"
+          label="City"
+        ></v-combobox>
+      </v-flex>
+    </v-layout>
+  </v-form>
+</v-container>
+<v-card-actions>
+  <v-spacer></v-spacer>
+  <v-btn flat color="primary" @click="hideStoreLocation">Close</v-btn>
+</v-card-actions>
+</v-card>
+</v-dialog>
 <vuetify-loader></vuetify-loader>
 <main-snackbar></main-snackbar>
 </v-app>
@@ -233,68 +270,11 @@ fixed
       search: null,
       select: null,
       states: [
-      'Alabama',
-      'Alaska',
-      'American Samoa',
-      'Arizona',
-      'Arkansas',
-      'California',
-      'Colorado',
-      'Connecticut',
-      'Delaware',
-      'District of Columbia',
-      'Federated States of Micronesia',
-      'Florida',
-      'Georgia',
-      'Guam',
-      'Hawaii',
-      'Idaho',
-      'Illinois',
-      'Indiana',
-      'Iowa',
-      'Kansas',
-      'Kentucky',
-      'Louisiana',
-      'Maine',
-      'Marshall Islands',
-      'Maryland',
-      'Massachusetts',
-      'Michigan',
-      'Minnesota',
-      'Mississippi',
-      'Missouri',
-      'Montana',
-      'Nebraska',
-      'Nevada',
-      'New Hampshire',
-      'New Jersey',
-      'New Mexico',
-      'New York',
-      'North Carolina',
-      'North Dakota',
-      'Northern Mariana Islands',
-      'Ohio',
-      'Oklahoma',
-      'Oregon',
-      'Palau',
-      'Pennsylvania',
-      'Puerto Rico',
-      'Rhode Island',
-      'South Carolina',
-      'South Dakota',
-      'Tennessee',
-      'Texas',
-      'Utah',
-      'Vermont',
-      'Virgin Island',
-      'Virginia',
-      'Washington',
-      'West Virginia',
-      'Wisconsin',
-      'Wyoming'
+      
       ]
     }
   }, 
+
   props: {
     source: String
   },
@@ -308,6 +288,9 @@ fixed
     'loader',
     'loginLoader',
     'snackbar',
+    'storeLocation',
+    'provinces',
+    'cities'
 
     ]),
    firstname: {
@@ -316,6 +299,22 @@ fixed
     },
     set(val){
       this.$store.dispatch('firstname', val)
+    }
+  },
+  selectedProvince:{
+    get(){
+      return this.$store.getters.selectedProvince
+    },
+    set(val) {
+      this.$store.dispatch('selectedProvince', val)
+    }
+  },
+  selectedCity:{
+    get(){
+      return this.$store.getters.selectedCity
+    },
+    set(val) {
+      this.$store.dispatch('selectedCity', val)
     }
   },
   middlename: {
@@ -381,9 +380,18 @@ fixed
     set(val){
       this.$store.dispatch('loginDialog', false)
     }
+  },
+  page(){
+    return this.$store.getters.page
+  },
+  selectedPage(){
+    return this.$store.getters.selectedPage
   }
 },
 methods: {
+  hideStoreLocation(){
+    this.$store.dispatch('storeLocation', false);
+  },
   hideUserReg(){
     this.$store.dispatch('userReg', false);
   },
@@ -455,10 +463,26 @@ methods: {
   }
 
 },
-watch: {
-  // search (val) {
-  //   val && val !== this.select && this.querySelections(val)
-  // }
-}
+  watch: {
+        selectedProvince(val){
+          
+          let data = this
+          if (val != null) {
+            axios.get( process.env.baseApi + '/get-cities/' + val.provCode)
+              .then(res => {
+                  data.$store.dispatch('cities', res.data.cities);
+                  data.textProvince = res.data.province;
+                })
+          }
+
+          axios.get( process.env.baseApi + '/get-items?provId=' + val.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
+          .then(res => {
+               data.$store.commit('items', res.data.items)
+            })
+
+
+          
+        },
+    }
 }
 </script>

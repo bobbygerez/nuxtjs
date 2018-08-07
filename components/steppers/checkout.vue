@@ -35,6 +35,8 @@
         <v-card
           flat
         >
+          <h3 class="title">Delivery Information</h3>
+          <br />
           <v-text-field
             v-model="receiverFirstname"
             :rules="[() => !!receiverFirstname || 'Firstname is required']"
@@ -124,20 +126,19 @@
           :position="markersPosition"
           :opened="infoWindow.open"
           @closeclick="infoWindow.open=false">
-<<<<<<< HEAD
+
           <div>
               <p>
-                <strong>{{ receiver }} </strong>
+                <strong>{{ receiverFirstname }} {{ receiverLastname }}</strong>
                 <br />
                 <span>{{ contactNumber }} </span>
 
               </p>
-=======
+          </div>
           <div><strong>{{receiverFirstname}} {{ receiverLastname}}</strong> <br />
           <span>{{contactNumber}}</span><br />
           <span>{{ textBrgy }}</span><br />
           <span>{{ textCity }}, {{ textProvince}} </span>
->>>>>>> 3c6df5d8567aa71d43e1107325e3f8f1294cfe83
 
           </div>
       </gmap-info-window>
@@ -222,7 +223,21 @@
           class="mb-1"
           flat
         >
-
+        <h3 class="title">Billing Information</h3>
+        <br />
+        <v-switch
+            label="Same as delivery information"
+            v-model="switch1"
+          ></v-switch>
+        </v-container>
+        <v-combobox
+          v-model="selectedCountry"
+          :items="countries"
+          :rules="[() => !!selectedCountry || 'Province is required']"
+          item-text="name"
+          item-value="iso"
+          label="Country"
+        ></v-combobox>
         <v-text-field
             v-model="payerFirstname"
             :rules="[() => !!payerFirstname || 'Firstname is required']"
@@ -272,25 +287,11 @@
               ></v-combobox> 
             </v-flex>
           </v-layout>
-          <v-layout row wrap>
-            <v-flex xs12 sm6 md3 class="ml-1">
-              <v-text-field
-                v-model="cvv"
-                :mask="'####'" 
-                :rules="[() => !!cvv || 'Card Verification Value is required']"
-                label="CVV"
-                required
-              ></v-text-field>
-            </v-flex>
-
-            <v-flex xs12 sm6 md3 class="ml-1">
-              <img :src="cvvImg" width="150" >
-            </v-flex>
-          </v-layout>
+          
         </v-card>
         
         <a href="#">
-          <img :src="paypalImg" width="150" @click="payNow()" >
+          <img :src="paypalImg" width="200" @click="payNow()" >
         </a>
         <div style="float: left">
         <v-btn color="primary" @click="changeStepper(4)" >Back</v-btn>
@@ -308,6 +309,9 @@
     middleware: ['auth'],
     data () {
       return {
+        countries: [],
+        selectedCountry: '',
+        switch1: false,
         validPayModel: false,
         cvv: '',
         payerLastname: '',
@@ -357,12 +361,10 @@
     },
     created(){
       this.getProvince()
+      this.getCountries()
        this.$store.dispatch('stepper', 5);
-<<<<<<< HEAD
-=======
        this.paypalImg = process.env.basePublic + '/images/paypal.png'
        this.cvvImg = process.env.basePublic + '/images/cvv.jpg'
->>>>>>> 3c6df5d8567aa71d43e1107325e3f8f1294cfe83
     },
     components: {
       vue2GoogleMaps
@@ -383,9 +385,7 @@
         return this.$store.getters.checkOutHeaders
       },
       merhcantInfo(){
-
             return "<div>Delivery Information</div>"
-
       },
       userLogin(){
         return this.$store.getters.userLogin
@@ -417,7 +417,6 @@
         if(this.$refs.stepper.validate()){
           this.changeStepper(stepper)
         }
-
       },
       gmapMakerClick(){
         this.infoWinOpen = true
@@ -435,13 +434,19 @@
                 data.$store.dispatch('provinces', res.data.provinces);
               })
       },
+      getCountries(){
+        let data = this
+        axios.get( process.env.baseApi + '/get-countries')
+            .then(res => {
+                data.countries = res.data.countries
+              })
+      },
       payNow(){
          let data = this
-
          if(this.$refs.validPay.validate()){
            data.$store.dispatch('loader', true);
            data.$store.dispatch('loginLoader', 'Processing Payment...');
-           axios.post( process.env.baseApi + '/pay-with-credit-card', {
+         axios.post( process.env.baseApi + '/pay-with-credit-card', {
               firstname: this.payerFirstname,
               lastname: this.payerLastname,
               creditCard: this.creditCardNumber,
@@ -450,7 +455,6 @@
               expiryYear: this.selectedExpirationYear,
               cvv: this.cvv,
               deliver: {
-
                   firstname: this.receiverFirstname,
                   lastname: this.receiverLastname 
               }
@@ -460,7 +464,10 @@
                 data.$store.dispatch('snackbar', true);
                 data.$store.dispatch('snackbarText', 'Payment Successful. Please check your email.');
                 data.$store.dispatch('snackbarColor', 'success');
+                window.open('www.yahoo.com')
+
               })
+            
         }
        
       }

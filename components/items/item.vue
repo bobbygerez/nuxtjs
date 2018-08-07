@@ -16,6 +16,7 @@
           <span v-for="img in item.images">
             <img :src="img.path" class='responsive'/>
           </span>
+          <p class="caption"><v-icon>place</v-icon>{{ item.province.provDesc }}, {{ item.city.citymunDesc }}</p>
           <p>{{ item.short_desc| truncate(100) }}</p>
           <h3 class="text-lg-center red--text">{{ item.amount|currency('₱ ') }}</h3>
         </v-card-text>

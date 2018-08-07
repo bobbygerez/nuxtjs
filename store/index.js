@@ -4,6 +4,7 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      storeLocation: false,
        checkOutHeaders: [
       {
         text: 'Image',
@@ -30,7 +31,16 @@ const createStore = () => {
         sortable: false, 
       }
       ],
-      selectedProvince: '',
+      selectedProvince: {
+        id: '',
+        provDesc: '',
+        id: ''
+      },
+      selectedCity: {
+        id: '',
+        citymunDesc: '',
+        id: ''
+      },
       brgys: [],
       cities: [],
       provinces: [],
@@ -68,6 +78,12 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      storeLocation(state, payload){
+        state.storeLocation = payload
+      },
+      selectedCity(state, payload){
+        state.selectedCity = payload
+      },
       selectedProvince(state, payload){
         state.selectedProvince = payload
       },
@@ -196,8 +212,14 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      storeLocation(store, payload){
+        store.commit('storeLocation', payload)
+      },
       selectedProvince(store, payload){
         store.commit('selectedProvince', payload)
+      },
+      selectedCity(store, payload){
+        store.commit('selectedCity', payload)
       },
       brgys(store, payload){
         store.commit('brgys', payload)
@@ -302,11 +324,17 @@ const createStore = () => {
       }
     },
     getters: {
+      storeLocation(state){
+        return state.storeLocation
+      },
       checkOutHeaders(state){
         return state.checkOutHeaders
       },
       selectedProvince(state){
         return state.selectedProvince
+      },
+      selectedCity(state){
+        return state.selectedCity
       },
       brgys(state){
         return state.brgys
