@@ -1,15 +1,24 @@
 <template>
   <v-layout class="ma-0 pa-0 pr-1">
-        <v-flex xs12 sm12 md1 lg1 xl1>
-            <v-btn icon @click="showStoreLocation" >
-              <v-icon >place</v-icon>
-            </v-btn>
+        
+        <v-flex xs12 sm12 md12 lg12 xl12 class="text-xs-center mt-2" >
+        <span class="subheading">Displaying <span class="gray--text">{{ items.from }}</span > to <span class="gray--text">{{ items.to }}</span > out of <span class="gray--text">{{ items.total }}</span> {{ suffix }} </span>
 
-        </v-flex>
-        <v-flex xs12 sm12 md8 lg8 xl8>
-          <div class="subheading pl-2 pt-3 text-xs-center">
-            <p>Displaying <span class="gray--text">{{ items.from }}</span > to <span class="gray--text">{{ items.to }}</span > out of <span class="gray--text">{{ items.total }}</span> {{ suffix }} </p>
-          </div>
+        
+        <v-btn icon @click="showStoreLocation" class="green--text" >
+              <v-icon>place</v-icon> 
+            </v-btn>
+            <v-chip
+              v-model="provDesc"
+              close
+             
+            >{{ selectedProvince.provDesc }}</v-chip>
+            <v-chip
+              v-model="citymunDesc"
+              close
+            >{{ selectedCity.citymunDesc }}</v-chip>
+        
+            
         </v-flex>
         <!-- <v-combobox
           v-model="selectedProvince"
@@ -21,7 +30,7 @@
           chips
           deletable-chips
         ></v-combobox> -->
-        <v-flex xs12 sm12 md3 lg3 xl3>
+        <!-- <v-flex xs12 sm12 md2 lg2 xl2>
           <v-select
                 max-height="100"
                 label="Items per page"
@@ -30,21 +39,57 @@
                 v-model="selectedPage"
               ></v-select>
           
-        </v-flex>
+        </v-flex> -->
   </v-layout>
 </template>
 <script type="text/javascript">
   
   export default {
+    
     props: ['suffix'],
     middleware: ['provinces'],
     computed: {
+      citymunDesc: {
+        get(){
+          if (this.selectedCity.citymunDesc != '') {
+            return true
+          }else{
+            return false
+          }
+        },
+        set(val){
+          this.$store.dispatch('selectedCity',{
+            citymunDesc: '',
+            id: ''
+          })
+        }
+        
+      },
+      provDesc: {
+        get(){
+          if (this.selectedProvince.provDesc != '') {
+            return true
+          }else{
+            return false
+          }
+        },
+        set(val){
+          this.$store.dispatch('selectedProvince',{
+            provDesc: '',
+            id: ''
+          })
+        }
+        
+      },
       selectedProvince: {
         get(){
           return this.$store.getters.selectedProvince
-        },
-        set(val){
-           this.$store.dispatch('selectedProvince',val)
+        }
+        
+      },
+      selectedCity: {
+        get(){
+          return this.$store.getters.selectedCity
         }
         
       },

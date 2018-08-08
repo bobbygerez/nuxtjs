@@ -6,7 +6,7 @@
     fixed
     app
     >
-    <v-list>
+    <v-list v-if="dashboard != true">
       <v-list-tile :to="'/'">
         <v-list-tile-title>Home</v-list-tile-title>
       </v-list-tile>
@@ -19,27 +19,34 @@
         <v-list-tile-title>{{ category.name }}</v-list-tile-title>
       </v-list-tile>
       
-      <v-list-group
-      no-action
-      sub-group
-      v-for="(subcategory, i) in category.subcategories"
-      :key="i"
-      >
-      <v-list-tile slot="activator" :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + `/${subcategory.id}`">
-        <v-list-tile-title>{{ subcategory.name }}</v-list-tile-title>
+        <v-list-group
+        no-action
+        sub-group
+        v-for="(subcategory, i) in category.subcategories"
+        :key="i"
+        >
+        <v-list-tile slot="activator" :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + `/${subcategory.id}`">
+          <v-list-tile-title>{{ subcategory.name }}</v-list-tile-title>
+        </v-list-tile>
+
+        <v-list-tile
+        v-for="(furtherCat, i) in subcategory.further_categories"
+        :key="i"
+        :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + '/' + slug(furtherCat.name) +`/${furtherCat.id}`"
+        >
+        <v-list-tile-title>{{ furtherCat.name }}</v-list-tile-title>
       </v-list-tile>
+    </v-list-group>
 
-      <v-list-tile
-      v-for="(furtherCat, i) in subcategory.further_categories"
-      :key="i"
-      :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + '/' + slug(furtherCat.name) +`/${furtherCat.id}`"
-      >
-      <v-list-tile-title>{{ furtherCat.name }}</v-list-tile-title>
-    </v-list-tile>
-  </v-list-group>
-
-</v-list-group>
-</v-list>
+    </v-list-group>
+    </v-list>
+    <v-list v-if="dashboard != false">
+      <v-list-tile :to="'/'">
+        <v-list-tile-title>Home</v-list-tile-title>
+      </v-list-tile>
+      <v-divider></v-divider>
+      
+    </v-list>
 </v-navigation-drawer>
 <v-toolbar
 :clipped-left="$vuetify.breakpoint.lgAndUp"
@@ -284,6 +291,7 @@ fixed
   },
   computed: {
    ...mapGetters([
+    'dashboard',
     'categories',
     'loader',
     'loginLoader',
@@ -460,6 +468,14 @@ methods: {
           })
       
     }
+  },
+  getItemsProvince(){
+    let data = this
+    axios.get( process.env.baseApi + '/get-items?provId=' + this.selectedProvince.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
+          .then(res => {
+               data.$store.commit('items', res.data.items)
+            })
+
   }
 
 },
@@ -467,7 +483,7 @@ methods: {
         selectedProvince(val){
           
           let data = this
-          if (val != null) {
+          if (val.provCode != null) {
             axios.get( process.env.baseApi + '/get-cities/' + val.provCode)
               .then(res => {
                   data.$store.dispatch('cities', res.data.cities);
@@ -475,14 +491,24 @@ methods: {
                 })
           }
 
-          axios.get( process.env.baseApi + '/get-items?provId=' + val.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
-          .then(res => {
-               data.$store.commit('items', res.data.items)
-            })
+          this.getItemsProvince()
 
 
           
         },
+        selectedCity(val){
+          let data = this 
+          if (val.id != '') {
+            axios.get( process.env.baseApi + '/get-items?cityId=' + val.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
+            .then(res => {
+                 data.$store.commit('items', res.data.items)
+              })
+          }else{
+            this.getItemsProvince()
+
+          }
+          
+        }
     }
 }
 </script>

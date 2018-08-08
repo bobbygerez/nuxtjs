@@ -4,7 +4,7 @@
 		  <v-btn icon @click="showUserReg">
 		    <v-icon>account_circle</v-icon>
 		  </v-btn>
-		  <v-btn icon v-if="userLogin == true"> 
+		  <v-btn icon v-if="userLogin == true" to="dashboard"> 
 		    <v-icon >dashboard</v-icon>
 		  </v-btn>
 		  <v-btn icon v-if="userLogin == true" @click="logoff"> 

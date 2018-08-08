@@ -29,6 +29,7 @@
   export default {
     created(){
       this.$store.dispatch('page', 1);
+      this.$store.dispatch('dashboard', false);
     },
     fetch ({ store, params }) {
       return myFetchMethod(store, params)
