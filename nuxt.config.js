@@ -31,7 +31,7 @@ module.exports = {
     basePublic: 'http://localhost/estoreapi/public'
   },
   router: {
-    middleware: ['sidebar-menu', 'auth']
+    middleware: ['sidebar-menu']
   },
   loading: { color: '#3B8070' },
   plugins:[

@@ -45,7 +45,16 @@
         <v-list-tile-title>Home</v-list-tile-title>
       </v-list-tile>
       <v-divider></v-divider>
+      <v-list-group
+      v-for="(menu, x) in user.menus"
+      :key="x"
+      >
+      <v-list-tile slot="activator" :to="'/super-admin/' + menu.name">
+        <v-list-tile-title>{{  menu.name }}</v-list-tile-title>
+      </v-list-tile>
       
+
+    </v-list-group>
     </v-list>
 </v-navigation-drawer>
 <v-toolbar
@@ -298,7 +307,8 @@ fixed
     'snackbar',
     'storeLocation',
     'provinces',
-    'cities'
+    'cities',
+    'user'
 
     ]),
    firstname: {

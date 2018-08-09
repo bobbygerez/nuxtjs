@@ -63,7 +63,9 @@ const createStore = () => {
       subcategoryName: '',
       categoryName: '',
       token: null,
-      user: {},
+      user: {
+        menu: {}
+      },
       userLogin: false,
       userReg: false,
       loginDialog: false,
