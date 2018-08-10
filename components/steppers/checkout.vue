@@ -230,14 +230,7 @@
             v-model="switch1"
           ></v-switch>
         </v-container>
-        <v-combobox
-          v-model="selectedCountry"
-          :items="countries"
-          :rules="[() => !!selectedCountry || 'Province is required']"
-          item-text="name"
-          item-value="iso"
-          label="Country"
-        ></v-combobox>
+        <span v-if="switch1==false">
         <v-text-field
             v-model="payerFirstname"
             :rules="[() => !!payerFirstname || 'Firstname is required']"
@@ -252,42 +245,52 @@
             placeholder="Enter Lastname"
             required
           ></v-text-field>
-        
+          <v-text-field
+            v-model="payerContactNum"
+            :rules="[() => !!payerContactNum || 'Contact Number is required']"
+            :mask="'(###) ### - #######'"
+            label="Contact Number"
+            placeholder="Payer's Phone number"
+            required
+          ></v-text-field>
+        </span>
         <v-combobox
-          v-model="selectedCreditCard"
-          :items="creditCardType"
-          label="Credit Card type"
-          chips
-          deletable-chips
-        ></v-combobox>  
-          <v-text-field 
-          :mask="'credit-card'" 
-          v-model="creditCardNumber"  
-          label="Card Number" 
-          :rules="[() => !!creditCardNumber || 'Card Number is required']"></v-text-field>
-        
-          <v-layout row wrap>
-            <v-flex xs12 sm6 md3 class="ml-1">
-              <v-combobox
-                v-model="selectedExpirationMonth"
-                :items="expiryMonth"
-                label="Select Expiration Month"
-                chips
-                deletable-chips
-              ></v-combobox> 
-            </v-flex>
-
-            <v-flex xs12 sm6 md3 class="ml-1">
-              <v-combobox
-                v-model="selectedExpirationYear"
-                :items="expiryYear"
-                label="Select Expiration Year"
-                chips
-                deletable-chips
-              ></v-combobox> 
-            </v-flex>
-          </v-layout>
-          
+          v-model="selectedCountry"
+          :items="countries"
+          :rules="[() => !!selectedCountry || 'Province is required']"
+          item-text="name"
+          item-value="sortName"
+          label="Country"
+        ></v-combobox>
+        <v-combobox
+          v-model="paymentProvince"
+          :items="paymentProvinces"
+          :rules="[() => !!paymentProvince || 'Province is required']"
+          item-text="name"
+          item-value="id"
+          label="State/Province"
+        ></v-combobox>
+        <v-combobox
+          v-model="paymentCity"
+          :items="paymentCities"
+          :rules="[() => !!paymentCity || 'Province is required']"
+          item-text="name"
+          item-value="id"
+          label="City"
+        ></v-combobox>
+        <v-text-field
+            v-model="postalCode"
+            :rules="[() => !!postalCode || 'Contact Number is required']"
+            label="Postal Code"
+            placeholder="Enter Postal code"
+            required
+          ></v-text-field>
+          <v-textarea
+          box
+          v-model="paymentStreet"
+          label="Lot No., Street"
+          :rules="[() => !!paymentStreet || 'Street is required']"
+        ></v-textarea>
         </v-card>
         
         <a href="#">
@@ -309,6 +312,13 @@
     middleware: ['auth'],
     data () {
       return {
+        paymentStreet: '',
+        postalCode: '',
+        payerContactNum: '',
+        paymentCity:'',
+        paymentCities:[],
+        paymentProvince:'',
+        paymentProvinces: [],
         countries: [],
         selectedCountry: '',
         switch1: false,
@@ -453,28 +463,46 @@
            axios.post( process.env.baseApi + '/pay-with-credit-card', {
               firstname: this.payerFirstname,
               lastname: this.payerLastname,
-              creditCard: this.creditCardNumber,
-              cardType: this.selectedCreditCard,
-              expiryMonth: this.selectedExpirationMonth,
-              expiryYear: this.selectedExpirationYear,
-              cvv: this.cvv,
-              deliver: {
-
-                  firstname: this.receiverFirstname,
-                  lastname: this.receiverLastname 
-              }
+              contactNum: this.payerContactNum,
+              country: this.selectedCountry,
+              province: this.paymentProvince,
+              city: this.paymentCity,
+              postalCode: this.postalCode
            })
-            .then(res => {
+            .then(function(res){
                 data.$store.dispatch('loader', false);
-                data.$store.dispatch('snackbar', true);
-                data.$store.dispatch('snackbarText', 'Payment Successful. Please check your email.');
-                data.$store.dispatch('snackbarColor', 'success');
-              })
+                window.location.href = res.data.approval_url;
+            })
         }
+
+        
        
+      },
+      approval(url){
+        window.open(url);
       }
     },
     watch: {
+      paymentProvince(val){
+        let data = this
+        if (val != null) {
+          axios.get( process.env.baseApi + '/get-payment-cities/' + val.id)
+            .then(res => {
+                 data.paymentCities = res.data.cities
+              })
+        }
+        
+      },
+      selectedCountry(val){
+        let data = this
+        if (val != null) {
+          axios.get( process.env.baseApi + '/get-payment-province/' + val.id)
+            .then(res => {
+                 this.paymentProvinces = res.data.states
+              })
+        }
+        
+      },
       selectedProvince(val){
         console.log(this.selectedProvince)
         let data = this
