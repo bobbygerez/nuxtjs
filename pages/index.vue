@@ -20,7 +20,7 @@
   import items from '~/components/items/item'
   import itemHeaders from '~/components/items/item-headers'
   function myFetchMethod(store, params){
-    return axios.get( process.env.baseApi + '/get-items?page=' + store.getters.page + '&perPage=' + store.getters.selectedPage)
+    return axios.get( process.env.baseApi + '/get-items?provId=' + store.getters.selectedProvince.id + '&page=' + store.getters.page + '&perPage=' + store.getters.selectedPage)
         .then(res => {
              store.commit('items', res.data.items)
           })
@@ -29,6 +29,7 @@
   export default {
     created(){
       this.$store.dispatch('page', 1);
+      this.$store.dispatch('dashboard', false);
     },
     fetch ({ store, params }) {
       return myFetchMethod(store, params)
@@ -36,7 +37,11 @@
     components: {
       items, itemHeaders
     },
+    middleware: 'provinces',
     computed: {
+      selectedProvince(){
+        return this.$store.getters.selectedProvince
+      },
       categories(){
         return this.$store.getters.categories
       },

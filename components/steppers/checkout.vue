@@ -230,7 +230,18 @@
             v-model="switch1"
           ></v-switch>
         </v-container>
+<<<<<<< HEAD
         <span v-if="switch1==false">
+=======
+        <v-combobox
+          v-model="selectedCountry"
+          :items="countries"
+          :rules="[() => !!selectedCountry || 'Province is required']"
+          item-text="name"
+          item-value="iso"
+          label="Country"
+        ></v-combobox>
+>>>>>>> ef26e3fd423d583838826648e7d289f1808ffb85
         <v-text-field
             v-model="payerFirstname"
             :rules="[() => !!payerFirstname || 'Firstname is required']"
@@ -255,6 +266,7 @@
           ></v-text-field>
         </span>
         <v-combobox
+<<<<<<< HEAD
           v-model="selectedCountry"
           :items="countries"
           :rules="[() => !!selectedCountry || 'Province is required']"
@@ -291,6 +303,42 @@
           label="Lot No., Street"
           :rules="[() => !!paymentStreet || 'Street is required']"
         ></v-textarea>
+=======
+          v-model="selectedCreditCard"
+          :items="creditCardType"
+          label="Credit Card type"
+          chips
+          deletable-chips
+        ></v-combobox>  
+          <v-text-field 
+          :mask="'credit-card'" 
+          v-model="creditCardNumber"  
+          label="Card Number" 
+          :rules="[() => !!creditCardNumber || 'Card Number is required']"></v-text-field>
+        
+          <v-layout row wrap>
+            <v-flex xs12 sm6 md3 class="ml-1">
+              <v-combobox
+                v-model="selectedExpirationMonth"
+                :items="expiryMonth"
+                label="Select Expiration Month"
+                chips
+                deletable-chips
+              ></v-combobox> 
+            </v-flex>
+
+            <v-flex xs12 sm6 md3 class="ml-1">
+              <v-combobox
+                v-model="selectedExpirationYear"
+                :items="expiryYear"
+                label="Select Expiration Year"
+                chips
+                deletable-chips
+              ></v-combobox> 
+            </v-flex>
+          </v-layout>
+          
+>>>>>>> ef26e3fd423d583838826648e7d289f1808ffb85
         </v-card>
         
         <a href="#">
@@ -312,6 +360,7 @@
     middleware: ['auth'],
     data () {
       return {
+<<<<<<< HEAD
         paymentStreet: '',
         postalCode: '',
         payerContactNum: '',
@@ -319,6 +368,8 @@
         paymentCities:[],
         paymentProvince:'',
         paymentProvinces: [],
+=======
+>>>>>>> ef26e3fd423d583838826648e7d289f1808ffb85
         countries: [],
         selectedCountry: '',
         switch1: false,
@@ -395,9 +446,7 @@
         return this.$store.getters.checkOutHeaders
       },
       merhcantInfo(){
-
             return "<div>Delivery Information</div>"
-
       },
       userLogin(){
         return this.$store.getters.userLogin
@@ -429,7 +478,6 @@
         if(this.$refs.stepper.validate()){
           this.changeStepper(stepper)
         }
-
       },
       gmapMakerClick(){
         this.infoWinOpen = true
@@ -456,23 +504,44 @@
       },
       payNow(){
          let data = this
-
          if(this.$refs.validPay.validate()){
            data.$store.dispatch('loader', true);
            data.$store.dispatch('loginLoader', 'Processing Payment...');
-           axios.post( process.env.baseApi + '/pay-with-credit-card', {
+         axios.post( process.env.baseApi + '/pay-with-credit-card', {
               firstname: this.payerFirstname,
               lastname: this.payerLastname,
+<<<<<<< HEAD
               contactNum: this.payerContactNum,
               country: this.selectedCountry,
               province: this.paymentProvince,
               city: this.paymentCity,
               postalCode: this.postalCode
+=======
+              creditCard: this.creditCardNumber,
+              cardType: this.selectedCreditCard,
+              expiryMonth: this.selectedExpirationMonth,
+              expiryYear: this.selectedExpirationYear,
+              cvv: this.cvv,
+              deliver: {
+                  firstname: this.receiverFirstname,
+                  lastname: this.receiverLastname 
+              }
+>>>>>>> ef26e3fd423d583838826648e7d289f1808ffb85
            })
             .then(function(res){
                 data.$store.dispatch('loader', false);
+<<<<<<< HEAD
                 window.location.href = res.data.approval_url;
             })
+=======
+                data.$store.dispatch('snackbar', true);
+                data.$store.dispatch('snackbarText', 'Payment Successful. Please check your email.');
+                data.$store.dispatch('snackbarColor', 'success');
+                window.open('www.yahoo.com')
+
+              })
+            
+>>>>>>> ef26e3fd423d583838826648e7d289f1808ffb85
         }
 
         

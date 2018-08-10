@@ -4,6 +4,8 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      dashboard: false,
+      storeLocation: false,
        checkOutHeaders: [
       {
         text: 'Image',
@@ -30,7 +32,16 @@ const createStore = () => {
         sortable: false, 
       }
       ],
-      selectedProvince: '',
+      selectedProvince: {
+        id: '',
+        provDesc: '',
+        id: ''
+      },
+      selectedCity: {
+        id: '',
+        citymunDesc: '',
+        id: ''
+      },
       brgys: [],
       cities: [],
       provinces: [],
@@ -52,7 +63,9 @@ const createStore = () => {
       subcategoryName: '',
       categoryName: '',
       token: null,
-      user: {},
+      user: {
+        menu: {}
+      },
       userLogin: false,
       userReg: false,
       loginDialog: false,
@@ -68,6 +81,15 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      dashboard(state, payload){
+        state.dashboard = payload
+      },
+      storeLocation(state, payload){
+        state.storeLocation = payload
+      },
+      selectedCity(state, payload){
+        state.selectedCity = payload
+      },
       selectedProvince(state, payload){
         state.selectedProvince = payload
       },
@@ -196,8 +218,17 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      dashboard(store, payload){
+        store.commit('dashboard', payload)
+      },
+      storeLocation(store, payload){
+        store.commit('storeLocation', payload)
+      },
       selectedProvince(store, payload){
         store.commit('selectedProvince', payload)
+      },
+      selectedCity(store, payload){
+        store.commit('selectedCity', payload)
       },
       brgys(store, payload){
         store.commit('brgys', payload)
@@ -302,11 +333,20 @@ const createStore = () => {
       }
     },
     getters: {
+      dashboard(state){
+        return state.dashboard
+      },
+      storeLocation(state){
+        return state.storeLocation
+      },
       checkOutHeaders(state){
         return state.checkOutHeaders
       },
       selectedProvince(state){
         return state.selectedProvince
+      },
+      selectedCity(state){
+        return state.selectedCity
       },
       brgys(state){
         return state.brgys

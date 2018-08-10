@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default async function ({context, store, route, redirect, req}) {
+export default async function ({context, store, router, redirect, req}) {
 
 	var token = store.getters.token;
  	if (token != null) {
@@ -10,7 +10,7 @@ export default async function ({context, store, route, redirect, req}) {
 		      store.dispatch('userLogin', true)
 		    })
 		  .catch(function(error){
-
+		  	  redirect('/')
 		  	  store.dispatch('snackbarText', 'Login expired...')
               store.dispatch('snackbarColor', 'error')
               store.dispatch('snackbar', true)
@@ -18,5 +18,7 @@ export default async function ({context, store, route, redirect, req}) {
               store.dispatch('userLogin', [])
 		  })
  	}
+
+ 	
 
 }
