@@ -303,7 +303,7 @@
           label="Lot No., Street"
           :rules="[() => !!paymentStreet || 'Street is required']"
         ></v-textarea>
-=======
+
           v-model="selectedCreditCard"
           :items="creditCardType"
           label="Credit Card type"
@@ -338,7 +338,7 @@
             </v-flex>
           </v-layout>
           
->>>>>>> ef26e3fd423d583838826648e7d289f1808ffb85
+
         </v-card>
         
         <a href="#">
@@ -360,7 +360,7 @@
     middleware: ['auth'],
     data () {
       return {
-<<<<<<< HEAD
+
         paymentStreet: '',
         postalCode: '',
         payerContactNum: '',
@@ -368,8 +368,7 @@
         paymentCities:[],
         paymentProvince:'',
         paymentProvinces: [],
-=======
->>>>>>> ef26e3fd423d583838826648e7d289f1808ffb85
+
         countries: [],
         selectedCountry: '',
         switch1: false,
@@ -510,13 +509,11 @@
          axios.post( process.env.baseApi + '/pay-with-credit-card', {
               firstname: this.payerFirstname,
               lastname: this.payerLastname,
-<<<<<<< HEAD
               contactNum: this.payerContactNum,
               country: this.selectedCountry,
               province: this.paymentProvince,
               city: this.paymentCity,
-              postalCode: this.postalCode
-=======
+              postalCode: this.postalCode,
               creditCard: this.creditCardNumber,
               cardType: this.selectedCreditCard,
               expiryMonth: this.selectedExpirationMonth,
@@ -526,22 +523,26 @@
                   firstname: this.receiverFirstname,
                   lastname: this.receiverLastname 
               }
->>>>>>> ef26e3fd423d583838826648e7d289f1808ffb85
+
            })
             .then(function(res){
                 data.$store.dispatch('loader', false);
-<<<<<<< HEAD
+
                 window.location.href = res.data.approval_url;
             })
-=======
-                data.$store.dispatch('snackbar', true);
+            .catch(function(err){
+              data.$store.dispatch('snackbar', true);
                 data.$store.dispatch('snackbarText', 'Payment Successful. Please check your email.');
                 data.$store.dispatch('snackbarColor', 'success');
                 window.open('www.yahoo.com')
 
-              })
+            })
+
+                
+
+              
             
->>>>>>> ef26e3fd423d583838826648e7d289f1808ffb85
+
         }
 
         

@@ -1,10 +1,10 @@
 <template>
 	<span :class="visibility">
 		  <cart-items></cart-items>
-		  <v-btn icon @click="showUserReg">
+		  <v-btn icon v-if="userLogin == false" @click="showUserReg">
 		    <v-icon>account_circle</v-icon>
 		  </v-btn>
-		  <v-btn icon v-if="userLogin == true" to="dashboard"> 
+		  <v-btn icon v-if="userLogin == true" to="/dashboard/users/1"> 
 		    <v-icon >dashboard</v-icon>
 		  </v-btn>
 		  <v-btn icon v-if="userLogin == true" @click="logoff"> 
@@ -53,6 +53,12 @@
 		        	data.$store.dispatch('token', null)
 		        	data.$store.dispatch('stepper', 1)
 
+		        })
+		        .catch(function(err){
+		        	data.$store.dispatch('userLogin', false)
+		        	data.$store.dispatch('user',{})
+		        	data.$store.dispatch('token', null)
+		        	data.$store.dispatch('stepper', 1)
 		        })
 			}
 		}

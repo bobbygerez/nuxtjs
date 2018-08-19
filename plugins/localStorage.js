@@ -1,16 +1,21 @@
 import createPersistedState from 'vuex-persistedstate'
 
-export default ({store}) => {
-  createPersistedState({
+export default ({store, isHMR}) => {
+  if (isHMR) return
+
+  window.onNuxtReady(() => {
+    createPersistedState({
        reducer: (persistedState) => {
         const stateFilter = Object.assign({}, persistedState)
-        const blackList = ['loginDialog', 'userReg']
+        const blackList = []
 
         blackList.forEach((item) => {
           delete stateFilter[item]
         })
 
         return stateFilter
-      }
-  })(store)
+      },
+
+    })(store)
+  })
 }

@@ -19,43 +19,86 @@
         <v-list-tile-title>{{ category.name }}</v-list-tile-title>
       </v-list-tile>
       
-        <v-list-group
-        no-action
-        sub-group
-        v-for="(subcategory, i) in category.subcategories"
-        :key="i"
-        >
-        <v-list-tile slot="activator" :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + `/${subcategory.id}`">
-          <v-list-tile-title>{{ subcategory.name }}</v-list-tile-title>
-        </v-list-tile>
-
-        <v-list-tile
-        v-for="(furtherCat, i) in subcategory.further_categories"
-        :key="i"
-        :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + '/' + slug(furtherCat.name) +`/${furtherCat.id}`"
-        >
-        <v-list-tile-title>{{ furtherCat.name }}</v-list-tile-title>
-      </v-list-tile>
-    </v-list-group>
-
-    </v-list-group>
-    </v-list>
-    <v-list v-if="dashboard != false">
-      <v-list-tile :to="'/'">
-        <v-list-tile-title>Home</v-list-tile-title>
-      </v-list-tile>
-      <v-divider></v-divider>
       <v-list-group
-      v-for="(menu, x) in user.menus"
-      :key="x"
+      no-action
+      sub-group
+      v-for="(subcategory, i) in category.subcategories"
+      :key="i"
       >
-      <v-list-tile slot="activator" :to="'/super-admin/' + menu.name">
-        <v-list-tile-title>{{  menu.name }}</v-list-tile-title>
+      <v-list-tile slot="activator" :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + `/${subcategory.id}`">
+        <v-list-tile-title>{{ subcategory.name }}</v-list-tile-title>
       </v-list-tile>
-      
 
-    </v-list-group>
-    </v-list>
+      <v-list-tile
+      v-for="(furtherCat, i) in subcategory.further_categories"
+      :key="i"
+      :to="'/Category/' + slug(category.name) + '/'+ slug(subcategory.name) + '/' + slug(furtherCat.name) +`/${furtherCat.id}`"
+      >
+      <v-list-tile-title>{{ furtherCat.name }}</v-list-tile-title>
+    </v-list-tile>
+  </v-list-group>
+
+</v-list-group>
+</v-list>
+<v-list v-if="dashboard != false">
+
+  <v-list-tile :to="'/'">
+    <v-list-tile-action>
+      <v-icon>home</v-icon>
+    </v-list-tile-action>
+    <v-list-tile-content>
+      <v-list-tile-title>Home</v-list-tile-title>
+    </v-list-tile-content>
+  </v-list-tile>
+  <v-divider></v-divider>
+  <v-list-tile :to="'/'">
+    <v-list-tile-action>
+      <v-icon>account_circle</v-icon>
+    </v-list-tile-action>
+    <v-list-tile-content>
+      <v-list-tile-title>Profile</v-list-tile-title>
+    </v-list-tile-content>
+  </v-list-tile>
+  <v-divider></v-divider>
+  <v-list-tile :to="'/'">
+    <v-list-tile-action>
+      <v-icon>people</v-icon>
+    </v-list-tile-action>
+    <v-list-tile-content>
+      <v-list-tile-title>users</v-list-tile-title>
+    </v-list-tile-content>
+  </v-list-tile>
+  <v-divider></v-divider>
+
+  <v-list-group
+  v-for="item in dashboardCategories"
+  v-model="item.active"
+  :key="item.title"
+  :prepend-icon="item.action"
+  no-action
+
+  >
+  <v-list-tile slot="activator">
+    <v-list-tile-content>
+      <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+    </v-list-tile-content>
+  </v-list-tile>
+
+  <v-list-tile
+  v-for="subItem in item.items"
+  :key="subItem.title"
+  @click=""
+  >
+  <v-list-tile-content>
+    <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+  </v-list-tile-content>
+
+  <v-list-tile-action>
+    <v-icon>{{ subItem.action }}</v-icon>
+  </v-list-tile-action>
+</v-list-tile>
+</v-list-group>
+</v-list>
 </v-navigation-drawer>
 <v-toolbar
 :clipped-left="$vuetify.breakpoint.lgAndUp"
@@ -107,39 +150,39 @@ fixed
     New User Account
   </v-card-title>
   <v-container grid-list-sm class="pa-4">
-  <v-form v-model="validReg" ref="register" lazy-validation>
-    <v-alert :value="alertLogin" outline color="error" icon="warning" dismissible @click="alertLogin = false">
-      {{ alertText }}
-    </v-alert>
-    <v-layout row wrap>
-      <v-flex xs4>
-        <v-text-field
-        prepend-icon="account_circle"
-        placeholder="Firstname"
-        v-model="firstname"
-        :rules="[
+    <v-form v-model="validReg" ref="register" lazy-validation>
+      <v-alert :value="alertLogin" outline color="error" icon="warning" dismissible @click="alertLogin = false">
+        {{ alertText }}
+      </v-alert>
+      <v-layout row wrap>
+        <v-flex xs4>
+          <v-text-field
+          prepend-icon="account_circle"
+          placeholder="Firstname"
+          v-model="firstname"
+          :rules="[
           (v) => !!v || 'Firstname is required'
-        ]"
-        ></v-text-field>
-      </v-flex>
-      <v-flex xs4>
-        <v-text-field
-        placeholder="Middlename"
-        v-model="middlename"
-        :rules="[
+          ]"
+          ></v-text-field>
+        </v-flex>
+        <v-flex xs4>
+          <v-text-field
+          placeholder="Middlename"
+          v-model="middlename"
+          :rules="[
           (v) => !!v || 'Middlename is required'
-        ]"
-        ></v-text-field>
-      </v-flex>
-      <v-flex xs4>
-        <v-text-field
-        placeholder="Lastname"
-        v-model="lastname"
-        :rules="[
-         (v) => !!v || 'Lastname is required'
-        ]"
-        ></v-text-field>
-      </v-flex>
+          ]"
+          ></v-text-field>
+        </v-flex>
+        <v-flex xs4>
+          <v-text-field
+          placeholder="Lastname"
+          v-model="lastname"
+          :rules="[
+          (v) => !!v || 'Lastname is required'
+          ]"
+          ></v-text-field>
+        </v-flex>
       </v-flex>
       <v-flex xs12>
         <v-text-field
@@ -160,13 +203,13 @@ fixed
       @click:prepend="e1 = !e1"
       ></v-text-field>
     </v-layout>
-    </v-form>
-  </v-container>
-  <v-card-actions>
-    <v-spacer></v-spacer>
-    <v-btn flat color="primary" @click="hideUserReg">Cancel</v-btn>
-    <v-btn flat @click="register">Submit</v-btn>
-  </v-card-actions>
+  </v-form>
+</v-container>
+<v-card-actions>
+  <v-spacer></v-spacer>
+  <v-btn flat color="primary" @click="hideUserReg">Cancel</v-btn>
+  <v-btn flat @click="register">Submit</v-btn>
+</v-card-actions>
 </v-card>
 </v-dialog>
 <v-dialog v-model="loginDialog" width="800px">
@@ -221,23 +264,23 @@ fixed
   </v-card-title>
   <v-container grid-list-sm class="pa-4">
     <v-form v-model="valid" ref="login" lazy-validation>
-    <v-layout row wrap>
-      <v-flex xs12 lg12 sm12 md 12 lx12>
+      <v-layout row wrap>
+        <v-flex xs12 lg12 sm12 md 12 lx12>
          <v-combobox
-          v-model="selectedProvince"
-          :items="provinces"
-          item-text="provDesc"
-          item-value="id"
-          label="Province"
-        ></v-combobox>
-      </v-flex>
-      <v-flex xs12 lg12 sm12 md 12 lx12>
-            <v-combobox
-          v-model="selectedCity"
-          :items="cities"
-          item-text="citymunDesc"
-          item-value="id"
-          label="City"
+         v-model="selectedProvince"
+         :items="provinces"
+         item-text="provDesc"
+         item-value="id"
+         label="Province"
+         ></v-combobox>
+       </v-flex>
+       <v-flex xs12 lg12 sm12 md 12 lx12>
+        <v-combobox
+        v-model="selectedCity"
+        :items="cities"
+        item-text="citymunDesc"
+        item-value="id"
+        label="City"
         ></v-combobox>
       </v-flex>
     </v-layout>
@@ -263,6 +306,16 @@ fixed
   export default {
    data(){
     return {
+      dashboardCategories: [
+      {
+        action: 'local_activity',
+        title: 'Categories',
+        items: [
+        { title: 'Subcategories' },
+        { title: 'Further Categories' }
+        ]
+      }
+      ],
       emailLogin: '',
       passwordLogin: '',
       password: '',
@@ -282,7 +335,6 @@ fixed
       ],
       drawer: true,
       loading: false,
-      items: [],
       search: null,
       select: null,
       states: [
@@ -461,64 +513,64 @@ methods: {
   register(){
     let data = this
     if(this.$refs.register.validate()){
-         axios.post(process.env.baseApi + '/user',{
-            firstname: this.firstname,
-            middlename: this.middlename,
-            lastname: this.lastname,
-            email: this.email,
-            password: this.password
-          }).then(function (res){
-            
+     axios.post(process.env.baseApi + '/user',{
+      firstname: this.firstname,
+      middlename: this.middlename,
+      lastname: this.lastname,
+      email: this.email,
+      password: this.password
+    }).then(function (res){
 
-          })
-          .catch(function(error){
-            data.alertText = 'Email address has already taken.'
-            data.alertLogin = true
-            data.$store.dispatch('loader', false) 
-          })
-      
-    }
-  },
-  getItemsProvince(){
-    let data = this
-    axios.get( process.env.baseApi + '/get-items?provId=' + this.selectedProvince.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
-          .then(res => {
-               data.$store.commit('items', res.data.items)
-            })
+
+    })
+    .catch(function(error){
+      data.alertText = 'Email address has already taken.'
+      data.alertLogin = true
+      data.$store.dispatch('loader', false) 
+    })
 
   }
+},
+getItemsProvince(){
+  let data = this
+  axios.get( process.env.baseApi + '/get-items?provId=' + this.selectedProvince.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
+  .then(res => {
+   data.$store.commit('items', res.data.items)
+ })
+
+}
 
 },
-  watch: {
-        selectedProvince(val){
-          
-          let data = this
-          if (val.provCode != null) {
-            axios.get( process.env.baseApi + '/get-cities/' + val.provCode)
-              .then(res => {
-                  data.$store.dispatch('cities', res.data.cities);
-                  data.textProvince = res.data.province;
-                })
-          }
+watch: {
+  selectedProvince(val){
 
-          this.getItemsProvince()
-
-
-          
-        },
-        selectedCity(val){
-          let data = this 
-          if (val.id != '') {
-            axios.get( process.env.baseApi + '/get-items?cityId=' + val.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
-            .then(res => {
-                 data.$store.commit('items', res.data.items)
-              })
-          }else{
-            this.getItemsProvince()
-
-          }
-          
-        }
+    let data = this
+    if (val.provCode != null) {
+      axios.get( process.env.baseApi + '/get-cities/' + val.provCode)
+      .then(res => {
+        data.$store.dispatch('cities', res.data.cities);
+        data.textProvince = res.data.province;
+      })
     }
+
+    this.getItemsProvince()
+
+
+
+  },
+  selectedCity(val){
+    let data = this 
+    if (val.id != '') {
+      axios.get( process.env.baseApi + '/get-items?cityId=' + val.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
+      .then(res => {
+       data.$store.commit('items', res.data.items)
+     })
+    }else{
+      this.getItemsProvince()
+
+    }
+
+  }
+}
 }
 </script>
