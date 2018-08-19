@@ -2,6 +2,7 @@
 	<v-container class="ma-1 pa-1">
       <v-layout wrap justify-center align-center>
         <v-flex xs12 sm12 md12 lg12 xl12 class="pr-2">
+        <h1>{{ user.firstname }} {{ user.lastname }}</h1>
          	<v-form ref="form" v-model="valid" lazy-validation>
               <v-text-field
               v-model="user.firstname"
@@ -25,10 +26,21 @@
               ></v-text-field>
               <roles></roles>
 
-              
-            </v-text-field>
-            
-            <v-btn color="info" @click="submit">Update</v-btn>
+            <v-text-field
+              v-if="changePassWord == true"
+              label="Change password"
+              hint="At least 8 characters"
+              :rules="passwordRules"
+              v-model="password"
+              :prepend-icon= "e1 ? 'visibility' : 'visibility_off'""
+              @click:prepend="() => (e1 = !e1)"
+              :type="e1 ? 'password' : 'text'"
+              counter
+
+              >
+              </v-text-field>
+              <v-btn color="success" @click="clickPassword()">{{passwordText}}</v-btn>
+            <v-btn color="info" @click="submit()">Update</v-btn>
           </v-form>
         </v-flex>
       </v-layout>
@@ -36,9 +48,13 @@
 </template>
 
 <script type="text/javascript">
+import roles from '~/components/select/roles'
 	export default {
      data(){
         return {
+          changePassWord: false,
+          password: '',
+          passwordText: 'Change Password',
           valid: false,
            nameRules: [
             v => !!v || 'Name is required',
@@ -55,6 +71,7 @@
               e1: true,
         }
       },
+    components: { roles },
 		middleware: 'auth',
     computed: {
       user(){
@@ -64,10 +81,19 @@
     created(){
       this.$store.dispatch('dashboard', true);
     },
-    method: {
+    methods: {
       submit(){
-        
+
+      },
+      clickPassword(){
+      if (this.changePassWord == false) {
+        this.changePassWord = true
+        this.passwordText = 'Hide Password'
+      }else{
+        this.changePassWord = false
+        this.passwordText = 'Change Password'
       }
+    },
     }
 	}
 </script>

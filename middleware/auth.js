@@ -15,7 +15,6 @@ export default async function ({context, store, router, redirect, req}) {
               store.dispatch('snackbarColor', 'error')
               store.dispatch('snackbar', true)
               store.dispatch('userLogin', false)
-              store.dispatch('userLogin', [])
               store.dispatch('user', {
 							        menu: {}
 							      })

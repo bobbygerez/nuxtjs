@@ -4,6 +4,8 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      roles: [],
+      role: '',
       dashboard: false,
       storeLocation: false,
        checkOutHeaders: [
@@ -81,6 +83,12 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      role(state, payload){
+        state.role = payload
+      },
+      roles(state, payload){
+        state.roles = payload
+      },
       dashboard(state, payload){
         state.dashboard = payload
       },
@@ -218,6 +226,12 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      role(store, payload){
+        store.commit('role', payload)
+      },
+      roles(store, payload){
+        store.commit('roles', payload)
+      },
       dashboard(store, payload){
         store.commit('dashboard', payload)
       },
@@ -333,6 +347,12 @@ const createStore = () => {
       }
     },
     getters: {
+      role(state){
+        return state.role
+      },
+      roles(state){
+        return state.roles
+      },
       dashboard(state){
         return state.dashboard
       },
