@@ -13,27 +13,26 @@
 
       <v-dialog v-model="dialog" max-width="500px">
         <v-card>
-          <v-card-title>
+          <v-card-title class="mb-0 pb-0">
             <span class="headline">Edit User</span>
           </v-card-title>
-
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+          <v-card-text class="ma-0 pa-0">
+            <v-container grid-list-md >
+              <v-layout wrap class="mt-0 pt-0">
+                <v-flex xs6 sm6 md6 >
+                  <v-text-field v-model="userEdit.firstname" label="Firstname" class="ma-0 pa-0"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                <v-flex xs6 sm6 md6>
+                  <v-text-field v-model="userEdit.lastname" label="Lastname" class="ma-0 pa-0"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field v-model="userEdit.email" label="Email" class="ma-0 pa-0"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field v-model="userEdit.company" label="Company" class="ma-0 pa-0"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field v-model="userEdit.contact" label="Contact #" class="ma-0 pa-0"></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -42,7 +41,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="save">Save</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="save">Update</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -90,6 +89,7 @@
 import axios from 'axios'
   export default {
     data: () => ({
+      userEdit: [],
       search: '',
       dialog: false,
       items: [
@@ -155,6 +155,16 @@ import axios from 'axios'
     watch: {
       dialog (val) {
         val || this.close()
+      },
+      'userEdit.firstname': function(val){
+        this.userEdit.firstname = val
+      },
+      'userEdit.lastname': function(val){
+        this.userEdit.lastname = val
+      },
+      'userEdit.email': function(val){
+        this.userEdit.email = val
+        console.log(this.userEdit)
       }
     },
 
@@ -174,9 +184,9 @@ import axios from 'axios'
       edit(userId) {
        let data = this
        this.dialog = true
-        axios.get( process.env.baseApi + '/user/' + userId)
+        axios.get( process.env.baseApi + '/user/' + userId + '/edit')
             .then(res => {
-               
+                data.userEdit = res.data.user
               })
       },
 

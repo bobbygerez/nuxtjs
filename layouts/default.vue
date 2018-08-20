@@ -78,7 +78,7 @@
   no-action
 
   >
-  <v-list-tile slot="activator">
+  <v-list-tile slot="activator" to='/Dashboard/Categories'>
     <v-list-tile-content>
       <v-list-tile-title>{{ item.title }}</v-list-tile-title>
     </v-list-tile-content>
@@ -87,7 +87,7 @@
   <v-list-tile
   v-for="subItem in item.items"
   :key="subItem.title"
-  @click=""
+  :to="subItem.to"
   >
   <v-list-tile-content>
     <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
@@ -97,6 +97,7 @@
     <v-icon>{{ subItem.action }}</v-icon>
   </v-list-tile-action>
 </v-list-tile>
+
 </v-list-group>
 </v-list>
 </v-navigation-drawer>
@@ -311,8 +312,8 @@ fixed
         action: 'local_activity',
         title: 'Categories',
         items: [
-        { title: 'Subcategories' },
-        { title: 'Further Categories' }
+        { title: 'Subcategories', to: '/Dashboard/Subcategories' },
+        { title: 'Further Categories', to: '/Dashboard/Further-Categories' }
         ]
       }
       ],
