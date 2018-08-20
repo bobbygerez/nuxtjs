@@ -4,7 +4,7 @@
       <v-toolbar-title>All Users</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-combobox
-          v-model="select"
+          v-model="search"
           :items="items"
           class="mt-3"
           prepend-icon="search"
@@ -14,7 +14,7 @@
       <v-dialog v-model="dialog" max-width="500px">
         <v-card>
           <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
+            <span class="headline">Edit User</span>
           </v-card-title>
 
           <v-card-text>
@@ -49,47 +49,48 @@
     </v-toolbar>
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="users"
       hide-actions
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
+        <td>{{ props.item.firstname }} {{ props.item.lastname }}</td>
+        <td>{{ props.item.email }}</td>
+        <td></td>
+        <td></td>
         <td class="justify-center layout px-0">
-          <v-icon
-            color="success"
-            class="mr-2"
-            @click="editItem(props.item)"
-          >
-            edit
-          </v-icon>
-          <v-icon
-            color="orange"
-            class="mr-2"
-            @click="editItem(props.item)"
-          >
-            block
-          </v-icon>
-          <v-icon
-            color="error"
-            @click="deleteItem(props.item)"
-          >
-            delete
-          </v-icon>
+         <v-tooltip bottom >
+          <v-btn slot="activator" icon class="ma-0 pa-0 mt-1" @click="edit(props.item.id)">
+            <v-icon color="success">edit</v-icon>
+          </v-btn>
+          <span>Edit User</span>
+        </v-tooltip>
+
+          <v-tooltip bottom>
+          <v-btn slot="activator" icon class="ma-0 pa-0 mt-1">
+            <v-icon color="orange" >block</v-icon>
+          </v-btn>
+          <span>Block User</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <v-btn slot="activator" icon class="ma-0 pa-0 mt-1">
+            <v-icon color="error">delete</v-icon>
+          </v-btn>
+          <span>Delete User</span>
+        </v-tooltip>
         </td>
       </template>
       <template slot="no-data">
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
+        <v-btn color="primary" @click="getUsers()">Reload</v-btn>
       </template>
     </v-data-table>
   </div>
 </template>
 <script>
+import axios from 'axios'
   export default {
     data: () => ({
+      search: '',
       dialog: false,
       items: [
           'Programming',
@@ -100,31 +101,26 @@
       headers: [
         {
           text: 'Name',
-          align: 'left',
           sortable: false,
           value: 'name'
         },
         {
           text: 'Email',
-          align: 'right',
           sortable: false,
           value: 'email'
         },
         {
-          text: 'Contact #',
-          align: 'right',
+          text: 'Company',
           sortable: false,
           value: 'contact'
         },
         {
           text: 'Contact #',
-          align: 'right',
           sortable: false,
           value: 'contact'
         },
         { 
           text: 'Actions',
-          align: 'center', 
           value: 'name', 
           sortable: false 
         }
@@ -150,6 +146,9 @@
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      },
+      users(){
+        return this.$store.getters.users
       }
     },
 
@@ -160,89 +159,25 @@
     },
 
     created () {
-      this.initialize()
+      this.getUsers()
     },
 
     methods: {
-      initialize () {
-        this.desserts = [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7
-          }
-        ]
+      getUsers(){
+        let data = this
+        axios.get( process.env.baseApi + '/user')
+            .then(res => {
+                data.$store.dispatch('users', res.data.users)
+              })
       },
 
-      editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
+      edit(userId) {
+       let data = this
+       this.dialog = true
+        axios.get( process.env.baseApi + '/user/' + userId)
+            .then(res => {
+               
+              })
       },
 
       deleteItem (item) {
