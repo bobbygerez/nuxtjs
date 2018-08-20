@@ -51,7 +51,7 @@
     </v-list-tile-content>
   </v-list-tile>
   <v-divider></v-divider>
-  <v-list-tile :to="'/'">
+  <v-list-tile :to="`/dashboard/profile/${user.id}`">
     <v-list-tile-action>
       <v-icon>account_circle</v-icon>
     </v-list-tile-action>
@@ -60,12 +60,12 @@
     </v-list-tile-content>
   </v-list-tile>
   <v-divider></v-divider>
-  <v-list-tile :to="'/'">
+  <v-list-tile :to="'/dashboard/users'">
     <v-list-tile-action>
       <v-icon>people</v-icon>
     </v-list-tile-action>
     <v-list-tile-content>
-      <v-list-tile-title>users</v-list-tile-title>
+      <v-list-tile-title>Users</v-list-tile-title>
     </v-list-tile-content>
   </v-list-tile>
   <v-divider></v-divider>
