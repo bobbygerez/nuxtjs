@@ -26,7 +26,7 @@ import _ from 'lodash'
       },
       role(){
         let roles = this.$store.getters.user.roles;
-       return _.map(roles, 'id');
+       return _.uniqBy(roles, 'id');
       }
     },
     methods: {

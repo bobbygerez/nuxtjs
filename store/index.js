@@ -4,6 +4,8 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      editCategory: [],
+      confirmDeleteDialog: false,
       users: [],
       roles: [],
       role: '',
@@ -84,6 +86,12 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      editCategory(state, payload){
+        state.editCategory = payload
+      },
+      confirmDeleteDialog(state, payload){
+        state.confirmDeleteDialog = payload
+      },
       users(state, payload){
         state.users = payload
       },
@@ -230,6 +238,12 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      editCategory(store, payload){
+        store.commit('editCategory', payload)
+      },
+      confirmDeleteDialog(store, payload){
+        store.commit('confirmDeleteDialog', payload)
+      },
       users(store, payload){
         store.commit('users', payload)
       },
@@ -354,6 +368,12 @@ const createStore = () => {
       }
     },
     getters: {
+      editCategory(state){
+        return state.editCategory
+      },
+      confirmDeleteDialog(state){
+        return state.confirmDeleteDialog
+      },
       users(state){
         return state.users
       },

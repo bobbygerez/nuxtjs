@@ -7,7 +7,7 @@ export default ({store, isHMR}) => {
     createPersistedState({
        reducer: (persistedState) => {
         const stateFilter = Object.assign({}, persistedState)
-        const blackList = []
+        const blackList = ['confirmDeleteDialog']
 
         blackList.forEach((item) => {
           delete stateFilter[item]
