@@ -4,6 +4,11 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      editSubcategory: {
+        category_id: null,
+        name: ''
+      },
+      subcategories:[],
       editCategory: [],
       confirmDeleteDialog: false,
       users: [],
@@ -86,6 +91,15 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      editSubcategory(state, payload){
+        state.editSubcategory = payload
+      },
+      subcategories(state, payload){
+        state.subcategories = payload
+      },
+      editSubcategoryField(state, payload){
+        state.editSubcategory[payload['field']] = payload['value']
+      },
       editCategory(state, payload){
         state.editCategory = payload
       },
@@ -238,6 +252,15 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      editSubcategory(store, payload){
+        store.commit('editSubcategory', payload)
+      },
+      subcategories(store, payload){
+        store.commit('subcategories', payload)
+      },
+      editSubcategoryField(store, payload){
+        store.commit('editSubcategoryField', payload)
+      },
       editCategory(store, payload){
         store.commit('editCategory', payload)
       },
@@ -368,6 +391,12 @@ const createStore = () => {
       }
     },
     getters: {
+      subcategories(state){
+        return state.subcategories
+      },
+      editSubcategory(state){
+        return state.editSubcategory
+      },
       editCategory(state){
         return state.editCategory
       },

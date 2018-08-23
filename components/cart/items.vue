@@ -12,7 +12,7 @@
         slot="activator"
         dark
       >
-      <v-badge :color="'success'" left>
+      <v-badge :color="'success'" left v-if="totalQuantity != null">
         <span slot="badge">{{ totalQuantity }}</span>
       </v-badge>
 
