@@ -99,6 +99,12 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      editFurtherCatFieldSub(state, payload){
+         state.editFurtherCat['subcategories']['category_id'] = payload
+      },
+      editFurtherCatField(state, payload){
+         state.editFurtherCat[payload['field']] = payload['value']
+      },
       editFurtherCat(state, payload){
         state.editFurtherCat = payload
       },
@@ -265,6 +271,12 @@ const createStore = () => {
           }
         }
         store.commit('cart', cleanArray)
+      },
+      editFurtherCatFieldSub(store, payload){
+        store.commit('editFurtherCatFieldSub', payload)
+      },
+      editFurtherCatField(store, payload){
+        store.commit('editFurtherCatField', payload)
       },
       editFurtherCat(store, payload){
         store.commit('editFurtherCat', payload)

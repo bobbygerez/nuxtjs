@@ -10,14 +10,12 @@ export default async function ({context, store, router, redirect, req}) {
 		      store.dispatch('userLogin', true)
 		    })
 		  .catch(function(error){
-		  	  redirect('/')
 		  	  store.dispatch('snackbarText', 'Login expired...')
               store.dispatch('snackbarColor', 'error')
               store.dispatch('snackbar', true)
               store.dispatch('userLogin', false)
-              store.dispatch('user', {
-							        menu: {}
-							      })
+              store.dispatch('dashboard', false)
+              redirect('/')
 		  })
  	}
 

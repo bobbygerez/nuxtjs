@@ -107,7 +107,6 @@ import _ from 'lodash'
     data: ()=>({
        selectedCategory: '',
        dialog: false,
-       perPage: 20,
        search: '',
        headers: [
         {
@@ -138,6 +137,9 @@ import _ from 'lodash'
       ],
     }),
     computed: {
+      perPage(){
+        return this.$store.getters.selectedPage
+      },
       subcategories(){
         let sub = this.$store.getters.subcategories
         return _.values(sub)
@@ -187,7 +189,14 @@ import _ from 'lodash'
       this.$store.dispatch('page', 1);
     },
     methods: {
-      searchSubcategory(){
+      getSubCategories(catId){
+        let data = this
+        axios.get( process.env.baseApi + '/get-subcategories/' + catId)
+            .then(res => {
+               data.$store.dispatch('subcategories', res.data.subcategories)
+              })
+      },
+      searchFurtherCat(){
         let data = this
           if (this.search !=null){
             axios.get( process.env.baseApi + '/search-subcategory?search='+this.search + '&page='+this.page+'&perPage='+this.perPage)
@@ -218,11 +227,11 @@ import _ from 'lodash'
       },
       update(){
         let data = this
-        axios.put( process.env.baseApi + '/subcategories/' + this.editSubcategory.id + '?page='+this.page+'&perPage='+this.perPage, 
-            this.editSubcategory
+        axios.put( process.env.baseApi + '/further_categories/' + this.editFurtherCat.id + '?page='+this.page+'&perPage='+this.perPage, 
+            this.editFurtherCat
             )
             .then(res => {
-              data.$store.dispatch('subcategories', res.data.subcategories)
+              data.$store.dispatch('furtherCategories', res.data.furtherCategories)
               data.$store.dispatch('snackbarOptions', {
                   snackbarColor : 'success',
                   snackbarText : 'Subcategory Updated Successfully',
@@ -245,27 +254,30 @@ import _ from 'lodash'
       page(){
         this.getFurtherCategories()
       },
-      'editSubcategory.name': function(val){
-
-        this.$store.dispatch('editSubcategoryField',{
+      'editFurtherCat.name': function(val){
+        this.$store.dispatch('editFurtherCatField',{
           field: 'name',
           value: val
         });
       },
-      'editSubcategory.category_id': function(val){
-        this.$store.dispatch('editSubcategoryField',{
-          field: 'category_id',
+      'editFurtherCat.subcategories.category_id': function(val){
+        this.getSubCategories(val);
+        this.$store.dispatch('editFurtherCatFieldSub', val);
+      },
+      'editFurtherCat.subcategory_id': function(val){
+        this.$store.dispatch('editFurtherCatField',{
+          field: 'subcategory_id',
           value: val
         });
       },
-      'editSubcategory.desc': function(val){
-        this.$store.dispatch('editSubcategoryField',{
+      'editFurtherCat.desc': function(val){
+        this.$store.dispatch('editFurtherCatField',{
           field: 'desc',
           value: val
         });
       },
       search : _.debounce(function(){
-        this.searchSubcategory()
+        this.searchFurtherCat()
       }, 500)
     }
    

@@ -127,8 +127,17 @@ import _ from 'lodash'
         let sub = this.$store.getters.subcategories.data
         return _.values(sub)
       },
-      subcategories(){
-        return this.$store.getters.subcategories
+      subcategories: {
+        get(){
+          return this.$store.getters.subcategories
+        },
+        set(val){
+
+        }
+        
+      },
+      selectedPage(){
+        return this.$store.getters.selectedPage
       },
       page: {
           get(){
@@ -164,9 +173,9 @@ import _ from 'lodash'
       searchSubcategory(){
         let data = this
           if (this.search !=null){
-            axios.get( process.env.baseApi + '/search-subcategory?search='+this.search)
+            axios.get( process.env.baseApi + '/search-subcategory?search='+this.search+'&page='+this.page+'&perPage='+this.selectedPage)
             .then(res => {
-               data.subcategories = res.data.subcategories
+               data.$store.dispatch('subcategories', res.data.subcategories)
               })
           }else{
             this.getCategories()
