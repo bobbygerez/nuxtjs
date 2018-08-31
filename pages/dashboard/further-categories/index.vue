@@ -1,5 +1,5 @@
 <template>
-	<v-container class="ma-1 pa-1">
+  <v-container class="ma-1 pa-1">
       <v-layout wrap justify-center align-center>
         <v-flex xs12 sm12 md12 lg12 xl12 class="pr-2">
             <further-categories></further-categories>
@@ -13,7 +13,7 @@
 import furtherCategories from '~/components/data-tables/further-categories'
 import confirmAlert from '~/components/alert/confirm-alert.vue'
 import axios from 'axios'
-	export default {
+  export default {
       middleware: 'get-subcategories',
       components: { furtherCategories, confirmAlert }
       ,

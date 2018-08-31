@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>All Subcategories</v-toolbar-title>
+      <v-toolbar-title>All Further Categories</v-toolbar-title>
       <v-spacer></v-spacer>
          <v-text-field
        v-model="search"
        append-icon="search"
-       label="Search Subcategories..."
+       label="Search Further Categories..."
        single-line
        hide-details
        ></v-text-field>
@@ -199,12 +199,12 @@ import _ from 'lodash'
       searchFurtherCat(){
         let data = this
           if (this.search !=null){
-            axios.get( process.env.baseApi + '/search-subcategory?search='+this.search + '&page='+this.page+'&perPage='+this.perPage)
+            axios.get( process.env.baseApi + '/search-further-category?search='+this.search + '&page='+this.page+'&perPage='+this.perPage)
             .then(res => {
-               data.$store.dispatch('subcategories', res.data.subcategories)
+               data.$store.dispatch('furtherCategories', res.data.furtherCategories)
               })
           }else{
-            this.getCategories()
+            this.getFurtherCategories()
           }
       },
       getFurtherCategories(){

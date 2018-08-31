@@ -99,6 +99,15 @@
 </v-list-tile>
 
 </v-list-group>
+<v-divider></v-divider>
+  <v-list-tile :to="'/dashboard/users'">
+    <v-list-tile-action>
+      <v-icon>store</v-icon>
+    </v-list-tile-action>
+    <v-list-tile-content>
+      <v-list-tile-title>Product</v-list-tile-title>
+    </v-list-tile-content>
+  </v-list-tile>
 </v-list>
 </v-navigation-drawer>
 <v-toolbar
@@ -309,7 +318,7 @@ fixed
     return {
       dashboardCategories: [
       {
-        action: 'local_activity',
+        action: 'assignment',
         title: 'Categories',
         items: [
         { title: 'Subcategories', to: '/Dashboard/Subcategories' },
