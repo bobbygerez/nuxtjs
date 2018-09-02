@@ -18,6 +18,17 @@ import axios from 'axios'
       components: { subcategories, confirmAlert }
       ,
       computed: {
+        selectedPage(){
+        return this.$store.getters.selectedPage
+        },
+        page: {
+            get(){
+              return this.$store.getters.page
+            },
+            set(val){
+              this.$store.dispatch('page', val);
+            }
+        },
         editSubcategory(){
           return this.$store.getters.editSubcategory
         }
@@ -26,8 +37,9 @@ import axios from 'axios'
         deleteItem(){
           let data = this
           
-           axios.delete( process.env.baseApi + '/subcategories/' + this.editSubcategory.id )
+           axios.delete( process.env.baseApi + '/subcategories/' + this.editSubcategory.id + '?page='+this.page+'&perPage='+this.selectedPage)
             .then(res => {
+                data.$store.dispatch('subcategories', res.data.subcategories)
                data.$store.dispatch('confirmDeleteDialog', false)
                data.$store.dispatch('snackbarOptions', {
                   snackbarColor : 'success',

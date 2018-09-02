@@ -1,7 +1,9 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>All Subcategories</v-toolbar-title>
+      <v-toolbar-title>
+        <v-btn outline class="success green--text" @click="openNewSub()">New Subcategories</v-btn>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
          <v-text-field
        v-model="search"
@@ -52,6 +54,48 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="newSub" max-width="500px">
+        <v-card>
+          <v-card-title class="mb-0 pb-0">
+            <span class="headline">New Subcategory</span> 
+            <v-spacer></v-spacer>
+          </v-card-title>
+          <v-card-text class="ma-0 pa-0">
+            <v-container grid-list-md >
+            <v-flex xs12 sm12 md12 >
+              <v-autocomplete
+                v-model="newSubcategory.category_id"
+                :items="categories"
+                item-value="id"
+                item-text="name"
+                label="Select Category"
+                class="ma-0 pa-0"
+              ></v-autocomplete>
+              </v-flex>
+              
+                <v-flex xs12 sm12 md12 >
+                  <v-text-field v-model="newSubcategory.name" label="Name" ></v-text-field>
+                </v-flex>
+
+                <v-flex xs12 sm12 md12 >
+                  <v-textarea
+                  v-model="newSubcategory.desc"
+                  label="Description"
+                  auto-grow
+                   class="ma-0 pa-0"
+                ></v-textarea>
+                </v-flex>
+                
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="save()">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-toolbar>
     <v-data-table
       :headers="headers"
@@ -95,6 +139,7 @@ import _ from 'lodash'
   export default {
 
     data: ()=>({
+       newSub: false,
        selectedCategory: '',
        dialog: false,
        x: [],
@@ -123,6 +168,9 @@ import _ from 'lodash'
       ],
     }),
     computed: {
+      newSubcategory(){
+        return this.$store.getters.newSubcategory
+      },
       subcategoriesData(){
         let sub = this.$store.getters.subcategories.data
         return _.values(sub)
@@ -170,6 +218,23 @@ import _ from 'lodash'
       this.$store.dispatch('page', 1);
     },
     methods: {
+      openNewSub(){
+        this.newSub = true
+      },
+      save(){
+        let data = this
+        axios.post( process.env.baseApi + '/subcategories?page='+this.page+'&perPage='+this.selectedPage, this.newSubcategory)
+            .then(res => {
+              data.$store.dispatch('subcategories', res.data.subcategories)
+              data.$store.dispatch('snackbarOptions', {
+                  snackbarColor : 'success',
+                  snackbarText : 'Subcategory Created Successfully',
+                  snackbar: true
+                })
+              })
+
+        this.newSub = false
+      },
       searchSubcategory(){
         let data = this
           if (this.search !=null){
@@ -190,6 +255,7 @@ import _ from 'lodash'
       },
       close(){
         this.dialog = false
+        this.newSub = false
       },
       edit(id){
         this.dialog = true
@@ -201,9 +267,9 @@ import _ from 'lodash'
       },
       update(){
         let data = this
-        axios.put( process.env.baseApi + '/subcategories/' + this.editSubcategory.id, this.editSubcategory)
+        axios.put( process.env.baseApi + '/subcategories/' + this.editSubcategory.id + '?page='+this.page+'&perPage='+this.selectedPage, this.editSubcategory)
             .then(res => {
-              data.subcategories = res.data.subcategories
+               data.$store.dispatch('subcategories', res.data.subcategories)
               data.$store.dispatch('snackbarOptions', {
                   snackbarColor : 'success',
                   snackbarText : 'Subcategory Updated Successfully',
@@ -225,6 +291,25 @@ import _ from 'lodash'
     watch: {
       page(){
         this.getSubcategories()
+      },
+      'newSubcategory.category_id': function(val){
+        this.$store.dispatch('newSubcategoryField',{
+          field: 'category_id',
+          value: val
+        });
+      },
+      'newSubcategory.name': function(val){
+
+        this.$store.dispatch('newSubcategoryField',{
+          field: 'name',
+          value: val
+        });
+      },
+      'newSubcategory.desc': function(val){
+        this.$store.dispatch('newSubcategoryField',{
+          field: 'desc',
+          value: val
+        });
       },
       'editSubcategory.name': function(val){
 

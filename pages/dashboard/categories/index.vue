@@ -18,16 +18,17 @@ import axios from 'axios'
         categories, confirmAlert 
       },
       computed: {
-        editCategory(){
-          return this.$store.getters.editCategory
+        edittCategory(){
+          return this.$store.getters.edittCategory
         }
       },
       methods: {
         deleteItem(){
           let data = this
           
-           axios.delete( process.env.baseApi + '/categories/' + this.editCategory.id )
+           axios.delete( process.env.baseApi + '/categories/' + this.edittCategory.id )
             .then(res => {
+               data.$store.dispatch('editCategories', res.data.categories)
                data.$store.dispatch('confirmDeleteDialog', false)
                data.$store.dispatch('snackbarOptions', {
                   snackbarColor : 'success',

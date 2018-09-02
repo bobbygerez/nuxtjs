@@ -100,7 +100,7 @@
 
 </v-list-group>
 <v-divider></v-divider>
-  <v-list-tile :to="'/dashboard/users'">
+  <v-list-tile :to="'/dashboard/products'">
     <v-list-tile-action>
       <v-icon>store</v-icon>
     </v-list-tile-action>

@@ -12,12 +12,18 @@ const createStore = () => {
         }
       },
       furtherCategories: [],
+      newSubcategory: {
+        category_id: null,
+        name: '',
+        desc: ''
+      },
       editSubcategory: {
         category_id: null,
         name: ''
       },
       subcategories:[],
-      editCategory: [],
+      edittCategory: [],
+      editCategories: [],
       confirmDeleteDialog: false,
       users: [],
       roles: [],
@@ -99,6 +105,9 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      editCategories(state, payload){
+        state.editCategories = payload
+      },
       editFurtherCatFieldSub(state, payload){
          state.editFurtherCat['subcategories']['category_id'] = payload
       },
@@ -111,6 +120,12 @@ const createStore = () => {
       furtherCategories(state, payload){
         state.furtherCategories = payload
       },
+      newSubcategory(state, payload){
+        state.newSubcategory = payload
+      },
+      newSubcategoryField(state, payload){
+        state.newSubcategory[payload['field']] = payload['value']
+      },
       editSubcategory(state, payload){
         state.editSubcategory = payload
       },
@@ -120,8 +135,8 @@ const createStore = () => {
       editSubcategoryField(state, payload){
         state.editSubcategory[payload['field']] = payload['value']
       },
-      editCategory(state, payload){
-        state.editCategory = payload
+      edittCategory(state, payload){
+        state.edittCategory = payload
       },
       confirmDeleteDialog(state, payload){
         state.confirmDeleteDialog = payload
@@ -272,6 +287,9 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      editCategories(store, payload){
+        store.commit('editCategories', payload)
+      },
       editFurtherCatFieldSub(store, payload){
         store.commit('editFurtherCatFieldSub', payload)
       },
@@ -284,6 +302,12 @@ const createStore = () => {
       furtherCategories(store, payload){
         store.commit('furtherCategories', payload)
       },
+      newSubcategoryField(store, payload){
+        store.commit('newSubcategoryField', payload)
+      },
+      newSubcategory(store, payload){
+        store.commit('newSubcategory', payload)
+      },
       editSubcategory(store, payload){
         store.commit('editSubcategory', payload)
       },
@@ -293,8 +317,8 @@ const createStore = () => {
       editSubcategoryField(store, payload){
         store.commit('editSubcategoryField', payload)
       },
-      editCategory(store, payload){
-        store.commit('editCategory', payload)
+      edittCategory(store, payload){
+        store.commit('edittCategory', payload)
       },
       confirmDeleteDialog(store, payload){
         store.commit('confirmDeleteDialog', payload)
@@ -423,6 +447,9 @@ const createStore = () => {
       }
     },
     getters: {
+      editCategories(state){
+        return state.editCategories
+      },
       editFurtherCat(state){
         return state.editFurtherCat
       },
@@ -432,11 +459,14 @@ const createStore = () => {
       subcategories(state){
         return state.subcategories
       },
+      newSubcategory(state){
+        return state.newSubcategory
+      },
       editSubcategory(state){
         return state.editSubcategory
       },
-      editCategory(state){
-        return state.editCategory
+      edittCategory(state){
+        return state.edittCategory
       },
       confirmDeleteDialog(state){
         return state.confirmDeleteDialog

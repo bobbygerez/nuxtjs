@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>All Categories</v-toolbar-title>
+      <v-toolbar-title><v-btn class="success green--text" outline @click="openNewCategory()">New Category</v-btn></v-toolbar-title>
       <v-spacer></v-spacer>
          <v-text-field
        v-model="search"
@@ -21,11 +21,11 @@
             <v-container grid-list-md >
               <v-layout wrap class="mt-0 pt-0">
                 <v-flex xs12 sm12 md12 >
-                  <v-text-field v-model="editCategory.name" label="Name" class="ma-0 pa-0"></v-text-field>
+                  <v-text-field v-model="edittCategory.name" label="Name" class="ma-0 pa-0"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md12 >
                 <v-textarea
-                  v-model="editCategory.description"
+                  v-model="edittCategory.description"
                   label="Description"
                   auto-grow
                    class="ma-0 pa-0"
@@ -42,10 +42,42 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="newCategory" max-width="500px">
+        <v-card>
+          <v-card-title class="mb-0 pb-0">
+            <span class="headline">New Category</span> 
+            <v-spacer></v-spacer>
+            
+          </v-card-title>
+          <v-card-text class="ma-0 pa-0">
+            <v-container grid-list-md >
+              <v-layout wrap class="mt-0 pt-0">
+                <v-flex xs12 sm12 md12 >
+                  <v-text-field v-model="newCatName" label="Name" class="ma-0 pa-0"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm12 md12 >
+                <v-textarea
+                  v-model="newCatDesc"
+                  label="Description"
+                  auto-grow
+                   class="ma-0 pa-0"
+                ></v-textarea>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click.native="closeNewCategory">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="save()">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-toolbar>
     <v-data-table
       :headers="headers"
-      :items="categories"
+      :items="editCategories"
       hide-actions
       class="elevation-1"
     >
@@ -81,9 +113,11 @@ import _ from 'lodash'
   export default {
 
     data: ()=>({
+      newCatName: '',
+      newCatDesc: '',
+      newCategory: false,
        dialog: false,
        search: '',
-       categories: [],
        headers: [
         {
           text: 'Name',
@@ -103,12 +137,20 @@ import _ from 'lodash'
       ],
     }),
     computed: {
-      editCategory: {
+      editCategories: {
         get(){
-          return this.$store.getters.editCategory
+          return this.$store.getters.editCategories
         },
         set(val){
-          this.$store.dispatch('editCategory', val)
+
+        }
+      },
+      edittCategory: {
+        get(){
+          return this.$store.getters.edittCategory
+        },
+        set(val){
+          this.$store.dispatch('edittCategory', val)
         }
       }
     },
@@ -116,12 +158,34 @@ import _ from 'lodash'
       this.getCategories()
     },
     methods: {
+      save(){
+        let data = this
+         axios.post( process.env.baseApi + '/categories',{
+            name: this.newCatName,
+            description: this.newCatDesc
+         })
+            .then(res => {
+               data.$store.dispatch('editCategories', res.data.categories)
+               data.newCategory = false
+               data.$store.dispatch('snackbarOptions', {
+                  snackbarColor : 'success',
+                  snackbarText : 'Category Created Successfully',
+                  snackbar: true
+                })
+              })
+      },
+      closeNewCategory(){
+        this.newCategory = false
+      },
+      openNewCategory(){
+        this.newCategory = true
+      },
       searchCategory(){
         let data = this
           if (this.search !=null){
             axios.get( process.env.baseApi + '/search-category?search='+this.search)
             .then(res => {
-               data.categories = res.data.categories
+               data.$store.dispatch('editCategories', res.data.categories)
               })
           }else{
             this.getCategories()
@@ -131,7 +195,7 @@ import _ from 'lodash'
         let data = this
         axios.get( process.env.baseApi + '/categories')
             .then(res => {
-                data.categories = res.data.categories
+                data.$store.dispatch('editCategories', res.data.categories)
               })
       },
       close(){
@@ -142,14 +206,14 @@ import _ from 'lodash'
         let data = this
         axios.get( process.env.baseApi + '/categories/' + id + '/edit')
             .then(res => {
-                data.$store.dispatch('editCategory', res.data.category) 
+                data.$store.dispatch('edittCategory', res.data.category) 
               })
       },
       update(){
         let data = this
-        axios.put( process.env.baseApi + '/categories/' + this.editCategory.id, this.editCategory)
+        axios.put( process.env.baseApi + '/categories/' + this.edittCategory.id, this.edittCategory)
             .then(res => {
-              data.categories = res.data.categories
+              data.$store.dispatch('editCategories', res.data.categories)
               data.$store.dispatch('snackbarOptions', {
                   snackbarColor : 'success',
                   snackbarText : 'Category Updated Successfully',
@@ -163,7 +227,7 @@ import _ from 'lodash'
         let data = this
         axios.get( process.env.baseApi + '/categories/' + id + '/edit')
             .then(res => {
-                data.$store.dispatch('editCategory', res.data.category) 
+                data.$store.dispatch('edittCategory', res.data.category) 
               })
         this.$store.dispatch('confirmDeleteDialog', true)
       }
