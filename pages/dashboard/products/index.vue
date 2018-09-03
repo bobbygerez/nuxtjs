@@ -2,15 +2,15 @@
 	<v-container class="ma-1 pa-1">
       <v-layout wrap justify-center align-center>
         <v-flex xs12 sm12 md12 lg12 xl12 class="pr-2">
-         <products></products>	
+         <items></items>	
         </v-flex>
       </v-layout>
   </v-container>
 </template>
 
 <script type="text/javascript">
-import products from '~/components/data-tables/products'
+import items from '~/components/data-tables/items'
 	export default {
-      components: { products }
+      components: { items }
     }
 </script>

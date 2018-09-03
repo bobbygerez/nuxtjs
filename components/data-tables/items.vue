@@ -1,16 +1,16 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>All Products</v-toolbar-title>
+      <v-toolbar-title><v-btn class="success green--text" outline @click="openNewItem()">New Product</v-btn></v-toolbar-title>
       <v-spacer></v-spacer>
          <v-text-field
        v-model="search"
        append-icon="search"
-       label="Search product..."
+       label="Search user..."
        single-line
        hide-details
        ></v-text-field>
-      <!-- <v-dialog v-model="dialog" max-width="500px">
+      <v-dialog v-model="dialog" max-width="500px">
         <v-card>
           <v-card-title class="mb-0 pb-0">
             <span class="headline">Edit User</span> 
@@ -48,7 +48,7 @@
             <v-btn color="blue darken-1" flat @click.native="update(userEdit.id)">Update</v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog> -->
+      </v-dialog>
     </v-toolbar>
     <v-data-table
       :headers="headers"
@@ -144,12 +144,6 @@ import _ from 'lodash'
       },
       users(){
         return this.$store.getters.users
-      },
-      page(){
-        return this.$store.getters.page
-      },
-      perPage(){
-        return this.$store.getters.selectedPage
       }
     },
 
@@ -175,10 +169,13 @@ import _ from 'lodash'
     },
 
     created () {
-      this.getItems()
+      this.getUsers()
     },
 
     methods: {
+      openNewItem(){
+        
+      },
       searchNewUser(){
           let data = this
           if (this.search !=null){
@@ -192,11 +189,11 @@ import _ from 'lodash'
           }
            
       },
-      getItems(){
+      getUsers(){
         let data = this
-        axios.get( process.env.baseApi + '/items?page='+this.page+'&perPage='+this.perPage)
+        axios.get( process.env.baseApi + '/user')
             .then(res => {
-                
+                data.$store.dispatch('users', res.data.users)
               })
       },
 

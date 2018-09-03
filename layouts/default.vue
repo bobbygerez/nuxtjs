@@ -105,7 +105,7 @@
       <v-icon>store</v-icon>
     </v-list-tile-action>
     <v-list-tile-content>
-      <v-list-tile-title>Product</v-list-tile-title>
+      <v-list-tile-title>Products</v-list-tile-title>
     </v-list-tile-content>
   </v-list-tile>
 </v-list>
