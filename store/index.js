@@ -4,6 +4,13 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      newFurtherCat: {
+        subcategory_id: null,
+        name: '',
+        subcategories: {
+          category_id: null
+        }
+      },
       editFurtherCat:{
         subcategory_id: null,
         name: '',
@@ -116,6 +123,15 @@ const createStore = () => {
       },
       editFurtherCat(state, payload){
         state.editFurtherCat = payload
+      },
+      newFurtherCatField(state, payload){
+         state.newFurtherCat[payload['field']] = payload['value']
+      },
+      newFurtherCatFieldSub(state, payload){
+         state.newFurtherCat['subcategories']['category_id'] = payload
+      },
+      newFurtherCat(state, payload){
+        state.newFurtherCat = payload
       },
       furtherCategories(state, payload){
         state.furtherCategories = payload
@@ -299,6 +315,15 @@ const createStore = () => {
       editFurtherCat(store, payload){
         store.commit('editFurtherCat', payload)
       },
+      newFurtherCatFieldSub(store, payload){
+        store.commit('newFurtherCatFieldSub', payload)
+      },
+      newFurtherCatField(store, payload){
+        store.commit('newFurtherCatField', payload)
+      },
+      newFurtherCat(store, payload){
+        store.commit('newFurtherCat', payload)
+      },
       furtherCategories(store, payload){
         store.commit('furtherCategories', payload)
       },
@@ -452,6 +477,9 @@ const createStore = () => {
       },
       editFurtherCat(state){
         return state.editFurtherCat
+      },
+      newFurtherCat(state){
+        return state.newFurtherCat
       },
       furtherCategories(state){
         return state.furtherCategories

@@ -37,7 +37,7 @@
     components: {
       items, itemHeaders
     },
-    middleware: 'provinces',
+    middleware: ['provinces', 'auth'],
     computed: {
       selectedProvince(){
         return this.$store.getters.selectedProvince

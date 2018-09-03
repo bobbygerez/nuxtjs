@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>All Further Categories</v-toolbar-title>
+      <v-toolbar-title><v-btn class="success green--text" outline @click="openNewFurth()">New Further Category</v-btn></v-toolbar-title>
       <v-spacer></v-spacer>
          <v-text-field
        v-model="search"
@@ -61,6 +61,57 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="newFurth" max-width="500px">
+        <v-card>
+          <v-card-title class="mb-0 pb-0">
+            <span class="headline">New Further Category</span> 
+            <v-spacer></v-spacer>
+          </v-card-title>
+          <v-card-text class="ma-0 pa-0">
+            <v-container grid-list-md >
+            <v-flex xs12 sm12 md12 >
+              <v-autocomplete
+                v-model="newFurtherCat.subcategories.category_id"
+                :items="categories"
+                item-value="id"
+                item-text="name"
+                label="Select Category"
+                class="ma-0 pa-0"
+              ></v-autocomplete>
+              </v-flex>
+              <v-flex xs12 sm12 md12 >
+              <v-autocomplete
+                v-model="newFurtherCat.subcategory_id"
+                :items="subcategories"
+                item-value="id"
+                item-text="name"
+                label="Select SubCategory"
+                class="ma-0 pa-0"
+              ></v-autocomplete>
+              </v-flex>
+                <v-flex xs12 sm12 md12 >
+                  <v-text-field v-model="newFurtherCat.name" label="Name" ></v-text-field>
+                </v-flex>
+
+                <v-flex xs12 sm12 md12 >
+                  <v-textarea
+                  v-model="newFurtherCat.desc"
+                  label="Description"
+                  auto-grow
+                   class="ma-0 pa-0"
+                ></v-textarea>
+                </v-flex>
+                
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="save()">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-toolbar>
     <v-data-table
       :headers="headers"
@@ -105,6 +156,7 @@ import _ from 'lodash'
   export default {
     
     data: ()=>({
+       newFurth: false,
        selectedCategory: '',
        dialog: false,
        search: '',
@@ -174,6 +226,14 @@ import _ from 'lodash'
           this.$store.dispatch('editFurtherCat', val)
         }
       },
+      newFurtherCat: {
+          get(){
+            return this.$store.getters.newFurtherCat
+          },
+          set(val){
+
+          }
+      },
       categories: {
         get(){
           return this.$store.getters.categories
@@ -189,6 +249,9 @@ import _ from 'lodash'
       this.$store.dispatch('page', 1);
     },
     methods: {
+      openNewFurth(){
+        this.newFurth = true
+      },
       getSubCategories(catId){
         let data = this
         axios.get( process.env.baseApi + '/get-subcategories/' + catId)
@@ -216,6 +279,7 @@ import _ from 'lodash'
       },
       close(){
         this.dialog = false
+        this.newFurth = false
       },
       edit(id){
         this.dialog = true
@@ -223,6 +287,12 @@ import _ from 'lodash'
         axios.get( process.env.baseApi + '/further_categories/' + id + '/edit')
             .then(res => {
                 data.$store.dispatch('editFurtherCat', res.data.furtherCat) 
+              })
+      },
+      save(){
+        axios.post( process.env.baseApi + '/further_categories?page='+this.page+'&perPage='+this.perPage, this.newFurtherCat)
+            .then(res => {
+                
               })
       },
       update(){
@@ -243,9 +313,9 @@ import _ from 'lodash'
       },
       confirmDelete(id){
         let data = this
-        axios.get( process.env.baseApi + '/subcategories/' + id + '/edit')
+         axios.get( process.env.baseApi + '/further_categories/' + id + '/edit')
             .then(res => {
-                data.$store.dispatch('editSubcategory', res.data.subcategory) 
+                data.$store.dispatch('editFurtherCat', res.data.furtherCat) 
               })
         this.$store.dispatch('confirmDeleteDialog', true)
       }
@@ -275,6 +345,28 @@ import _ from 'lodash'
           field: 'desc',
           value: val
         });
+      },
+      'newFurtherCat.name': function(val){
+        this.$store.dispatch('editFurtherCatField',{
+          field: 'name',
+          value: val
+        });
+      },
+      'newFurtherCat.desc': function(val){
+        this.$store.dispatch('editFurtherCatField',{
+          field: 'desc',
+          value: val
+        });
+      },
+      'newFurtherCat.subcategory_id': function(val){
+        this.$store.dispatch('newFurtherCatField',{
+          field: 'subcategory_id',
+          value: val
+        });
+      },
+      'newFurtherCat.subcategories.category_id': function(val){
+        this.getSubCategories(val);
+        this.$store.dispatch('newFurtherCatFieldSub', val);
       },
       search : _.debounce(function(){
         this.searchFurtherCat()
