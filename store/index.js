@@ -4,6 +4,13 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      newProduct: {
+        status: '',
+        name: '',
+        short_desc: '',
+        amount: ''
+      },
+      products: [],
       newFurtherCat: {
         subcategory_id: null,
         name: '',
@@ -112,6 +119,15 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      newProductField(state, payload){
+         state.newProduct[payload['field']] = payload['value']
+      },
+      newProduct(state, payload){
+        state.newProduct = payload
+      },
+      products(state, payload){
+        state.products = payload
+      },
       editCategories(state, payload){
         state.editCategories = payload
       },
@@ -303,6 +319,15 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      newProductField(store, payload){
+        store.commit('newProductField', payload)
+      },
+      newProduct(store, payload){
+        store.commit('newProduct', payload)
+      },
+      products(store, payload){
+        store.commit('products', payload)
+      },
       editCategories(store, payload){
         store.commit('editCategories', payload)
       },
@@ -472,6 +497,12 @@ const createStore = () => {
       }
     },
     getters: {
+      newProduct(state){
+        return state.newProduct
+      },
+      products(state){
+        return state.products
+      },
       editCategories(state){
         return state.editCategories
       },

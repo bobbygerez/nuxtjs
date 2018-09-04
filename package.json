@@ -19,6 +19,7 @@
     "lodash": "^4.17.10",
     "luminous-lightbox": "^2.0.1",
     "nuxt": "^1.0.0",
+    "nuxt-dropzone": "^0.2.7",
     "vue-product-zoomer": "^2.0.10",
     "vue-select-image": "^1.5.0",
     "vue-star-rating": "^1.6.0",

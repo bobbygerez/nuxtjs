@@ -10,55 +10,53 @@
        single-line
        hide-details
        ></v-text-field>
-      <v-dialog v-model="dialog" max-width="500px">
+      <v-dialog v-model="newProductDialog" max-width="600px">
+        <v-form ref="form" v-model="valid" lazy-validation>
         <v-card>
           <v-card-title class="mb-0 pb-0">
-            <span class="headline">Edit User</span> 
+            <span class="headline">New Product</span> 
             <v-spacer></v-spacer>
             <v-switch
-              :label="'Block user'"
-              v-model="userEdit.status"
+              :label="'Status'"
+              v-model="newProduct.status"
             ></v-switch>
           </v-card-title>
           <v-card-text class="ma-0 pa-0">
             <v-container grid-list-md >
               <v-layout wrap class="mt-0 pt-0">
-                <v-flex xs6 sm6 md6 >
-                  <v-text-field v-model="userEdit.firstname" label="Firstname" class="ma-0 pa-0"></v-text-field>
+                <v-flex xs12>
+                  <v-text-field v-model="newProduct.name" label="Product Name" class="ma-0 pa-0"></v-text-field>
                 </v-flex>
-                <v-flex xs6 sm6 md6>
-                  <v-text-field v-model="userEdit.lastname" label="Lastname" class="ma-0 pa-0"></v-text-field>
+                <v-flex xs12>
+                  <v-textarea v-model="newProduct.short_desc" label="Short Description" class="ma-0 pa-0"></v-textarea>
                 </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <v-text-field v-model="userEdit.email" label="Email" class="ma-0 pa-0"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <v-text-field v-model="userEdit.company" label="Company" class="ma-0 pa-0"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <v-text-field v-model="userEdit.contact" label="Contact #" class="ma-0 pa-0"></v-text-field>
+                <v-flex xs12>
+                  <dropzone id="foo" ref="myVueDropzone" :options="options" :destroyDropzone="true"></dropzone>
                 </v-flex>
               </v-layout>
             </v-container>
+            
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="update(userEdit.id)">Update</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="submit()">Submit</v-btn>
           </v-card-actions>
         </v-card>
+        </v-form>
       </v-dialog>
     </v-toolbar>
     <v-data-table
       :headers="headers"
-      :items="users"
+      :items="productsData"
       hide-actions
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.firstname }} {{ props.item.lastname }}</td>
-        <td>{{ props.item.email }}</td>
+        <td>{{ props.item.name }} </td>
+        <td>{{ props.item.short_desc | truncate(30) }}</td>
+        <td>{{ props.item.amount|currency('₱ ') }}</td>
         <td></td>
         <td></td>
         <td class="justify-center layout px-0">
@@ -66,13 +64,13 @@
           <v-btn slot="activator" icon class="ma-0 pa-0 mt-1" @click="edit(props.item.id)">
             <v-icon color="success">edit</v-icon>
           </v-btn>
-          <span>Edit User</span>
+          <span>Edit</span>
         </v-tooltip>
         <v-tooltip bottom>
           <v-btn slot="activator" icon class="ma-0 pa-0 mt-1">
             <v-icon color="error">delete</v-icon>
           </v-btn>
-          <span>Delete User</span>
+          <span>Delete</span>
         </v-tooltip>
         </td>
       </template>
@@ -80,18 +78,34 @@
         <v-btn color="primary" @click="getUsers()">Reload</v-btn>
       </template>
     </v-data-table>
+    <div class="text-xs-center pt-2">
+      <v-pagination v-model="page" :length="products.last_page" total-visible="9"></v-pagination>
+    </div>
   </div>
 </template>
 <script>
+import Dropzone from 'nuxt-dropzone'
+import 'nuxt-dropzone/dropzone.css'
 import axios from 'axios'
 import _ from 'lodash'
   export default {
+    components: {
+      Dropzone
+    },
     data: () => ({
+      options: {
+        url: "http://httpbin.org/anything",
+        acceptedFiles: 'image/jpeg, image/jpg', 
+        addRemoveLinks: true,
+        dictDefaultMessage: 'Upload Images...',
+        maxFilesize: 2, // MB
+        dictFileTooBig: 'Maximum file is {{maxFilesize}}.'
+      },
+      newProductDialog: false,
       switch1: false,
       userEdit: [],
       selectedUser: '',
       search: '',
-      dialog: false,
       searchUser: [],
       headers: [
         {
@@ -100,23 +114,28 @@ import _ from 'lodash'
           value: 'name'
         },
         {
-          text: 'Email',
+          text: 'Desc',
           sortable: false,
           value: 'email'
         },
         {
-          text: 'Company',
-          sortable: false,
-          value: 'contact'
-        },
-        {
-          text: 'Contact #',
+          text: 'Price',
           sortable: false,
           value: 'contact'
         },
         { 
-          text: 'Actions',
-          value: 'name', 
+          text: 'Store',
+          value: 'store', 
+          sortable: false 
+        },
+        {
+          text: 'Status',
+          sortable: false,
+          value: 'status'
+        },
+        { 
+          text: 'Action',
+          value: 'action', 
           sortable: false 
         }
       ],
@@ -137,13 +156,34 @@ import _ from 'lodash'
         protein: 0
       }
     }),
-
+    mounted() {
+      // Everything is mounted and you can access the dropzone instance
+      const instance = this.$refs.el.dropzone
+    },
     computed: {
+        selectedPage(){
+        return this.$store.getters.selectedPage
+        },
+        page: {
+            get(){
+              return this.$store.getters.page
+            },
+            set(val){
+              this.$store.dispatch('page', val);
+            }
+        },
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
-      users(){
-        return this.$store.getters.users
+      newProduct(){
+        return this.$store.getters.newProduct
+      },
+      products(){
+        return this.$store.getters.products
+      },
+      productsData(){
+        let products = this.$store.getters.products.data
+        return _.values(products)
       }
     },
 
@@ -169,12 +209,21 @@ import _ from 'lodash'
     },
 
     created () {
-      this.getUsers()
+      this.getItems()
     },
 
     methods: {
+      submit () {
+        if (this.$refs.form.validate()) {
+          // Native form submission is not yet supported
+          this.$refs.myVueDropzone.processQueue();
+        }
+      },
+      clear () {
+        this.$refs.form.reset()
+      },
       openNewItem(){
-        
+        this.newProductDialog = true
       },
       searchNewUser(){
           let data = this
@@ -189,11 +238,11 @@ import _ from 'lodash'
           }
            
       },
-      getUsers(){
+      getItems(){
         let data = this
-        axios.get( process.env.baseApi + '/user')
+        axios.get( process.env.baseApi + '/items?page='+this.page+'&perPage='+this.selectedPage)
             .then(res => {
-                data.$store.dispatch('users', res.data.users)
+                data.$store.dispatch('products', res.data.items)
               })
       },
 
@@ -212,11 +261,7 @@ import _ from 'lodash'
       },
 
       close () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
+        this.newProductDialog = false
       },
       update(userId) {
        let data = this
@@ -232,6 +277,17 @@ import _ from 'lodash'
                 })
               })
         this.dialog = false
+      }
+    },
+    watch: {
+      'newProduct.status': function(val){
+        this.$store.dispatch('newProductField',{
+          field: 'status',
+          value: val
+        });
+      },
+      page(){
+        this.getItems()
       }
     }
   }
