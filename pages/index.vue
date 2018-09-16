@@ -30,6 +30,16 @@
     created(){
       this.$store.dispatch('page', 1);
       this.$store.dispatch('dashboard', false);
+      let data = this;
+      axios.get( process.env.baseApi + '/auth/user?token=' + this.$store.getters.token)
+      .then(response => {
+          data.$store.dispatch('user', response.data.user)
+          data.$store.dispatch('userLogin', true)
+        })
+      .catch(function(error){
+          data.$store.dispatch('userLogin', false)
+          data.$store.dispatch('dashboard', false)
+      })
     },
     fetch ({ store, params }) {
       return myFetchMethod(store, params)

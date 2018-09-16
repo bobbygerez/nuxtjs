@@ -158,7 +158,7 @@ import _ from 'lodash'
     }),
     mounted() {
       // Everything is mounted and you can access the dropzone instance
-      const instance = this.$refs.el.dropzone
+      const instance = this.$refs.myVueDropzone.dropzone
     },
     computed: {
         selectedPage(){

@@ -12,11 +12,11 @@
               v-model="provDesc"
               close
              
-            >{{ selectedProvince.provDesc }}</v-chip>
+            ><span>{{ selectedProvince.provDesc }}</span></v-chip>
             <v-chip
               v-model="citymunDesc"
               close
-            >{{ selectedCity.citymunDesc }}</v-chip>
+            ><span>{{ selectedCity.citymunDesc }}</span></v-chip>
         
             
         </v-flex>
