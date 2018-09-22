@@ -1,5 +1,5 @@
 <template>
-  <v-container class="ma-1 pa-1">
+  <span>
       <item-headers v-bind:suffix="subcategoryName"/>
       <v-divider></v-divider>
       <v-layout wrap class="ma-0 pa-0" justify-center align-center>
@@ -12,7 +12,7 @@
           </div>
         </v-flex>
       </v-layout>
-  </v-container>
+  </span>
 </template>
 
 <script type="text/javascript">

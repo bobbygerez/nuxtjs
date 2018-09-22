@@ -1,6 +1,6 @@
 <template>
-  <v-container class="ma-1 pa-1 elevation-1">
-      <v-layout wrap >
+  <span >
+      <v-layout wrap class="elevation-1">
       	<v-flex xs12 sm12 md4 lg4 xl4 justify-center align-center>
       		<v-card flat>
 		        <v-card-title>
@@ -21,7 +21,7 @@
       	<v-flex xs12 sm12 md8 lg8 xl8>
       		<div class="detail">
 				   <section>
-				      <h1 class="display-1"> {{ item.name }}</h1>
+				      <h1 class="display-1 pt-1"> {{ item.name }}</h1>
 				      <span><star-rating v-model="rating" read-only :star-size="30" :show-rating="false"></star-rating> </span> 
 				      <p>{{ item.short_desc }}</p>
 				      <v-divider></v-divider>
@@ -52,7 +52,7 @@
 Made with dual-materials (durable 1.5mm hard plastic back-plateand flexible TPU edges and corners) that protect the back and allsides of your device from everyday use
         </v-flex>
       </v-layout>
-  </v-container>
+  </span>
 </template>
 
 <script type="text/javascript">
@@ -60,6 +60,13 @@ import Vue from 'vue'
 import cartQuantity from '~/components/cart/qty'
 import _ from 'lodash'
   export default{
+    head () {
+    return {
+      script: [
+        { src: '/js/drift-min.js' }
+      ],
+    } 
+  },
   	data () {
     return {
      	rating: 4,

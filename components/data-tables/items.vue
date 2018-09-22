@@ -55,10 +55,12 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.name }} </td>
-        <td>{{ props.item.short_desc | truncate(30) }}</td>
         <td>{{ props.item.amount|currency('₱ ') }}</td>
-        <td></td>
-        <td></td>
+        <td>{{ props.item.store.name }}</td>
+        <td>
+          <v-icon>check</v-icon>
+        </td>
+        <td>{{ props.item.created_at }}</td>
         <td class="justify-center layout px-0">
          <v-tooltip bottom >
           <v-btn slot="activator" icon class="ma-0 pa-0 mt-1" @click="edit(props.item.id)">
@@ -93,6 +95,7 @@ import _ from 'lodash'
       Dropzone
     },
     data: () => ({
+      valid: false,
       options: {
         url: "http://httpbin.org/anything",
         acceptedFiles: 'image/jpeg, image/jpg', 
@@ -113,11 +116,7 @@ import _ from 'lodash'
           sortable: false,
           value: 'name'
         },
-        {
-          text: 'Desc',
-          sortable: false,
-          value: 'email'
-        },
+        
         {
           text: 'Price',
           sortable: false,
@@ -132,6 +131,11 @@ import _ from 'lodash'
           text: 'Status',
           sortable: false,
           value: 'status'
+        },
+        {
+          text: 'Created',
+          sortable: false,
+          value: 'date'
         },
         { 
           text: 'Action',

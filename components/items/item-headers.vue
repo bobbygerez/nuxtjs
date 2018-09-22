@@ -1,7 +1,7 @@
 <template>
-  <v-layout class="ma-0 pa-0 pr-1">
+  <v-layout >
         
-        <v-flex xs12 sm12 md12 lg12 xl12 class="text-xs-center mt-2" >
+        <v-flex xs12 sm12 md12 lg12 xl12 class="text-xs-center " >
         <span class="subheading">Displaying <span class="gray--text">{{ items.from }}</span > to <span class="gray--text">{{ items.to }}</span > out of <span class="gray--text">{{ items.total }}</span> {{ suffix }} </span>
 
         

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="ma-1 pa-1">
+  <span>
       <item-headers v-bind:suffix="'Items'"/>
       <v-divider></v-divider>
       <v-layout wrap class="ma-0 pa-0" justify-center align-center>
@@ -12,7 +12,7 @@
           </div>
         </v-flex>
       </v-layout>
-  </v-container>
+  </span>
 </template>
 
 <script type="text/javascript">
@@ -28,7 +28,6 @@
   
   export default {
     created(){
-      this.$store.dispatch('page', 1);
       this.$store.dispatch('dashboard', false);
       let data = this;
       axios.get( process.env.baseApi + '/auth/user?token=' + this.$store.getters.token)

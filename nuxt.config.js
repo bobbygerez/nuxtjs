@@ -15,14 +15,13 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css'}
     ],
      script: [
-      {
-        src: "http://yourjavascript.com/24511711480/drift-min.js"
-      },
+        { src: '/js/drift-min.js' }
     ]
   },
   css: [
     '~assets/css/luminous-basic.css'
   ],
+
   /*
   ** Customize the progress bar color
   */
