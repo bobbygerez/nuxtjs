@@ -18,20 +18,20 @@
             <v-spacer></v-spacer>
             <v-switch
               :label="'Status'"
-              v-model="newProduct.status"
+              v-model="status"
             ></v-switch>
           </v-card-title>
           <v-card-text class="ma-0 pa-0">
             <v-container grid-list-md >
               <v-layout wrap class="mt-0 pt-0">
                 <v-flex xs12>
-                  <v-text-field v-model="newProduct.name" label="Product Name" class="ma-0 pa-0"></v-text-field>
+                  <v-text-field v-model="name" label="Product Name" class="ma-0 pa-0"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-textarea v-model="newProduct.short_desc" label="Short Description" class="ma-0 pa-0"></v-textarea>
+                  <v-textarea v-model="short_desc" label="Short Description" class="ma-0 pa-0"></v-textarea>
                 </v-flex>
                 <v-flex xs12>
-                  <dropzone id="foo" ref="myVueDropzone" :options="options" :destroyDropzone="true"></dropzone>
+                  <dropzone id="myDropzone" ref="myVueDropzone" :options="options" :destroyDropzone="true"></dropzone>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -92,20 +92,23 @@ import axios from 'axios'
 import _ from 'lodash'
   export default {
     components: {
-      Dropzone
+      Dropzone 
     },
     data: () => ({
       valid: false,
+      name: '',
+      short_desc: '',
+      status:false,
       options: {
-        url: "http://httpbin.org/anything",
-        acceptedFiles: 'image/jpeg, image/jpg', 
+        url: process.env.baseApi,
+        acceptedFiles: 'image/jpeg, image/jpg, image/png', 
         addRemoveLinks: true,
         dictDefaultMessage: 'Upload Images...',
         maxFilesize: 2, // MB
-        dictFileTooBig: 'Maximum file is {{maxFilesize}}.'
+        dictFileTooBig: 'Maximum file is {{maxFilesize}}.',
+        autoProcessQueue: false
       },
       newProductDialog: false,
-      switch1: false,
       userEdit: [],
       selectedUser: '',
       search: '',
@@ -218,9 +221,18 @@ import _ from 'lodash'
 
     methods: {
       submit () {
+        
         if (this.$refs.form.validate()) {
-          // Native form submission is not yet supported
-          this.$refs.myVueDropzone.processQueue();
+          axios.post( process.env.baseApi + '/items',{
+            images: this.$refs.myVueDropzone.getQueuedFiles(),
+            name: this.name,
+            short_desc: short_desc,
+            status:this.status
+          })
+            .then(res => {
+               
+              })
+          
         }
       },
       clear () {
@@ -296,3 +308,9 @@ import _ from 'lodash'
     }
   }
 </script>
+
+<style type="text/css">
+  #myDropzone .dz-preview .dz-progress {
+    opacity: 0;
+}
+</style>

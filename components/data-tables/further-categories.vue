@@ -124,6 +124,7 @@
         <td>{{ props.item.subcategories.name }}</td>
         <td>{{ props.item.subcategories.categories.name }}</td>
         <td>{{ props.item.desc }}</td>
+        <td>{{ props.item.created_at }}</td>
         <td class="justify-center layout px-0">
          <v-tooltip bottom >
           <v-btn slot="activator" icon class="ma-0 pa-0 mt-1" @click="edit(props.item.id)">
@@ -180,6 +181,11 @@ import _ from 'lodash'
           text: 'Description',
           sortable: false,
           value: 'desc'
+        },
+        {
+          text: 'Created',
+          sortable: false,
+          value: 'created'
         },
         { 
           text: 'Actions',
