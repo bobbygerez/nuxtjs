@@ -261,6 +261,7 @@ import _ from 'lodash'
                 data.$store.dispatch('products', res.data.items)
               })
       },
+      
 
       edit(userId) {
        let data = this
