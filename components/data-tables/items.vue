@@ -12,20 +12,50 @@
        ></v-text-field>
       <v-dialog v-model="newProductDialog" max-width="600px">
         <v-form ref="form" v-model="valid" lazy-validation>
-        <v-card>
+        <v-card class="mb-0 pb-0">
           <v-card-title class="mb-0 pb-0">
-            <span class="headline">New Product</span> 
+            <span class="headline mb-0 pb-0">New Product</span> 
             <v-spacer></v-spacer>
             <v-switch
               :label="'Status'"
               v-model="status"
+              class="mb-0 pb-0"
             ></v-switch>
           </v-card-title>
           <v-card-text class="ma-0 pa-0">
-            <v-container grid-list-md >
+            <v-container grid-list-md class="mt-0 pt-0">
               <v-layout wrap class="mt-0 pt-0">
                 <v-flex xs12>
-                  <v-text-field v-model="name" label="Product Name" class="ma-0 pa-0"></v-text-field>
+                    <search-store></search-store>
+                </v-flex>
+                <v-flex xs12>
+                    <v-select
+                      :items="branches"
+                      v-model="selectedBranches"
+                      label="Select Branch"
+                      item-text="name"
+                      item-value="id"
+                      attach
+                      multiple
+                      chips
+                    >
+                      
+                    </v-select>
+                </v-flex>
+                <v-flex xs12>
+                  <provinces></provinces>
+                </v-flex>
+                <v-flex xs12>
+                  <cities></cities>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="name" label="Product Name" ></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <my-currency-input v-model="price" v-bind:label="'Price'"></my-currency-input>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="qty" label="Qty" type="number"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
                   <v-textarea v-model="short_desc" label="Short Description" class="ma-0 pa-0"></v-textarea>
@@ -54,9 +84,10 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }} </td>
-        <td>{{ props.item.amount|currency('₱ ') }}</td>
+        <td>{{ props.item.item.name }} </td>
+        <td>{{ props.item.item.amount|currency('₱') }}</td>
         <td>{{ props.item.store.name }}</td>
+        <td>{{ props.item.branch.name }}</td>
         <td>
           <v-icon>check</v-icon>
         </td>
@@ -87,14 +118,21 @@
 </template>
 <script>
 import Dropzone from 'nuxt-dropzone'
+import searchStore from '~/components/autocomplete/search-store'
+import myCurrencyInput from '~/components/currency-format/my-currency-input'
+import provinces from '~/components/combobox/provinces'
+import cities from '~/components/select/cities'
 import 'nuxt-dropzone/dropzone.css'
 import axios from 'axios'
 import _ from 'lodash'
   export default {
     components: {
-      Dropzone 
+      Dropzone, searchStore, myCurrencyInput, provinces, cities
     },
     data: () => ({
+      
+      price: 0,
+      qty: '',
       valid: false,
       name: '',
       short_desc: '',
@@ -129,6 +167,11 @@ import _ from 'lodash'
           text: 'Store',
           value: 'store', 
           sortable: false 
+        },
+        {
+          text: 'Branch',
+          sortable: false,
+          value: 'branch'
         },
         {
           text: 'Status',
@@ -168,6 +211,22 @@ import _ from 'lodash'
       const instance = this.$refs.myVueDropzone.dropzone
     },
     computed: {
+      selectedBranches: {
+        get(){
+          return this.$store.getters.selectedBranches
+        },
+        set(val){
+          this.$store.dispatch('selectedBranches', val)
+        }
+      },
+      branches: {
+        get(){
+          return this.$store.getters.branches
+        },
+        set(val){
+
+        }
+      },  
         selectedPage(){
         return this.$store.getters.selectedPage
         },
@@ -220,6 +279,7 @@ import _ from 'lodash'
     },
 
     methods: {
+      
       submit () {
         
         if (this.$refs.form.validate()) {
@@ -256,13 +316,13 @@ import _ from 'lodash'
       },
       getItems(){
         let data = this
-        axios.get( process.env.baseApi + '/items?page='+this.page+'&perPage='+this.selectedPage)
+        axios.get( process.env.baseApi + '/item_info?page='+this.page+'&perPage='+this.selectedPage)
             .then(res => {
-                data.$store.dispatch('products', res.data.items)
+                data.$store.dispatch('products', res.data.itemInfo)
               })
       },
 
-      
+
 
       edit(userId) {
        let data = this

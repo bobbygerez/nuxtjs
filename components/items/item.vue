@@ -5,20 +5,20 @@
         hover
         class="ma-1"
         :height="500"
-        :to="'/Category/' + slug(item.category.name) + '/'+ slug(item.sub_category.name) + '/' + slug(item.further_category.name) + '/' + slug(item.name) +`/${item.id}`" 
+        :to="'/Category/' + slug(itemInfo.category.name) + '/'+ slug(itemInfo.sub_category.name) + '/' + slug(itemInfo.further_category.name) + '/' + slug(itemInfo.item.name) +`/${itemInfo.id}`" 
       >
         <v-card-title primary-title>
           <div>
-            <div class="title">{{ item.name }}</div>
+            <div class="title">{{ itemInfo.item.name }}</div>
           </div>
         </v-card-title>
         <v-card-text wrap style='text-align: left;  word-wrap: break-word;'>
-          <span v-for="img in item.images">
+          <span v-for="img in itemInfo.images">
             <img :src="img.path" class='responsive'/>
           </span>
-          <p class="caption"><v-icon>place</v-icon>{{ item.province.provDesc }}, {{ item.city.citymunDesc }}</p>
-          <p>{{ item.short_desc| truncate(100) }}</p>
-          <h3 class="text-lg-center red--text">{{ item.amount|currency('₱ ') }}</h3>
+          <p class="caption"><v-icon>place</v-icon>{{ itemInfo.province.provDesc }}, {{ itemInfo.city.citymunDesc }}</p>
+          <p>{{ itemInfo.item.short_desc| truncate(100) }}</p>
+          <h3 class="text-lg-center red--text">{{ itemInfo.item.amount|currency('₱ ') }}</h3>
         </v-card-text>
       </v-card>
     </v-flex>
@@ -28,7 +28,7 @@
 
 <script>
   export default {
-    props: ['item', 'index'],
+    props: ['itemInfo', 'index'],
     data: () => ({
       show: false,
       cardME: "elevation-1"

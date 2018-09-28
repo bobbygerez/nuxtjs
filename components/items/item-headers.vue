@@ -2,7 +2,10 @@
   <v-layout >
         
         <v-flex xs12 sm12 md12 lg12 xl12 class="text-xs-center " >
-        <span class="subheading">Displaying <span class="gray--text">{{ items.from }}</span > to <span class="gray--text">{{ items.to }}</span > out of <span class="gray--text">{{ items.total }}</span> {{ suffix }} </span>
+        <span class="subheading">Displaying 
+        <span class="gray--text">{{ itemInfo.from }}</span > to <span class="gray--text">{{ itemInfo.to }}</span > out of 
+        <span class="gray--text">{{ itemInfo.total }} </span> <strong>{{ suffix }} </strong>
+        </span>
 
         
         <v-btn icon @click="showStoreLocation" class="green--text" >
@@ -96,8 +99,8 @@
       provinces(){
         return this.$store.getters.provinces
       },
-      items(){
-        return this.$store.getters.items
+      itemInfo(){
+        return this.$store.getters.itemInfo
       },
       perPage(){
         return this.$store.getters.perPage

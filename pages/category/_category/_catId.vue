@@ -3,12 +3,12 @@
       <item-headers v-bind:suffix="categoryName"/>
       <v-divider></v-divider>
       <v-layout wrap class="ma-0 pa-0" justify-center align-center>
-           <items v-bind:item="item" v-bind:index="i" v-for="(item, i) in items.data" :key="i"></items>
+           <items v-bind:itemInfo="x" v-bind:index="i" v-for="(x, i) in itemInfo.data" :key="i"></items>
       </v-layout>
       <v-layout>
         <v-flex>
           <div class="text-xs-center pt-2">
-          <v-pagination v-model="page" :length="items.last_page" total-visible="9"></v-pagination>
+          <v-pagination v-model="page" :length="itemInfo.last_page" total-visible="9"></v-pagination>
           </div>
         </v-flex>
       </v-layout>
@@ -29,8 +29,8 @@
 			selectedProvince(){
 				return this.$store.getters.selectedProvince
 			},
-			items(){
-				return this.$store.getters.items
+			itemInfo(){
+				return this.$store.getters.itemInfo
 			},
 			page: {
 				get(){
@@ -51,7 +51,7 @@
 			page(val){
 				axios.get( process.env.baseApi + '/get-items/' + this.$route.params.catId + '?catId=' + this.$route.params.catId + '&page=' + val + '&perPage=' + this.$store.getters.selectedPage + '&provCode=' + this.selectedProvince.provCode)
 		        .then(res => {
-		             this.$store.commit('items', res.data.items)
+		             this.$store.commit('itemInfo', res.data.itemInfo)
 		             this.$store.commit('categoryName', res.data.categoryName)
 		          })
 			}

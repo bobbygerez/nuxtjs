@@ -3,12 +3,12 @@
       <item-headers v-bind:suffix="'Items'"/>
       <v-divider></v-divider>
       <v-layout wrap class="ma-0 pa-0" justify-center align-center>
-           <items v-bind:item="item" v-bind:index="i" v-for="(item, i) in items.data" :key="i"></items>
+           <items v-bind:itemInfo="itemInfo" v-bind:index="i" v-for="(itemInfo, i) in itemInfo.data" :key="i"></items>
       </v-layout>
       <v-layout>
         <v-flex>
           <div class="text-xs-center pt-2">
-          <v-pagination v-model="page" :length="items.last_page" total-visible="9"></v-pagination>
+          <v-pagination v-model="page" :length="itemInfo.last_page" total-visible="9"></v-pagination>
           </div>
         </v-flex>
       </v-layout>
@@ -22,7 +22,7 @@
   function myFetchMethod(store, params){
     return axios.get( process.env.baseApi + '/get-items?provId=' + store.getters.selectedProvince.id + '&page=' + store.getters.page + '&perPage=' + store.getters.selectedPage)
         .then(res => {
-             store.commit('items', res.data.items)
+             store.commit('itemInfo', res.data.itemInfo)
           })
   }
   
@@ -74,8 +74,8 @@
           this.$store.dispatch('selectedPage', val);
         }
       },
-      items(){
-        return this.$store.getters.items
+      itemInfo(){
+        return this.$store.getters.itemInfo
       }
     },
     watch: {

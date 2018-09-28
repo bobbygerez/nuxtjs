@@ -30,11 +30,11 @@
         </td>
 
         <td>{{ props.item.quantity }}</td>
-        <td>{{ props.item.item.amount|currency('₱ ') }}</td>
+        <td>{{ props.item.item.item.amount|currency('₱ ') }}</td>
         <td>
-          <v-btn icon small class="orange--text mt-3" @click.native="remove(props.index)">
-            <v-icon dark>remove_circle</v-icon>
-          </v-btn>
+          <v-btn flat icon color="error mt-3" @click.native="remove(props.index)">
+              <v-icon>delete</v-icon>
+            </v-btn>
         </td>
       </template>
      <template slot="footer">
@@ -59,8 +59,8 @@
 
 <v-card-actions class="mt-0 pt-0">
 <v-spacer></v-spacer>
-          <v-btn flat color="error" @click="$emit('closeCartMenu')">Cancel</v-btn>
-          <v-btn flat color="success" :to="'/checkout'" @click="$emit('closeCartMenu')">Check out</v-btn>
+          <v-btn  color="error" @click="$emit('closeCartMenu')">Cancel</v-btn>
+          <v-btn  color="primary" :to="'/checkout'" @click="$emit('closeCartMenu')">Check out</v-btn>
         </v-card-actions>
 </v-card>
 </template>
@@ -80,7 +80,7 @@
       },
       cartTotal(){
         var x = this.cart.map(function(item){
-          return item.quantity * parseFloat(item.item.amount)
+          return item.quantity * parseFloat(item.item.item.amount)
         })
         if(x.length > 0){
           return x.reduce((a, b)=> a + b)

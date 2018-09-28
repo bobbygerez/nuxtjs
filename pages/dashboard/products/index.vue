@@ -11,6 +11,7 @@
 <script type="text/javascript">
 import items from '~/components/data-tables/items'
 	export default {
+      middleware: ['provinces'],
       components: { items }
     }
 </script>

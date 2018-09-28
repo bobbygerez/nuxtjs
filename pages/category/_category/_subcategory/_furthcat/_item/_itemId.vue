@@ -21,12 +21,12 @@
       	<v-flex xs12 sm12 md8 lg8 xl8>
       		<div class="detail">
 				   <section>
-				      <h1 class="display-1 pt-1"> {{ item.name }}</h1>
+				      <h1 class="display-1 pt-1"> {{ item.item.name }}</h1>
 				      <span><star-rating v-model="rating" read-only :star-size="30" :show-rating="false"></star-rating> </span> 
 				      <p>{{ item.short_desc }}</p>
 				      <v-divider></v-divider>
 				       <h2 class=" title pa-3">
-				       <span class="red--text">{{ item.amount|currency('₱ ') }}</span> <br /><span class="grey--text body-2" style="text-decoration: line-through">{{ item.amount|currency('₱ ') }} </span> <span class="black--text body-2 ml-1"> -44% </span></h2>
+				       <span class="red--text">{{ item.item.amount|currency('₱ ') }}</span> <br /><span class="grey--text body-2" style="text-decoration: line-through">{{ item.item.amount|currency('₱ ') }} </span> <span class="black--text body-2 ml-1"> -44% </span></h2>
 				       <v-divider></v-divider>
                <br />
                <p>Quantity <cart-quantity></cart-quantity></p>

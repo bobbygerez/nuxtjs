@@ -10,45 +10,6 @@
        single-line
        hide-details
        ></v-text-field>
-      <!-- <v-dialog v-model="dialog" max-width="500px">
-        <v-card>
-          <v-card-title class="mb-0 pb-0">
-            <span class="headline">Edit User</span> 
-            <v-spacer></v-spacer>
-            <v-switch
-              :label="'Block user'"
-              v-model="userEdit.status"
-            ></v-switch>
-          </v-card-title>
-          <v-card-text class="ma-0 pa-0">
-            <v-container grid-list-md >
-              <v-layout wrap class="mt-0 pt-0">
-                <v-flex xs6 sm6 md6 >
-                  <v-text-field v-model="userEdit.firstname" label="Firstname" class="ma-0 pa-0"></v-text-field>
-                </v-flex>
-                <v-flex xs6 sm6 md6>
-                  <v-text-field v-model="userEdit.lastname" label="Lastname" class="ma-0 pa-0"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <v-text-field v-model="userEdit.email" label="Email" class="ma-0 pa-0"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <v-text-field v-model="userEdit.company" label="Company" class="ma-0 pa-0"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm12 md12>
-                  <v-text-field v-model="userEdit.contact" label="Contact #" class="ma-0 pa-0"></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="update(userEdit.id)">Update</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog> -->
     </v-toolbar>
     <v-data-table
       :headers="headers"

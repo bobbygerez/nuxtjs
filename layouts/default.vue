@@ -127,7 +127,6 @@ fixed
 <v-spacer></v-spacer>
 <v-autocomplete
 prepend-icon="search"
-
 cache-items
 class="mx-3 hidden-xs-only"
 flat
@@ -272,7 +271,7 @@ fixed
     <v-card-title
     class="grey lighten-4 py-4 title"
     >
-    Filter Store Location
+    Filter Product Location
   </v-card-title>
   <v-container grid-list-sm class="pa-4">
     <v-form v-model="valid" ref="login" lazy-validation>
@@ -547,7 +546,7 @@ getItemsProvince(){
   let data = this
   axios.get( process.env.baseApi + '/get-items?provId=' + this.selectedProvince.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
   .then(res => {
-   data.$store.commit('items', res.data.items)
+   data.$store.commit('itemInfo', res.data.itemInfo)
  })
 
 }
@@ -575,7 +574,7 @@ watch: {
     if (val.id != '') {
       axios.get( process.env.baseApi + '/get-items?cityId=' + val.id + '&page=' + this.page + '&perPage=' + this.selectedPage)
       .then(res => {
-       data.$store.commit('items', res.data.items)
+       data.$store.commit('itemInfo', res.data.itemInfo)
      })
     }else{
       this.getItemsProvince()

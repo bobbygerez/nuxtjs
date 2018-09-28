@@ -4,6 +4,11 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      selectedProvinceProduct: '',
+      selectedBranches:[],
+      branches:[],
+      selectedStore: '',
+      stores: [],
       newProduct: {
         status: '',
         name: '',
@@ -115,10 +120,25 @@ const createStore = () => {
       perPage: [12, 16, 20, 24, 28],
       selectedPage: 20,
       page: 1,
-      items: [],
+      itemInfo: [],
       categories: []
     },
     mutations: {
+      selectedProvinceProduct(state, payload){
+        state.selectedProvinceProduct = payload
+      },
+      selectedBranches(state, payload){
+        state.selectedBranches = payload
+      },
+      branches(state, payload){
+        state.branches = payload
+      },
+      selectedStore(state, payload){
+        state.selectedStore = payload
+      },
+      stores(state, payload){
+        state.stores = payload
+      },
       newProductField(state, payload){
          state.newProduct[payload['field']] = payload['value']
       },
@@ -284,8 +304,8 @@ const createStore = () => {
       selectedPage(state, payload){
         state.selectedPage = payload
       },
-      items(state, payload){
-        state.items = payload
+      itemInfo(state, payload){
+        state.itemInfo = payload
       },
       page(state, payload){
         state.page = payload
@@ -318,6 +338,21 @@ const createStore = () => {
           }
         }
         store.commit('cart', cleanArray)
+      },
+      selectedProvinceProduct(store, payload){
+        store.commit('selectedProvinceProduct', payload)
+      },
+      selectedBranches(store, payload){
+        store.commit('selectedBranches', payload)
+      },
+      branches(store, payload){
+        store.commit('branches', payload)
+      },
+      selectedStore(store, payload){
+        store.commit('selectedStore', payload)
+      },
+      stores(store, payload){
+        store.commit('stores', payload)
       },
       newProductField(store, payload){
         store.commit('newProductField', payload)
@@ -486,8 +521,8 @@ const createStore = () => {
       perPage(store, payload){
         store.commit('perPage', payload)
       },
-      items(store, payload){
-        store.commit('items', payload)
+      itemInfo(store, payload){
+        store.commit('itemInfo', payload)
       },
       page(store, payload){
         store.commit('page', payload)
@@ -497,6 +532,21 @@ const createStore = () => {
       }
     },
     getters: {
+      selectedProvinceProduct(state){
+        return state.selectedProvinceProduct
+      },
+      selectedBranches(state){
+        return state.selectedBranches
+      },
+      branches(state){
+        return state.branches
+      },
+      selectedStore(state){
+        return state.selectedStore
+      },
+      stores(state){
+        return state.stores
+      },
       newProduct(state){
         return state.newProduct
       },
@@ -644,8 +694,8 @@ const createStore = () => {
       perPage(state){
         return state.perPage
       },
-      items(state){
-        return state.items
+      itemInfo(state){
+        return state.itemInfo
       },
       page(state){
         return state.page
