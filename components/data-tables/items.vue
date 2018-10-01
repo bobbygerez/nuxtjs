@@ -48,6 +48,9 @@
                 <v-flex xs12>
                   <cities></cities>
                 </v-flex>
+                <v-flex xs12 v-if="selectedCitiesProduct.length == 1">
+                  <brgys></brgys>
+                </v-flex>
                 <v-flex xs12>
                   <v-text-field v-model="name" label="Product Name" ></v-text-field>
                 </v-flex>
@@ -56,6 +59,9 @@
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field v-model="qty" label="Qty" type="number"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <colors></colors>
                 </v-flex>
                 <v-flex xs12>
                   <v-textarea v-model="short_desc" label="Short Description" class="ma-0 pa-0"></v-textarea>
@@ -117,17 +123,19 @@
   </div>
 </template>
 <script>
+import colors from '~/components/autocomplete/colors'
 import Dropzone from 'nuxt-dropzone'
 import searchStore from '~/components/autocomplete/search-store'
 import myCurrencyInput from '~/components/currency-format/my-currency-input'
 import provinces from '~/components/combobox/provinces'
 import cities from '~/components/select/cities'
+import brgys from '~/components/select/brgys'
 import 'nuxt-dropzone/dropzone.css'
 import axios from 'axios'
 import _ from 'lodash'
   export default {
     components: {
-      Dropzone, searchStore, myCurrencyInput, provinces, cities
+      Dropzone, searchStore, myCurrencyInput, provinces, cities, brgys, colors
     },
     data: () => ({
       
@@ -211,6 +219,9 @@ import _ from 'lodash'
       const instance = this.$refs.myVueDropzone.dropzone
     },
     computed: {
+      selectedCitiesProduct(){
+        return this.$store.getters.selectedCitiesProduct
+      },
       selectedBranches: {
         get(){
           return this.$store.getters.selectedBranches

@@ -4,6 +4,9 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      selectedColorsProduct:[],
+      selectedBrgysProduct: [],
+      selectedCitiesProduct: [],
       selectedProvinceProduct: '',
       selectedBranches:[],
       branches:[],
@@ -92,6 +95,7 @@ const createStore = () => {
       brgys: [],
       stepper: 0,
       colorIds:[],
+      colors: [],
       cart: [],
       cartQuantity: 0,
       item: {},
@@ -124,6 +128,18 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      colors(state, payload){
+        state.colors = payload
+      },
+      selectedColorsProduct(state, payload){
+        state.selectedColorsProduct = payload
+      },
+      selectedBrgysProduct(state, payload){
+        state.selectedBrgysProduct = payload
+      },
+      selectedCitiesProduct(state, payload){
+        state.selectedCitiesProduct = payload
+      },
       selectedProvinceProduct(state, payload){
         state.selectedProvinceProduct = payload
       },
@@ -339,6 +355,21 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      colors(store, payload){
+        store.commit('colors', payload)
+      },
+      selectedColorsProduct(store, payload){
+        store.commit('selectedColorsProduct', payload)
+      },
+      selectedBrgysProduct(store, payload){
+        store.commit('selectedBrgysProduct', payload)
+      },
+      selectedCitiesProduct(store, payload){
+        store.commit('selectedCitiesProduct', payload)
+      },
+      selectedProvinceProduct(store, payload){
+        store.commit('selectedProvinceProduct', payload)
+      },
       selectedProvinceProduct(store, payload){
         store.commit('selectedProvinceProduct', payload)
       },
@@ -532,6 +563,18 @@ const createStore = () => {
       }
     },
     getters: {
+      colors(state){
+        return state.colors
+      },
+      selectedColorsProduct(state){
+        return state.selectedColorsProduct
+      },
+      selectedBrgysProduct(state){
+        return state.selectedBrgysProduct
+      },
+      selectedCitiesProduct(state){
+        return state.selectedCitiesProduct
+      },
       selectedProvinceProduct(state){
         return state.selectedProvinceProduct
       },

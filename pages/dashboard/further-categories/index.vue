@@ -14,7 +14,7 @@ import furtherCategories from '~/components/data-tables/further-categories'
 import confirmAlert from '~/components/alert/confirm-alert.vue'
 import axios from 'axios'
   export default {
-      middleware: 'get-subcategories',
+      middleware: ['get-subcategories', 'auth'],
       components: { furtherCategories, confirmAlert }
       ,
       computed: {

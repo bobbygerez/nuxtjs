@@ -111,9 +111,6 @@ import _ from 'lodash'
       selectedImage(e, id){
         
         let length = document.getElementsByClassName('selectedImg').length ;
-        console.log(this.colorIds)
-        console.log(this.cartQuantity)
-        console.log(length)
         if ( this.cartQuantity > length) {
           var colorExist = _.includes(this.colorIds, id);
           var classExist = e.srcElement.classList.contains('selectedImg');

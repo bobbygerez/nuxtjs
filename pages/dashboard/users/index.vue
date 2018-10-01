@@ -11,6 +11,7 @@
 <script type="text/javascript">
 import users from '~/components/data-tables/users'
 	export default {
+      middleware: ['auth'],
       components: { users }
     }
 </script>

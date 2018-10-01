@@ -1,8 +1,8 @@
 <template>
   <v-select
-    v-model="selectedCitiesProduct"
+    v-model="selectedCities"
     :items="cities"
-    label="Cities"
+    label="Barangay"
     item-text="citymunDesc"
     item-value="citymunCode"
     multiple
@@ -14,7 +14,7 @@
       @click="toggle"
     >
       <v-list-tile-action>
-        <v-icon :color="selectedCitiesProduct.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+        <v-icon :color="selectedCities.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
       </v-list-tile-action>
       <v-list-tile-title>Select All</v-list-tile-title>
     </v-list-tile>
@@ -37,28 +37,22 @@
       <span
         v-if="index === 1"
         class="grey--text caption"
-      >(+{{ selectedCitiesProduct.length - 1 }} others)</span>
+      >(+{{ selectedCities.length - 1 }} others)</span>
     </template>
   </v-select>
 </template>
 <script>
-  import axios from 'axios'
   export default {
-    
+    data: () => ({
+      selectedCities: []
+    }),
+
     computed: {
       likesAllCities () {
-        return this.selectedCitiesProduct.length === this.cities.length
+        return this.selectedCities.length === this.cities.length
       },
       likesSomeCities () {
-        return this.selectedCitiesProduct.length > 0 && !this.likesAllCities
-      },
-      selectedCitiesProduct: {
-        get(){
-          return this.$store.getters.selectedCitiesProduct
-        },
-        set(val){
-          this.$store.dispatch('selectedCitiesProduct', val)
-        }
+        return this.selectedCities.length > 0 && !this.likesAllCities
       },
       icon () {
         if (this.likesAllCities) return 'indeterminate_check_box'
@@ -74,20 +68,11 @@
       toggle () {
         this.$nextTick(() => {
           if (this.likesAllCities) {
-            this.selectedCitiesProduct = []
+            this.selectedCities = []
           } else {
-            this.selectedCitiesProduct = this.cities.slice()
+            this.selectedCities = this.cities.slice()
           }
         })
-      }
-    },
-    watch: {
-
-      selectedCitiesProduct(val){
-
-          if (val.length == 1) {
-            axios.get(process.env.baseApi + '/get-brgys/' + val[0])
-          }
       }
     }
   }

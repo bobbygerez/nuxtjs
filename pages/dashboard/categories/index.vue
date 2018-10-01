@@ -14,6 +14,7 @@ import categories from '~/components/data-tables/categories'
 import confirmAlert from '~/components/alert/confirm-alert.vue'
 import axios from 'axios'
 	export default {
+      middleware: ['auth'],
       components: { 
         categories, confirmAlert 
       },
