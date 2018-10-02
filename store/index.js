@@ -4,6 +4,8 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      selectedSizesProduct: [],
+      sizes: [],
       selectedColorsProduct:[],
       selectedBrgysProduct: [],
       selectedCitiesProduct: [],
@@ -128,6 +130,12 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      selectedSizesProduct(state, payload){
+        state.selectedSizesProduct = payload
+      },
+      sizes(state, payload){
+        state.sizes = payload
+      },
       colors(state, payload){
         state.colors = payload
       },
@@ -355,6 +363,12 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      selectedSizesProduct(store, payload){
+        store.commit('selectedSizesProduct', payload)
+      },
+      sizes(store, payload){
+        store.commit('sizes', payload)
+      },
       colors(store, payload){
         store.commit('colors', payload)
       },
@@ -563,6 +577,12 @@ const createStore = () => {
       }
     },
     getters: {
+      selectedSizesProduct(state){
+        return state.selectedSizesProduct
+      },
+      sizes(state){
+        return state.sizes
+      },
       colors(state){
         return state.colors
       },
