@@ -11,4 +11,6 @@ export default async function ({context, store, router, redirect, req}) {
 	.catch(function(error){
 
 	})
+
+	
 }
