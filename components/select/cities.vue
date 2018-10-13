@@ -6,6 +6,7 @@
     item-text="citymunDesc"
     item-value="citymunCode"
     multiple
+    clearable
   >
 
     <v-list-tile
@@ -84,9 +85,14 @@
     watch: {
 
       selectedCitiesProduct(val){
-
+        let data = this
           if (val.length == 1) {
             axios.get(process.env.baseApi + '/get-brgys/' + val[0])
+            .then(function(res){
+              data.$store.dispatch('brgys', res.data.brgys)
+            })
+          }else{
+            data.$store.dispatch('selectedBrgysProduct', [])
           }
       }
     }

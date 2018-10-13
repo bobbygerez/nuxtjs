@@ -7,6 +7,7 @@
 	label="Province"
 	attach
 	chips
+	clearable
 	>
 </v-select>
 </template>
@@ -41,6 +42,7 @@
 				axios.get( process.env.baseApi + '/get-cities/' + val)
 				      .then(res => {
 				        data.$store.dispatch('cities', res.data.cities);
+				        data.$store.dispatch('selectedCitiesProduct', []);
 				      })
 			}
 		}

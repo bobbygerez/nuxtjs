@@ -25,8 +25,6 @@
       >
         <v-chip
           :selected="selected"
-          color="blue-grey"
-          class="white--text"
         >
           <v-icon left>mdi-coin</v-icon>
           <span v-text="item.name"></span>
@@ -59,7 +57,6 @@ import _ from 'lodash'
   export default {
     data: () => ({
       isLoading: false,
-      storeId: null,
       search: null
     }),
     computed: {
@@ -69,6 +66,14 @@ import _ from 'lodash'
         },
         set(val){
 
+        }
+      },
+      storeId: {
+        get(){
+          return this.$store.getters.storeId
+        },
+        set(val){
+          this.$store.dispatch('storeId', val)
         }
       }
     },
@@ -90,8 +95,6 @@ import _ from 'lodash'
             console.log(err)
           })
           .finally(() => (this.isLoading = false))
-
-
 
           }, 500),
 

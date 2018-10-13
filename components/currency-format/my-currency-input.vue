@@ -5,7 +5,7 @@
     v-model="displayValue" 
     @blur="isInputActive = false" 
     @focus="isInputActive = true"/>
-    	
+    
     </v-text-field>
 </template>
 

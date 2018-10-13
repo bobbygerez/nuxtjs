@@ -4,16 +4,24 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      productSKU: '',
+      productName: '',
+      productPrice: 0,
+      productQuantity: 0,
+      newProductDialog: true,
+      selectedUnitProduct: '',
+      units: [],
       selectedSizesProduct: [],
       sizes: [],
       selectedColorsProduct:[],
       selectedBrgysProduct: [],
       selectedCitiesProduct: [],
       selectedProvinceProduct: '',
-      selectedBranches:[],
+      selectedBranches:'',
       branches:[],
       selectedStore: '',
       stores: [],
+      storeId: '',
       newProduct: {
         status: '',
         name: '',
@@ -130,6 +138,27 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      productSKU(state, payload){
+        state.productSKU = payload
+      },
+      productQuantity(state, payload){
+        state.productQuantity = payload
+      },
+      productPrice(state, payload){
+        state.productPrice = payload
+      },
+      productName(state, payload){
+        state.productName = payload
+      },
+      newProductDialog(state, payload){
+        state.newProductDialog = payload
+      },
+      selectedUnitProduct(state, payload){
+        state.selectedUnitProduct = payload
+      },
+      units(state, payload){
+        state.units = payload
+      },
       selectedSizesProduct(state, payload){
         state.selectedSizesProduct = payload
       },
@@ -162,6 +191,9 @@ const createStore = () => {
       },
       stores(state, payload){
         state.stores = payload
+      },
+      storeId(state, payload){
+        state.storeId = payload
       },
       newProductField(state, payload){
          state.newProduct[payload['field']] = payload['value']
@@ -363,6 +395,27 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      productSKU(store, payload){
+        store.commit('productSKU', payload)
+      },
+      productQuantity(store, payload){
+        store.commit('productQuantity', payload)
+      },
+      productName(store, payload){
+        store.commit('productName', payload)
+      },
+      productPrice(store, payload){
+        store.commit('productPrice', payload)
+      },
+      newProductDialog(store, payload){
+        store.commit('newProductDialog', payload)
+      },
+      selectedUnitProduct(store, payload){
+        store.commit('selectedUnitProduct', payload)
+      },
+      units(store, payload){
+        store.commit('units', payload)
+      },
       selectedSizesProduct(store, payload){
         store.commit('selectedSizesProduct', payload)
       },
@@ -398,6 +451,9 @@ const createStore = () => {
       },
       stores(store, payload){
         store.commit('stores', payload)
+      },
+      storeId(store, payload){
+        store.commit('storeId', payload)
       },
       newProductField(store, payload){
         store.commit('newProductField', payload)
@@ -577,6 +633,27 @@ const createStore = () => {
       }
     },
     getters: {
+      productSKU(state){
+        return state.productSKU
+      },
+      productQuantity(state){
+        return state.productQuantity
+      },
+      productPrice(state){
+        return state.productPrice
+      },
+      productName(state){
+        return state.productName
+      },
+      newProductDialog(state){
+        return state.newProductDialog
+      },
+      selectedUnitProduct(state){
+        return state.selectedUnitProduct
+      },
+      units(state){
+        return state.units
+      },
       selectedSizesProduct(state){
         return state.selectedSizesProduct
       },
@@ -609,6 +686,9 @@ const createStore = () => {
       },
       stores(state){
         return state.stores
+      },
+      storeId(state){
+        return state.storeId
       },
       newProduct(state){
         return state.newProduct

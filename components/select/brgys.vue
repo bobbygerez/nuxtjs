@@ -1,11 +1,12 @@
 <template>
   <v-select
-    v-model="selectedCities"
-    :items="cities"
+    v-model="selectedBrgysProduct"
+    :items="brgys"
     label="Barangay"
-    item-text="citymunDesc"
-    item-value="citymunCode"
+    item-text="brgyDesc"
+    item-value="brgyCode"
     multiple
+    clearable
   >
 
     <v-list-tile
@@ -14,7 +15,7 @@
       @click="toggle"
     >
       <v-list-tile-action>
-        <v-icon :color="selectedCities.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+        <v-icon :color="selectedBrgysProduct.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
       </v-list-tile-action>
       <v-list-tile-title>Select All</v-list-tile-title>
     </v-list-tile>
@@ -32,45 +33,49 @@
       slot-scope="{ item, index }"
     >
       <v-chip v-if="index === 0">
-        <span>{{ item.citymunDesc }}</span>
+        <span>{{ item.brgyDesc }}</span>
       </v-chip>
       <span
         v-if="index === 1"
         class="grey--text caption"
-      >(+{{ selectedCities.length - 1 }} others)</span>
+      >(+{{ selectedBrgysProduct.length - 1 }} others)</span>
     </template>
   </v-select>
 </template>
 <script>
   export default {
-    data: () => ({
-      selectedCities: []
-    }),
-
     computed: {
-      likesAllCities () {
-        return this.selectedCities.length === this.cities.length
+      likesAllBrgys () {
+        return this.selectedBrgysProduct.length === this.brgys.length
       },
-      likesSomeCities () {
-        return this.selectedCities.length > 0 && !this.likesAllCities
+      likesSomeBrgys () {
+        return this.selectedBrgysProduct.length > 0 && !this.likesAllBrgys
       },
       icon () {
-        if (this.likesAllCities) return 'indeterminate_check_box'
-        if (this.likesSomeCities) return 'check_box_outline_blank'
+        if (this.likesAllBrgys) return 'indeterminate_check_box'
+        if (this.likesSomeBrgys) return 'check_box_outline_blank'
         return 'check_box_outline_blank'
       },
-      cities(){
-        return this.$store.getters.cities
-      }
+      brgys(){
+        return this.$store.getters.brgys
+      },
+      selectedBrgysProduct: {
+        get(){
+          return this.$store.getters.selectedBrgysProduct
+        },
+        set(val){
+          this.$store.dispatch('selectedBrgysProduct', val)
+        }
+      },
     },
 
     methods: {
       toggle () {
         this.$nextTick(() => {
-          if (this.likesAllCities) {
-            this.selectedCities = []
+          if (this.likesAllBrgys) {
+            this.selectedBrgysProduct = []
           } else {
-            this.selectedCities = this.cities.slice()
+            this.selectedBrgysProduct = this.brgys.slice()
           }
         })
       }

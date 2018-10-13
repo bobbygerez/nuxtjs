@@ -9,6 +9,7 @@
               item-text="name"
               item-value="id"
               multiple
+              clearable
             >
               <template
                 slot="selection"
