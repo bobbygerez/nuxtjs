@@ -11,6 +11,7 @@
       item-text="name"
       item-value="id"
       label="Select Store"
+      
     >
       <template slot="no-data">
         <v-list-tile>
@@ -104,7 +105,7 @@ import _ from 'lodash'
           axios.get(process.env.baseApi + '/get-branches/' + val)
           .then(res => {
             data.$store.dispatch('branches', res.data.branches)
-            data.$store.dispatch('selectedBranches', [])
+            data.$store.dispatch('selectedBranches', '')
           })
 
       }

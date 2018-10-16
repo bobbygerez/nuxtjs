@@ -87,58 +87,67 @@ class="elevation-1"
       <v-toolbar-title>New Product</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn dark flat @click.native="dialog = false">Save</v-btn>
+        <v-btn dark flat @click.native="submit()">Save</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <v-container >
       <v-layout wrap >
-        <v-flex xs6>
+        <v-flex xs12 sm6 md6 lg4>
+          <product-status></product-status>
+        </v-flex>
+        <v-flex xs12 sm6 md6 lg4>
           <search-store></search-store>
         </v-flex>
-        <v-flex xs6 class="pl-2">
+        <v-flex xs12 sm6 md6 lg4>
           <branches></branches>
         </v-flex>
-        <v-flex xs4>
+        <v-flex xs12 sm6 md6 lg4>
           <provinces></provinces>
         </v-flex>
-        <v-flex xs4 class="pl-2">
+        <v-flex xs12 sm6 md6 lg4>
           <cities></cities>
         </v-flex>
-        <v-flex xs4 v-if="selectedCitiesProduct.length == 1"  class="pl-2">
-          <brgys></brgys>
+        <v-flex xs12 sm6 md6 lg4 v-if="selectedCitiesProduct.length == 1" >
+          <brgys v-bind:status="false"></brgys>
         </v-flex>
-        <v-flex xs4 v-else class="pl-2">
-          <v-switch
-          :label="'All Barangays'"
-          v-model="switchBrgy"
-          disabled
-          >
-        </v-switch>
+        <v-flex xs12 sm6 md6 lg4 v-else class="pl-2">
+          <brgys v-bind:status="true"></brgys>
       </v-flex>
-      <v-flex xs4>
+      <v-flex xs12 sm6 md6 lg4 >
         <v-text-field v-model="productName" label="Product Name" clearable ></v-text-field>
       </v-flex>
-      <v-flex xs4 class="pl-2">
+      <v-flex xs12 sm6 md6 lg4 >
         <v-text-field v-model="productSKU" label="SKU" clearable ></v-text-field>
       </v-flex>
-      <v-flex xs4 class="pl-2">
+      <v-flex xs12 sm6 md6 lg2 >
         <my-currency-input v-model="productPrice" v-bind:label="'Price'"></my-currency-input>
       </v-flex>
-      <v-flex xs4 class="pl-2">
+      <v-flex xs12 sm6 md6 lg1>
         <v-text-field v-model="productQuantity" label="Qty" type="number" clearable></v-text-field>
       </v-flex>
-      <v-flex xs4 class="pl-2">
+      <v-flex xs12 sm6 md6 lg1>
+        <v-text-field v-model="productDiscount" label="Discount" type="number" clearable></v-text-field>
+      </v-flex>
+      <v-flex xs12 sm6 md6 lg4>
         <units></units>
       </v-flex>
-      <v-flex xs4 class="pl-2">
+      <v-flex xs12 sm6 md6 lg4>
         <sizes></sizes>
       </v-flex>
-      <v-flex xs12>
+      <v-flex xs12 sm12 md12 lg4>
         <colors></colors>
       </v-flex>
-      
+      <v-flex xs12 sm12 md12 lg4>
+        <categories></categories>
+      </v-flex>
+      <v-flex xs12 sm12 md12 lg4>
+        <colors></colors>
+      </v-flex>
       <v-flex xs12>
-        <v-textarea v-model="short_desc" label="Short Description" class="ma-0 pa-0" clearable></v-textarea>
+        <v-textarea v-model="productShortDesc" label="Short Description" class="ma-0 pa-0" clearable></v-textarea>
+      </v-flex>
+      <v-flex xs12>
+        <v-textarea v-model="productLongDesc" label="Long Description" class="ma-0 pa-0" clearable></v-textarea>
       </v-flex>
       <v-flex xs12>
         <dropzone id="myDropzone" ref="myVueDropzone" :options="options" :destroyDropzone="true"></dropzone>
@@ -161,7 +170,8 @@ class="elevation-1"
 </div>
 </template>
 <script>
-
+  import categories from '~/components/select/categories'
+  import productStatus from '~/components/select/productStatus'
   import units from '~/components/select/units'
   import sizes from '~/components/select/sizes'
   import colors from '~/components/autocomplete/colors'
@@ -186,7 +196,9 @@ class="elevation-1"
       colors,
       sizes,
       units,
-      branches
+      branches,
+      productStatus,
+      categories
     },
     data: () => ({
       xx: false,
@@ -196,7 +208,6 @@ class="elevation-1"
       widgets: false,
       switchBrgy: true,
       valid: false,
-      short_desc: '',
       status:false,
       options: {
         url: process.env.baseApi,
@@ -298,12 +309,43 @@ class="elevation-1"
           this.$store.dispatch('productQuantity', value);
         }
       },
-       productSKU: {
+      productSKU: {
         get(){
           return this.$store.getters.productSKU
         },
         set(value){
           this.$store.dispatch('productSKU', value);
+        }
+      },
+      productShortDesc: {
+        get(){
+          return this.$store.getters.productShortDesc
+        },
+        set(val){
+          this.$store.dispatch('productShortDesc', val);
+        }
+      },
+      productLongDesc: {
+        get(){
+          return this.$store.getters.productLongDesc
+        },
+        set(val){
+          this.$store.dispatch('productLongDesc', val)
+        }
+      },
+      selectedProductStatus: {
+        get(){
+          return this.$store.getters.selectedProductStatus
+        },
+        set(val){
+        }
+      },
+      productDiscount: {
+        get(){
+          return this.$store.getters.productDiscount
+        },
+        set(val){
+          this.$store.dispatch('productDiscount', val);
         }
       },
       selectedUnitProduct(){
@@ -393,15 +435,18 @@ class="elevation-1"
             color_ids: this.selectedColorsProduct,
             brgy_ids: _.map(this.selectedBrgysProduct, 'brgyCode'),
             city_ids: this.selectedCitiesProduct,
-            province_id: this.selectedProvinceProduct,
+            provCode: this.selectedProvinceProduct,
             branch_ids: this.selectedBranches,
             store_id: this.storeId,
             images: this.$refs.myVueDropzone.getQueuedFiles(),
+            sku: this.productSKU,
             name: this.productName,
             amount: this.productPrice,
             quantity: this.productQuantity,
-            short_desc: this.short_desc,
-            status:this.status
+            discount: this.productDiscount,
+            short_desc: this.productShortDesc,
+            long_desc: this.productLongDesc,
+            status:this.selectedProductStatus
           })
           .then(res => {
 

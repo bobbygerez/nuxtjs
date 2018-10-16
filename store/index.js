@@ -4,6 +4,9 @@ const createStore = () => {
   return new Vuex.Store({
     
     state: {
+      productDiscount: 0,
+      productLongDesc: '',
+      productShortDesc: '',
       productSKU: '',
       productName: '',
       productPrice: 0,
@@ -11,6 +14,7 @@ const createStore = () => {
       newProductDialog: true,
       selectedUnitProduct: '',
       units: [],
+      selectedProductStatus: true,
       selectedSizesProduct: [],
       sizes: [],
       selectedColorsProduct:[],
@@ -138,6 +142,18 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      productDiscount(state, payload){
+        state.productDiscount = payload
+      },
+      selectedProductStatus(state, payload){
+        state.selectedProductStatus = payload
+      },
+      productLongDesc(state, payload){
+        state.productLongDesc = payload
+      },
+      productShortDesc(state, payload){
+        state.productShortDesc = payload
+      },
       productSKU(state, payload){
         state.productSKU = payload
       },
@@ -395,6 +411,18 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      productDiscount(store, payload){
+        store.commit('productDiscount', payload)
+      },
+      selectedProductStatus(store, payload){
+        store.commit('selectedProductStatus', payload)
+      },
+      productShortDesc(store, payload){
+        store.commit('productShortDesc', payload)
+      },
+      productLongDesc(store, payload){
+        store.commit('productLongDesc', payload)
+      },
       productSKU(store, payload){
         store.commit('productSKU', payload)
       },
@@ -633,6 +661,18 @@ const createStore = () => {
       }
     },
     getters: {
+      productDiscount(state){
+        return state.productDiscount
+      },
+      selectedProductStatus(state){
+        return state.selectedProductStatus
+      },
+      productShortDesc(state){
+        return state.productShortDesc
+      },
+      productLongDesc(state){
+        return state.productLongDesc
+      },
       productSKU(state){
         return state.productSKU
       },

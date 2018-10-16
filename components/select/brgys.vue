@@ -5,6 +5,7 @@
     label="Barangay"
     item-text="brgyDesc"
     item-value="brgyCode"
+    :disabled="status"
     multiple
     clearable
   >
@@ -44,6 +45,7 @@
 </template>
 <script>
   export default {
+    props:['status'],
     computed: {
       likesAllBrgys () {
         return this.selectedBrgysProduct.length === this.brgys.length
