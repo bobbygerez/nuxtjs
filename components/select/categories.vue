@@ -13,6 +13,8 @@
 </template>
 <script type="text/javascript">
 	
+	import axios from 'axios'
+
 	export default {
 		computed: {
 			selectedCategory: {
@@ -28,6 +30,16 @@
 					return this.$store.getters.categories
 				}
 			}  
+		},
+		watch: {
+
+			selectedCategory(val){
+				 let data = this
+				 axios.get(process.env.baseApi + '/get-subcategories/' + val)
+		            .then(function(res){
+		              data.$store.dispatch('subcategories', res.data.subcategories)
+		            })
+			}
 		}
 	}
 </script>

@@ -141,7 +141,10 @@ class="elevation-1"
         <categories></categories>
       </v-flex>
       <v-flex xs12 sm12 md12 lg4>
-        <colors></colors>
+        <subcategories></subcategories>
+      </v-flex>
+      <v-flex xs12 sm12 md12 lg4>
+        <further-categories></further-categories>
       </v-flex>
       <v-flex xs12>
         <v-textarea v-model="productShortDesc" label="Short Description" class="ma-0 pa-0" clearable></v-textarea>
@@ -170,6 +173,8 @@ class="elevation-1"
 </div>
 </template>
 <script>
+  import furtherCategories from '~/components/select/further-categories'
+  import subcategories from '~/components/select/subcategories'
   import categories from '~/components/select/categories'
   import productStatus from '~/components/select/productStatus'
   import units from '~/components/select/units'
@@ -198,7 +203,9 @@ class="elevation-1"
       units,
       branches,
       productStatus,
-      categories
+      categories,
+      subcategories,
+      furtherCategories
     },
     data: () => ({
       xx: false,
@@ -348,6 +355,16 @@ class="elevation-1"
           this.$store.dispatch('productDiscount', val);
         }
       },
+      selectedCategory(){
+        return this.$store.getters.selectedCategory
+      },
+      selectedSubcategory(){
+        return this.$store.getters.selectedSubcategory
+      },
+      selectedFurtherCategory(){
+        return this.$store.getters.selectedFurtherCategory
+      },
+
       selectedUnitProduct(){
         return this.$store.getters.selectedUnitProduct
       },
@@ -430,6 +447,9 @@ class="elevation-1"
 
         if (this.$refs.form.validate()) {
           axios.post( process.env.baseApi + '/items?token=' + this.token,{
+            category_id: this.selectedCategory,
+            subcategory_id: this.selectedSubcategory,
+            further_category_id: this.selectedFurtherCategory,
             unit_ids: this.selectedUnitProduct,
             size_ids: _.map(this.selectedSizesProduct, 'id'),
             color_ids: this.selectedColorsProduct,

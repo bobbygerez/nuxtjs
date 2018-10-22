@@ -17,6 +17,9 @@ const createStore = () => {
       selectedProductStatus: true,
       selectedSizesProduct: [],
       sizes: [],
+      selectedCategory: '',
+      selectedSubcategory: '',
+      selectedFurtherCategory: '',
       selectedColorsProduct:[],
       selectedBrgysProduct: [],
       selectedCitiesProduct: [],
@@ -142,6 +145,15 @@ const createStore = () => {
       categories: []
     },
     mutations: {
+      selectedFurtherCategory(state, payload){
+        state.selectedFurtherCategory = payload
+      },
+      selectedSubcategory(state, payload){
+        state.selectedSubcategory = payload
+      },
+      selectedCategory(state, payload){
+        state.selectedCategory = payload
+      },
       productDiscount(state, payload){
         state.productDiscount = payload
       },
@@ -411,6 +423,15 @@ const createStore = () => {
         }
         store.commit('cart', cleanArray)
       },
+      selectedFurtherCategory(store, payload){
+        store.commit('selectedFurtherCategory', payload)
+      },
+      selectedSubcategory(store, payload){
+        store.commit('selectedSubcategory', payload)
+      },
+      selectedCategory(store, payload){
+        store.commit('selectedCategory', payload)
+      },
       productDiscount(store, payload){
         store.commit('productDiscount', payload)
       },
@@ -661,6 +682,15 @@ const createStore = () => {
       }
     },
     getters: {
+      selectedFurtherCategory(state){
+        return state.selectedFurtherCategory
+      },
+      selectedSubcategory(state){
+        return state.selectedSubcategory
+      },
+      selectedCategory(state){
+        return state.selectedCategory
+      },
       productDiscount(state){
         return state.productDiscount
       },
